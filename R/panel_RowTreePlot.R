@@ -23,6 +23,7 @@ RowTreePlot <- function(...) {
   new("RowTreePlot", ...)
 }
 
+#' importFrom iSEE .fullName
 setMethod(".fullName", "RowTreePlot", function(x) "Row tree")
 setMethod(".panelColor", "RowTreePlot", function(x) "#8B5A2B")
 
@@ -30,8 +31,9 @@ library(shiny)
 setMethod(".defineDataInterface", "RowTreePlot", function(x, se, select_info) {
   plot_name <- .getEncodedName(x)
   list(
-    numericInput(paste0(plot_name, "_NodeColour"), label="Node colour",
-                 min=0, value=x[["NodeColour"]])
+    textInput(paste0(plot_name, "_NodeColour"),
+              label="Node colour",
+              value=x[["NodeColour"]])
   )
 })
 
@@ -56,6 +58,7 @@ setMethod(".createObservers", "RowTreePlot",
 
             plot_name <- .getEncodedName(x)
 
+            # instructs iSEE which params will break the plot
             .createUnprotectedParameterObservers(plot_name,
                                                  fields="NodeColour",
                                                  input=input,
@@ -64,6 +67,22 @@ setMethod(".createObservers", "RowTreePlot",
           })
 
 # making the plot
+setMethod(".generateDotPlotData", "RowTreePlot", function(x, envir) {
+  commands <- character(0)
+
+  commands <- c(commands,
+                "plot.data <- data.frame(X=numeric(0), Y=numeric(0));")
+
+  commands <- c(commands,
+                "plot.data <- plot.data[colnames(se),,drop=FALSE];",
+                "rownames(plot.data) <- colnames(se);")
+
+  eval(parse(text=commands), envir=envir)
+
+  list(data_cmds=commands, plot_title="Tree plot",
+       x_lab="a", y_lab="b")
+})
+
 #' importFrom miaViz plotRowTree
 setMethod(".generateDotPlot", "RowTreePlot", function(x, envir) {
 
@@ -73,8 +92,6 @@ setMethod(".generateDotPlot", "RowTreePlot", function(x, envir) {
 
   list(commands=commands, contents=envir$tab)
 })
-
-# probably need to define method of .generateDotPlotData for RowTreePlot
 
 # visualising panel
 tree_plot <- RowTreePlot(PanelWidth=8L, DataBoxOpen=TRUE)
