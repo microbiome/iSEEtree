@@ -1,10 +1,11 @@
-setClass("RowTreePlot", contains="RowDotPlot")
+setClass("RowTreePlot", contains="RowDotPlot",
+         slots = c(NodeColour = "character"))
 
 library(S4Vectors)
 setValidity2("RowTreePlot", function(object) {
   msg <- character(0)
 
-  msg <- .validNumberError(msg, object, "LogFC", lower=0, upper=Inf) # must be non-negative.
+  msg <- .validStringError(msg, object, "NodeColour")
 
   if (length(msg)) {
     return(msg)
@@ -13,9 +14,9 @@ setValidity2("RowTreePlot", function(object) {
 })
 
 setMethod("initialize", "RowTreePlot",
-          function(.Object, LogFC=0, ...)
+          function(.Object, NodeColour="blue", ...)
           {
-            callNextMethod(.Object, LogFC=LogFC, ColumnSelectionType="Union", ...)
+            callNextMethod(.Object, NodeColour=NodeColour, ColumnSelectionType="Union", ...)
           })
 
 RowTreePlot <- function(...) {
@@ -29,8 +30,8 @@ library(shiny)
 setMethod(".defineDataInterface", "RowTreePlot", function(x, se, select_info) {
   plot_name <- .getEncodedName(x)
   list(
-    numericInput(paste0(plot_name, "_LogFC"), label="Log-FC threshold",
-                 min=0, value=x[["LogFC"]])
+    numericInput(paste0(plot_name, "_NodeColour"), label="Node colour",
+                 min=0, value=x[["NodeColour"]])
   )
 })
 
@@ -56,7 +57,7 @@ setMethod(".createObservers", "RowTreePlot",
             plot_name <- .getEncodedName(x)
 
             .createUnprotectedParameterObservers(plot_name,
-                                                 fields="LogFC",
+                                                 fields="NodeColour",
                                                  input=input,
                                                  pObjects=pObjects,
                                                  rObjects=rObjects)
@@ -73,5 +74,8 @@ setMethod(".generateDotPlot", "RowTreePlot", function(x, envir) {
   list(commands=commands, contents=envir$tab)
 })
 
+# probably need to define method of .generateDotPlotData for RowTreePlot
+
 # visualising panel
 tree_plot <- RowTreePlot(PanelWidth=8L, DataBoxOpen=TRUE)
+
