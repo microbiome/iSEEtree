@@ -1,8 +1,10 @@
 #' Row tree plot
 #'
-#' A dimensionality reduction plot that dynamically recomputes the coordinates for the samples,
-#' based on the selected subset of samples (and possibly features) in transmitting panels.
-#' All samples in active and saved multiple selections are used here.
+#' Hierarchical tree for the rows of a
+#' \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}
+#' object. The tree can be produced with \code{\link[mia:taxonomy-methods]{addTaxonomyTree}}
+#' and gets stored in the \code{\link[TreeSummarizedExperiment:rowLinks]{rowTree}}
+#' slot of the experiment object.
 #'
 #' @section Slot overview:
 #' The following slots control the thresholds used in the visualization:
@@ -15,8 +17,7 @@
 #' \item \code{colour_tip_by}, 
 #' }
 #'
-#' In addition, this class inherits all slots from its parent \linkS4class{ColumnDotPlot},
-#' \linkS4class{DotPlot} and \linkS4class{Panel} classes.
+#' In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
 #'
 #' @section Constructor:
 #' \code{RowTreePlot(...)} creates an instance of a RowTreePlot class,
@@ -88,7 +89,8 @@ RowTreePlot <- function(...) {
   new("RowTreePlot", ...)
 }
 
-#' @importFrom TreeSummarizedExperiment rowTreeNames rowData assayNames
+#' @importFrom SummarizedExperiment rowData assayNames
+#' @importFrom TreeSummarizedExperiment rowTreeNames
 setMethod(".defineDataInterface", "RowTreePlot", function(x, se, select_info) {
   tab_name <- .getEncodedName(x)
   

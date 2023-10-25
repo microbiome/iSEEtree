@@ -2,8 +2,8 @@
 
 exportClasses(RowTreePlot)
 importFrom(S4Vectors,setValidity2)
-importFrom(TreeSummarizedExperiment,assayNames)
-importFrom(TreeSummarizedExperiment,rowData)
+importFrom(SummarizedExperiment,assayNames)
+importFrom(SummarizedExperiment,rowData)
 importFrom(TreeSummarizedExperiment,rowTreeNames)
 importFrom(iSEE,panelDefaults)
 importFrom(methods,callNextMethod)
