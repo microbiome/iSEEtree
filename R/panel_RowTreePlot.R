@@ -1,7 +1,74 @@
+#' Row tree plot
+#'
+#' A dimensionality reduction plot that dynamically recomputes the coordinates for the samples,
+#' based on the selected subset of samples (and possibly features) in transmitting panels.
+#' All samples in active and saved multiple selections are used here.
+#'
+#' @section Slot overview:
+#' The following slots control the thresholds used in the visualization:
+#' \itemize{
+#' \item \code{layout}, a string specifying 
+#' \item \code{add_legend}, an integer scalar specifying
+#' \item \code{colour_tip}, 
+#' \item \code{colour_edge_by}, string indicating
+#' \item \code{colour_tip}, 
+#' \item \code{colour_tip_by}, 
+#' }
+#'
+#' In addition, this class inherits all slots from its parent \linkS4class{ColumnDotPlot},
+#' \linkS4class{DotPlot} and \linkS4class{Panel} classes.
+#'
+#' @section Constructor:
+#' \code{RowTreePlot(...)} creates an instance of a RowTreePlot class,
+#' where any slot and its value can be passed to \code{...} as a named argument.
+#'
+#' @author Giulio Benedetti
+#' @examples
+#' library(mia)
+#' data("GlobalPatterns", package = "mia")
+#' tse <- GlobalPatterns
+#' 
+#' rowData(tse)$prevalence <- getPrevalence(tse,
+#'                                          detection = 1/100,
+#'                                          sort = FALSE,
+#'                                          assay.type = "counts",
+#'                                          as_relative = TRUE)
+#'                                          
+#' tse_genus <- mergeFeaturesByPrevalence(tse,
+#'                                        rank = "Genus",
+#'                                        prevalence = 50/100)
+#'                                        
+#' tse_genus <- addTaxonomyTree(tse_genus)
+#' tse_genus <- transformAssay(tse_genus, method = "relabundance")
+#'
+#' if (interactive()) {
+#'   iSEE(tse_genus)
+#' }
+#'
+#' @name RowTreePlot-class
+NULL
+
+#' @export
 setClass("RowTreePlot", contains="Panel",
          slots=c(layout="character", add_legend="logical",
                  edge_colour="character", edge_colour_by="character",
                  tip_colour="character", tip_colour_by="character"))
+
+#' @importFrom S4Vectors setValidity2
+setValidity2("RowTreePlot", function(x) {
+  msg <- character(0)
+  
+  msg <- .singleStringError(msg, x,
+    fields=c("layout", "edge_colour", "edge_colour_by", "tip_colour", "tip_colour_by")
+  )
+  
+  msg <- .validLogicalError(msg, x, fields="add_legend")
+  
+  if (length(msg)) {
+    return(msg)
+  }
+  TRUE
+})
 
 #' @importFrom methods callNextMethod
 setMethod("initialize", "RowTreePlot", function(.Object, ...) {
@@ -9,9 +76,9 @@ setMethod("initialize", "RowTreePlot", function(.Object, ...) {
   extra_args <- .emptyDefault(extra_args, "layout", "circular")
   extra_args <- .emptyDefault(extra_args, "add_legend", TRUE)
   extra_args <- .emptyDefault(extra_args, "edge_colour", "None")
-  extra_args <- .emptyDefault(extra_args, "edge_colour_by", "Kingdom")
+  extra_args <- .emptyDefault(extra_args, "edge_colour_by", NA_character_)
   extra_args <- .emptyDefault(extra_args, "tip_colour", "None")
-  extra_args <- .emptyDefault(extra_args, "tip_colour_by", "Kingdom")
+  extra_args <- .emptyDefault(extra_args, "tip_colour_by", NA_character_)
 
   do.call(callNextMethod, c(list(.Object), extra_args))
 })

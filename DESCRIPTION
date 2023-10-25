@@ -14,4 +14,7 @@ Depends:
 Imports:
     miaViz,
     TreeSummarizedExperiment,
-    methods
+    methods,
+    S4Vectors
+Suggests:
+    mia
