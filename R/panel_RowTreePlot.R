@@ -1,46 +1,66 @@
 setClass("RowTreePlot", contains="Panel",
          slots=c(layout="character", add_legend="logical",
-                 edge_colour_by="character", tip_colour_by="character"))
+                 edge_colour="character", edge_colour_by="character",
+                 tip_colour="character", tip_colour_by="character"))
 
+#' @importFrom methods callNextMethod
 setMethod("initialize", "RowTreePlot", function(.Object, ...) {
   extra_args <- list(...)
   extra_args <- .emptyDefault(extra_args, "layout", "circular")
   extra_args <- .emptyDefault(extra_args, "add_legend", TRUE)
-  extra_args <- .emptyDefault(extra_args, "edge_colour_by", "none")
-  extra_args <- .emptyDefault(extra_args, "tip_colour_by", "none")
+  extra_args <- .emptyDefault(extra_args, "edge_colour", "None")
+  extra_args <- .emptyDefault(extra_args, "edge_colour_by", "Kingdom")
+  extra_args <- .emptyDefault(extra_args, "tip_colour", "None")
+  extra_args <- .emptyDefault(extra_args, "tip_colour_by", "Kingdom")
 
   do.call(callNextMethod, c(list(.Object), extra_args))
 })
 
-#' importFrom methods new
+#' @importFrom methods new
 RowTreePlot <- function(...) {
   new("RowTreePlot", ...)
 }
 
-#' importFrom TreeSummarizedExperiment rowTreeNames rowData assayNames
+#' @importFrom TreeSummarizedExperiment rowTreeNames rowData assayNames
 setMethod(".defineDataInterface", "RowTreePlot", function(x, se, select_info) {
   tab_name <- .getEncodedName(x)
-  collected <- list()
-
-  collected[[1]] <- selectInput(
-    paste0(tab_name, "_layout"), label="Layout",
-    choices=c("circular", "rectangular", "slanted", "fan", "inward_circular",
-              "radial", "unrooted", "equal_angle", "daylight", "dendrogram",
-              "ape", "ellipse", "roundrect"), selected=slot(x, "layout")
-  )
-  collected[[2]] <- checkboxInput(
-    paste0(tab_name, "_add_legend"), label="add_legend", value=slot(x, "add_legend")
-  )
-  collected[[3]] <- selectInput(
-    paste0(tab_name, "_edge_colour_by"), label="Color lines by",
-    choices=names(rowData(se)), selected=slot(x, "edge_colour_by")
-  )
-  collected[[4]] <- selectInput(
-    paste0(tab_name, "_tip_colour_by"), label="Color nodes by",
-    choices=names(rowData(se)), selected=slot(x, "tip_colour_by")
-  )
   
-  do.call(tagList, collected)
+  # Define what parameters the user can adjust
+  list(
+    # Tree layout
+    .selectInput.iSEE(
+      x, field="layout", label="Layout",
+      choices=c("circular", "rectangular", "slanted", "fan", "inward_circular",
+                "radial", "unrooted", "equal_angle", "daylight", "dendrogram",
+                "ape", "ellipse", "roundrect"), selected=slot(x, "layout")
+    ),
+    # Colour legend
+    .checkboxInput.iSEE(
+      x, field="add_legend", label="View legend", value=slot(x, "add_legend")
+    ),
+    .radioButtons.iSEE(
+      x, field="edge_colour", label="Line color:", inline=TRUE,
+      choices=c("None", "Row data"), selected=slot(x, "edge_colour")
+    ),
+    .conditionalOnRadio(
+      paste0(tab_name, "_edge_colour"), "Row data",
+      iSEE:::.selectInputHidden(x, field="edge_colour_by",
+                                label="Color lines by",
+                                choices=names(rowData(se)), 
+                                selected=slot(x, "edge_colour_by"))
+    ),
+    .radioButtons.iSEE(
+      x, field="tip_colour", label="Node color:", inline=TRUE,
+      choices=c("None", "Row data"), selected=slot(x, "tip_colour")
+    ),
+    .conditionalOnRadio(
+      paste0(tab_name, "_tip_colour"), "Row data",
+      iSEE:::.selectInputHidden(x, field="tip_colour_by",
+                                label="Color nodes by",
+                                choices=names(rowData(se)), 
+                                selected=slot(x, "tip_colour_by"))
+    )
+  )
 })
 
 setMethod(".createObservers", "RowTreePlot", function(x, se, input, session, pObjects, rObjects) {
@@ -65,7 +85,7 @@ setMethod(".defineOutput", "RowTreePlot", function(x) {
   plotOutput(.getEncodedName(x))
 })
 
-#' importFrom miaViz plotRowTree
+#' @importFrom miaViz plotRowTree
 setMethod(".generateOutput", "RowTreePlot", function(x, se, all_memory, all_contents) {
   plot_env <- new.env()
   plot_env$se <- se
