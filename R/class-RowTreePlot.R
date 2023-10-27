@@ -91,11 +91,13 @@ RowTreePlot <- function(...) {
 
 #' @importFrom SummarizedExperiment rowData assayNames
 #' @importFrom TreeSummarizedExperiment rowTreeNames
-setMethod(".defineDataInterface", "RowTreePlot", function(x, se, select_info) {
+setMethod(".defineInterface", "RowTreePlot", function(x, se, select_info) {
   tab_name <- .getEncodedName(x)
-  
+
   # Define what parameters the user can adjust
-  list(
+  collapseBox(paste0(tab_name, "_Visual"),
+                     title="Visual parameters",
+                     open=FALSE,
     # Tree layout
     .selectInput.iSEE(
       x, field="layout", label="Layout",
