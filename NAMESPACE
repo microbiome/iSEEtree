@@ -2,10 +2,12 @@
 
 exportClasses(RowTreePlot)
 importFrom(S4Vectors,setValidity2)
+importFrom(SingleCellExperiment,reducedDims)
 importFrom(SummarizedExperiment,assayNames)
 importFrom(SummarizedExperiment,rowData)
+importFrom(TreeSummarizedExperiment,TreeSummarizedExperiment)
+importFrom(TreeSummarizedExperiment,rowLinks)
 importFrom(TreeSummarizedExperiment,rowTreeNames)
-importFrom(iSEE,panelDefaults)
 importFrom(methods,callNextMethod)
 importFrom(methods,new)
 importFrom(miaViz,plotRowTree)
