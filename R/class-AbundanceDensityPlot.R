@@ -18,6 +18,7 @@ setValidity2("AbundanceDensityPlot", function(x) {
   TRUE
 })
 
+#' @export
 #' @importFrom methods callNextMethod
 setMethod("initialize", "AbundanceDensityPlot", function(.Object, ...) {
   extra_args <- list(...)
@@ -28,11 +29,13 @@ setMethod("initialize", "AbundanceDensityPlot", function(.Object, ...) {
   do.call(callNextMethod, c(list(.Object), extra_args))
 })
 
+#' @export
 #' @importFrom methods new
 AbundanceDensityPlot <- function(...) {
   new("AbundanceDensityPlot", ...)
 }
 
+#' @export
 #' @importFrom SummarizedExperiment rowData assayNames
 #' @importFrom TreeSummarizedExperiment rowTreeNames
 setMethod(".defineInterface", "AbundanceDensityPlot", function(x, se, select_info) {
@@ -58,6 +61,7 @@ setMethod(".defineInterface", "AbundanceDensityPlot", function(x, se, select_inf
   )
 })
 
+#' @export
 setMethod(".createObservers", "AbundanceDensityPlot", function(x, se, input, session, pObjects, rObjects) {
   callNextMethod()
   
@@ -72,14 +76,18 @@ setMethod(".createObservers", "AbundanceDensityPlot", function(x, se, input, ses
   invisible(NULL)
 })
 
+#' @export
 setMethod(".fullName", "AbundanceDensityPlot", function(x) "Abundance density plot")
 
+#' @export
 setMethod(".panelColor", "AbundanceDensityPlot", function(x) "#8B5A2B")
 
+#' @export
 setMethod(".defineOutput", "AbundanceDensityPlot", function(x) {
   plotOutput(.getEncodedName(x))
 })
 
+#' @export
 #' @importFrom miaViz plotRowTree
 setMethod(".generateOutput", "AbundanceDensityPlot", function(x, se, all_memory, all_contents) {
   plot_env <- new.env()
@@ -110,6 +118,7 @@ setMethod(".generateOutput", "AbundanceDensityPlot", function(x, se, all_memory,
   list(contents=plot_env$gg, commands=list(select=selected, plot=commands))
 })
 
+#' @export
 setMethod(".renderOutput", "AbundanceDensityPlot", function(x, se, output, pObjects, rObjects) {
   plot_name <- .getEncodedName(x)
   force(se) # defensive programming to avoid difficult bugs due to delayed evaluation.

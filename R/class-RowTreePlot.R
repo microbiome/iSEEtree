@@ -71,6 +71,7 @@ setValidity2("RowTreePlot", function(x) {
   TRUE
 })
 
+#' @export
 #' @importFrom methods callNextMethod
 setMethod("initialize", "RowTreePlot", function(.Object, ...) {
   extra_args <- list(...)
@@ -84,11 +85,13 @@ setMethod("initialize", "RowTreePlot", function(.Object, ...) {
   do.call(callNextMethod, c(list(.Object), extra_args))
 })
 
+#' @export
 #' @importFrom methods new
 RowTreePlot <- function(...) {
   new("RowTreePlot", ...)
 }
 
+#' @export
 #' @importFrom SummarizedExperiment rowData assayNames
 #' @importFrom TreeSummarizedExperiment rowTreeNames
 setMethod(".defineInterface", "RowTreePlot", function(x, se, select_info) {
@@ -134,6 +137,7 @@ setMethod(".defineInterface", "RowTreePlot", function(x, se, select_info) {
   )
 })
 
+#' @export
 setMethod(".createObservers", "RowTreePlot", function(x, se, input, session, pObjects, rObjects) {
   callNextMethod()
   
@@ -148,14 +152,18 @@ setMethod(".createObservers", "RowTreePlot", function(x, se, input, session, pOb
   invisible(NULL)
 })
 
+#' @export
 setMethod(".fullName", "RowTreePlot", function(x) "Row tree plot")
 
+#' @export
 setMethod(".panelColor", "RowTreePlot", function(x) "#4EEE94")
 
+#' @export
 setMethod(".defineOutput", "RowTreePlot", function(x) {
   plotOutput(.getEncodedName(x))
 })
 
+#' @export
 #' @importFrom miaViz plotRowTree
 setMethod(".generateOutput", "RowTreePlot", function(x, se, all_memory, all_contents) {
   plot_env <- new.env()
@@ -187,6 +195,7 @@ setMethod(".generateOutput", "RowTreePlot", function(x, se, all_memory, all_cont
   list(contents=plot_env$gg, commands=list(select=selected, plot=commands))
 })
 
+#' @export
 setMethod(".renderOutput", "RowTreePlot", function(x, se, output, pObjects, rObjects) {
   plot_name <- .getEncodedName(x)
   force(se) # defensive programming to avoid difficult bugs due to delayed evaluation.
