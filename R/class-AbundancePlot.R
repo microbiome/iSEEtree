@@ -1,3 +1,48 @@
+#' Abundance plot
+#'
+#' Composite abundance profile of all features in a
+#' \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}
+#' object.
+#'
+#' @section Slot overview:
+#' The following slots control the thresholds used in the visualisation:
+#' \itemize{
+#' \item \code{rank}, a string specifying the taxonomic rank to visualise 
+#' \item \code{add_legend}, a logical value indicating whether the legend should appear
+#' }
+#'
+#' In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
+#'
+#' @section Constructor:
+#' \code{AbundancePlot(...)} creates an instance of a AbundancePlot class,
+#' where any slot and its value can be passed to \code{...} as a named argument.
+#'
+#' @author Giulio Benedetti
+#' @examples
+#' library(mia)
+#' data("GlobalPatterns", package = "mia")
+#' tse <- GlobalPatterns
+#' 
+#' rowData(tse)$prevalence <- getPrevalence(tse,
+#'                                          detection = 1/100,
+#'                                          sort = FALSE,
+#'                                          assay.type = "counts",
+#'                                          as_relative = TRUE)
+#'                                          
+#' tse_genus <- mergeFeaturesByPrevalence(tse,
+#'                                        rank = "Genus",
+#'                                        prevalence = 50/100)
+#'                                        
+#' tse_genus <- addTaxonomyTree(tse_genus)
+#' tse_genus <- transformAssay(tse_genus, method = "relabundance")
+#'
+#' if (interactive()) {
+#'   iSEE(tse_genus)
+#' }
+#'
+#' @name AbundancePlot-class
+NULL
+
 #' @export
 setClass("AbundancePlot", contains="Panel",
          slots=c(rank="character", add_legend="logical"))

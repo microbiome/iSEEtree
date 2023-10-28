@@ -33,7 +33,6 @@ RDAPlot <- function(...) {
 }
 
 #' @importFrom SummarizedExperiment colData
-#' @importFrom TreeSummarizedExperiment
 setMethod(".defineInterface", "RDAPlot", function(x, se, select_info) {
   tab_name <- .getEncodedName(x)
   
