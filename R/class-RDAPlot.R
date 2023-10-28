@@ -16,7 +16,6 @@ setValidity2("RDAPlot", function(x) {
   TRUE
 })
 
-#' @export
 #' @importFrom methods callNextMethod
 setMethod("initialize", "RDAPlot", function(.Object, ...) {
   extra_args <- list(...)
@@ -34,7 +33,6 @@ RDAPlot <- function(...) {
   new("RDAPlot", ...)
 }
 
-#' @export
 #' @importFrom SummarizedExperiment colData
 setMethod(".defineInterface", "RDAPlot", function(x, se, select_info) {
   tab_name <- .getEncodedName(x)
@@ -59,7 +57,6 @@ setMethod(".defineInterface", "RDAPlot", function(x, se, select_info) {
   )
 })
 
-#' @export
 setMethod(".createObservers", "RDAPlot", function(x, se, input, session, pObjects, rObjects) {
   callNextMethod()
   
@@ -74,18 +71,14 @@ setMethod(".createObservers", "RDAPlot", function(x, se, input, session, pObject
   invisible(NULL)
 })
 
-#' @export
 setMethod(".fullName", "RDAPlot", function(x) "RDA plot")
 
-#' @export
 setMethod(".panelColor", "RDAPlot", function(x) "#CD5B45")
 
-#' @export
 setMethod(".defineOutput", "RDAPlot", function(x) {
   plotOutput(.getEncodedName(x))
 })
 
-#' @export
 #' @importFrom miaViz plotRowTree
 setMethod(".generateOutput", "RDAPlot", function(x, se, all_memory, all_contents) {
   plot_env <- new.env()
@@ -117,7 +110,6 @@ setMethod(".generateOutput", "RDAPlot", function(x, se, all_memory, all_contents
   list(contents=plot_env$gg, commands=list(select=selected, plot=commands))
 })
 
-#' @export
 setMethod(".renderOutput", "RDAPlot", function(x, se, output, pObjects, rObjects) {
   plot_name <- .getEncodedName(x)
   force(se) # defensive programming to avoid difficult bugs due to delayed evaluation.

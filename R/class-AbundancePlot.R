@@ -61,7 +61,6 @@ setValidity2("AbundancePlot", function(x) {
   TRUE
 })
 
-#' @export
 #' @importFrom methods callNextMethod
 setMethod("initialize", "AbundancePlot", function(.Object, ...) {
   extra_args <- list(...)
@@ -77,7 +76,6 @@ AbundancePlot <- function(...) {
   new("AbundancePlot", ...)
 }
 
-#' @export
 #' @importFrom SummarizedExperiment rowData assayNames
 #' @importFrom TreeSummarizedExperiment rowTreeNames
 #' @importFrom mia taxonomyRanks
@@ -100,7 +98,6 @@ setMethod(".defineInterface", "AbundancePlot", function(x, se, select_info) {
   )
 })
 
-#' @export
 setMethod(".createObservers", "AbundancePlot", function(x, se, input, session, pObjects, rObjects) {
   callNextMethod()
   
@@ -115,18 +112,14 @@ setMethod(".createObservers", "AbundancePlot", function(x, se, input, session, p
   invisible(NULL)
 })
 
-#' @export
 setMethod(".fullName", "AbundancePlot", function(x) "Abundance plot")
 
-#' @export
 setMethod(".panelColor", "AbundancePlot", function(x) "#00E5EE")
 
-#' @export
 setMethod(".defineOutput", "AbundancePlot", function(x) {
   plotOutput(.getEncodedName(x))
 })
 
-#' @export
 #' @importFrom miaViz plotRowTree
 setMethod(".generateOutput", "AbundancePlot", function(x, se, all_memory, all_contents) {
   plot_env <- new.env()
@@ -156,7 +149,6 @@ setMethod(".generateOutput", "AbundancePlot", function(x, se, all_memory, all_co
   list(contents=plot_env$gg, commands=list(select=selected, plot=commands))
 })
 
-#' @export
 setMethod(".renderOutput", "AbundancePlot", function(x, se, output, pObjects, rObjects) {
   plot_name <- .getEncodedName(x)
   force(se) # defensive programming to avoid difficult bugs due to delayed evaluation.
