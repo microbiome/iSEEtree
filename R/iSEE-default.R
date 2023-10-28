@@ -1,5 +1,6 @@
 setGeneric("iSEE", iSEE::iSEE)
 
+#' @export
 #' @importFrom TreeSummarizedExperiment TreeSummarizedExperiment rowLinks
 #' @importFrom SingleCellExperiment reducedDims
 setMethod("iSEE", "TreeSummarizedExperiment",
