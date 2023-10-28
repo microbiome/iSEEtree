@@ -1,3 +1,6 @@
+#' @name iSEE-TreeSE
+
+#' @export
 setGeneric("iSEE", iSEE::iSEE)
 
 #' @export
