@@ -1,10 +1,11 @@
 #' @importFrom TreeSummarizedExperiment TreeSummarizedExperiment rowLinks
 #' @importFrom SingleCellExperiment reducedDims
 setMethod("iSEE", "TreeSummarizedExperiment",
-  function(se, initial = c(RowTreePlot(), ReducedDimensionPlot(), ComplexHeatmapPlot()),
+  function(se, initial = c(RowTreePlot(), AbundancePlot(), AbundanceDensityPlot(),
+                           ReducedDimensionPlot(), ComplexHeatmapPlot()),
            extra = NULL, colormap = ExperimentColorMap(), landingPage = createLandingPage(),
            tour = NULL, appTitle = NULL, runLocal = TRUE, voice = FALSE,
-           bugs = FALSE, saveState = NULL,...) {
+           bugs = FALSE, saveState = NULL, ...) {
     
     initial <- .check_panel(se, initial, "RowTreePlot", rowLinks)
     initial <- .check_panel(se, initial, "ReducedDimensionPlot", reducedDims)
