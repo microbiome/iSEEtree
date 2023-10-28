@@ -150,7 +150,7 @@ setMethod(".createObservers", "RowTreePlot", function(x, se, input, session, pOb
 
 setMethod(".fullName", "RowTreePlot", function(x) "Row tree plot")
 
-setMethod(".panelColor", "RowTreePlot", function(x) "#8B5A2B")
+setMethod(".panelColor", "RowTreePlot", function(x) "#4EEE94")
 
 setMethod(".defineOutput", "RowTreePlot", function(x) {
   plotOutput(.getEncodedName(x))

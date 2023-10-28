@@ -68,7 +68,7 @@ setMethod(".createObservers", "AbundancePlot", function(x, se, input, session, p
 
 setMethod(".fullName", "AbundancePlot", function(x) "Abundance plot")
 
-setMethod(".panelColor", "AbundancePlot", function(x) "#8B5A2B")
+setMethod(".panelColor", "AbundancePlot", function(x) "#00E5EE")
 
 setMethod(".defineOutput", "AbundancePlot", function(x) {
   plotOutput(.getEncodedName(x))
