@@ -142,7 +142,7 @@ setMethod(".createObservers", "RowTreePlot", function(x, se, input, session, pOb
 
   .createProtectedParameterObservers(
     panel_name,
-    c("layout", "add_legend", "edge_colour_by", "tip_colour_by"),
+    c("layout", "add_legend", "edge_colour", "edge_colour_by", "tip_colour", "tip_colour_by"),
     input=input, pObjects=pObjects, rObjects=rObjects
   )
   
@@ -170,20 +170,24 @@ setMethod(".generateOutput", "RowTreePlot", function(x, se, all_memory, all_cont
   extra_args <- list()
   extra_args[["layout"]] <- deparse(slot(x, "layout"))
   extra_args[["add_legend"]] <- deparse(slot(x, "add_legend"))
-  extra_args[["edge_colour_by"]] <- deparse(slot(x, "edge_colour_by"))
-  extra_args[["tip_colour_by"]] <- deparse(slot(x, "tip_colour_by"))
+  if (slot(x, "edge_colour") == "Row data") {
+    extra_args[["edge_colour_by"]] <- deparse(slot(x, "edge_colour_by"))
+  }
+  if (slot(x, "tip_colour") == "Row data") {
+    extra_args[["tip_colour_by"]] <- deparse(slot(x, "tip_colour_by"))
+  }
 
   extra_args <- paste(sprintf("%s=%s", names(extra_args), unlist(extra_args)), collapse=", ")
   fn_call <- paste(fn_call, extra_args, sep = ", ")
   fn_call <- paste0(fn_call, ")")
   fn_call <- paste(strwrap(fn_call, exdent=4), collapse="\n")
 
-  plot_env$.customFUN <- miaViz::plotRowTree
+  plot_env$.customFUN <- plotRowTree
   tmp_call <- sprintf(fn_call, ".customFUN")
   .textEval(tmp_call, plot_env)
   
   commands <- sprintf(fn_call, "PlotRowTree")
-  
+  print(commands)
   commands <- sub("^gg <- ", "", commands) # to avoid an unnecessary variable.
   list(contents=plot_env$gg, commands=list(select=selected, plot=commands))
 })
@@ -196,3 +200,21 @@ setMethod(".renderOutput", "RowTreePlot", function(x, se, output, pObjects, rObj
   })
 })
 
+#' @importFrom miaViz plotRowTree
+.plotRowTree <- function(se, layout, add_legend, edge_colour,
+                         edge_colour_by, tip_colour, tip_colour_by) {
+  args <- list(object = se,
+               layout = layout,
+               add_legend = add_legend)
+  
+  if (edge_colour == "Row data") {
+    args[["edge_colour_by"]] <- edge_colour_by
+  }
+  if (tip_colour == "Row data") {
+    args[["tip_colour_by"]] <- tip_colour_by
+  }
+  
+  return(do.call(plotRowTree, args=args))
+}
+
+#.plotRowTree(tse_genus, "circular", FALSE, "None", "Kingdom", "Row data", "Phylum")
