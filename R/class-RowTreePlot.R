@@ -187,6 +187,7 @@ setMethod(".generateOutput", "RowTreePlot", function(x, se, all_memory, all_cont
   .textEval(tmp_call, plot_env)
   
   commands <- sprintf(fn_call, "PlotRowTree")
+  
   commands <- sub("^gg <- ", "", commands) # to avoid an unnecessary variable.
   list(contents=plot_env$gg, commands=list(select=selected, plot=commands))
 })

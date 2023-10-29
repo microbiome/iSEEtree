@@ -117,4 +117,3 @@ setMethod(".renderOutput", "RDAPlot", function(x, se, output, pObjects, rObjects
     .retrieveOutput(plot_name, se, pObjects, rObjects)$contents
   })
 })
-
