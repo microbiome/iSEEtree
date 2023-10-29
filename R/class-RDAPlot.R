@@ -1,6 +1,8 @@
+setClassUnion("charlog", c("character", "logical"))
+
 #' @export
 setClass("RDAPlot", contains="Panel",
-         slots=c(add.ellipse="logical", colour_by="character", vec.text="logical", add.vectors="logical"))
+         slots=c(add.ellipse="charlog", colour_by="character", vec.text="logical", add.vectors="logical"))
 
 #' @importFrom S4Vectors setValidity2
 setValidity2("RDAPlot", function(x) {
@@ -8,7 +10,7 @@ setValidity2("RDAPlot", function(x) {
   
   msg <- .singleStringError(msg, x, fields="colour_by")
   
-  msg <- .validLogicalError(msg, x, fields=c("vec.text", "add.vectors", "add.ellipse"))
+  msg <- .validLogicalError(msg, x, fields=c("vec.text", "add.vectors"))
   
   if (length(msg)) {
     return(msg)
@@ -19,7 +21,7 @@ setValidity2("RDAPlot", function(x) {
 #' @importFrom methods callNextMethod
 setMethod("initialize", "RDAPlot", function(.Object, ...) {
   extra_args <- list(...)
-  extra_args <- .emptyDefault(extra_args, "add.ellipse", TRUE)
+  extra_args <- .emptyDefault(extra_args, "add.ellipse", "fill")
   extra_args <- .emptyDefault(extra_args, "colour_by", NA_character_)
   extra_args <- .emptyDefault(extra_args, "vec.text", TRUE)
   extra_args <- .emptyDefault(extra_args, "add.vectors", TRUE)
@@ -45,14 +47,18 @@ setMethod(".defineInterface", "RDAPlot", function(x, se, select_info) {
                 x, field="colour_by", label="Color by",
                 choices=names(colData(se)), selected=slot(x, "colour_by")
               ),
-              .checkboxInput.iSEE(
-                x, field="add.ellipse", label="Add ellipse", value=slot(x, "add.ellipse")
+              .selectInput.iSEE(
+                x, field="add.ellipse", label="Ellipse style",
+                choices = c("fill", "colour", "FALSE"), selected=slot(x, "add.ellipse")
               ),
               .checkboxInput.iSEE(
                 x, field="add.vectors", label="Add vectors", value=slot(x, "add.vectors")
               ),
-              .checkboxInput.iSEE(
-                x, field="vec.text", label="Remove labels", value=slot(x, "vec.text")
+              .conditionalOnCheckSolo(
+                paste0(tab_name, "_add.vectors"), TRUE,
+                .checkboxInput.iSEE(x, field="vec.text",
+                                    label="Unboxed labels",
+                                    value=slot(x, "vec.text"))
               )
   )
 })
@@ -104,8 +110,8 @@ setMethod(".generateOutput", "RDAPlot", function(x, se, all_memory, all_contents
   tmp_call <- sprintf(fn_call, ".customFUN")
   .textEval(tmp_call, plot_env)
   
-  commands <- sprintf(fn_call, "PlotRowTree")
-  
+  commands <- sprintf(fn_call, "plotRDA")
+
   commands <- sub("^gg <- ", "", commands) # to avoid an unnecessary variable.
   list(contents=plot_env$gg, commands=list(select=selected, plot=commands))
 })
