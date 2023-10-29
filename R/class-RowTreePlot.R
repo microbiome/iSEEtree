@@ -142,7 +142,7 @@ setMethod(".createObservers", "RowTreePlot", function(x, se, input, session, pOb
 
   .createProtectedParameterObservers(
     panel_name,
-    c("layout", "add_legend", "edge_colour_by", "tip_colour_by"),
+    c("layout", "add_legend", "edge_colour", "edge_colour_by", "tip_colour", "tip_colour_by"),
     input=input, pObjects=pObjects, rObjects=rObjects
   )
   
@@ -170,8 +170,12 @@ setMethod(".generateOutput", "RowTreePlot", function(x, se, all_memory, all_cont
   extra_args <- list()
   extra_args[["layout"]] <- deparse(slot(x, "layout"))
   extra_args[["add_legend"]] <- deparse(slot(x, "add_legend"))
-  extra_args[["edge_colour_by"]] <- deparse(slot(x, "edge_colour_by"))
-  extra_args[["tip_colour_by"]] <- deparse(slot(x, "tip_colour_by"))
+  if (slot(x, "edge_colour") == "Row data") {
+    extra_args[["edge_colour_by"]] <- deparse(slot(x, "edge_colour_by"))
+  }
+  if (slot(x, "tip_colour") == "Row data") {
+    extra_args[["tip_colour_by"]] <- deparse(slot(x, "tip_colour_by"))
+  }
 
   extra_args <- paste(sprintf("%s=%s", names(extra_args), unlist(extra_args)), collapse=", ")
   fn_call <- paste(fn_call, extra_args, sep = ", ")
@@ -195,4 +199,3 @@ setMethod(".renderOutput", "RowTreePlot", function(x, se, output, pObjects, rObj
     .retrieveOutput(plot_name, se, pObjects, rObjects)$contents
   })
 })
-
