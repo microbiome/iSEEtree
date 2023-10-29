@@ -11,7 +11,7 @@
 container, enabling the interactive visualisation of typical microbiome data.
 }
 \examples{
-library("iSEEtree")
+library(iSEEtree)
 }
 \author{
 Giulio Benedetti \email{giulio.benedetti@utu.fi}

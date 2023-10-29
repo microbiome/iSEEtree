@@ -6,14 +6,15 @@
 \description{
 Composite abundance profile of all features in a
 \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}
-object.
+object. The panel implements \code{\link[miaViz:plotAbundance]{plotAbundance}}
+to generate the plot.
 }
 \section{Slot overview}{
 
-The following slots control the thresholds used in the visualisation:
+The following slots control the thresholds used in the visualization:
 \itemize{
-\item \code{rank}, a string specifying the taxonomic rank to visualise
-\item \code{add_legend}, a logical value indicating whether the legend should appear
+\item \code{rank}, a string specifying the taxonomic rank to visualize.
+\item \code{add_legend}, a logical indicating if the color legend should appear.
 }
 
 In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
@@ -26,23 +27,17 @@ where any slot and its value can be passed to \code{...} as a named argument.
 }
 
 \examples{
+# Import TreeSE
 library(mia)
 data("GlobalPatterns", package = "mia")
 tse <- GlobalPatterns
 
-rowData(tse)$prevalence <- getPrevalence(tse,
-                                         detection = 1/100,
-                                         sort = FALSE,
-                                         assay.type = "counts",
-                                         as_relative = TRUE)
-                                         
+# Agglomerate TreeSE by Genus and filter by prevalence
 tse_genus <- mergeFeaturesByPrevalence(tse,
                                        rank = "Genus",
                                        prevalence = 50/100)
-                                       
-tse_genus <- addTaxonomyTree(tse_genus)
-tse_genus <- transformAssay(tse_genus, method = "relabundance")
 
+# Launch iSEE
 if (interactive()) {
   iSEE(tse_genus)
 }

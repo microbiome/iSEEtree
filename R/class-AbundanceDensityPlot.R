@@ -1,3 +1,47 @@
+#' Abundance density plot
+#'
+#' Density abundance profile of single features in a
+#' \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}.
+#' The panel implements \code{\link[miaViz:plotAbundanceDensity]{plotAbundanceDensity}}
+#' to generate the plot.
+#'
+#' @section Slot overview:
+#' The following slots control the thresholds used in the visualization:
+#' \itemize{
+#' \item \code{layout}, a string specifying abundance layout (jitter, density or points). 
+#' \item \code{assay.type}, a string specifying the assay to visualize.
+#' \item \code{n}, a number indicating the number of top taxa to visualize.
+#' }
+#'
+#' In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
+#'
+#' @section Constructor:
+#' \code{AbundanceDensityPlot(...)} creates an instance of an AbundanceDensityPlot
+#' class, where any slot and its value can be passed to \code{...} as a named argument.
+#'
+#' @author Giulio Benedetti
+#' @examples
+#' # Import TreeSE
+#' library(mia)
+#' data("GlobalPatterns", package = "mia")
+#' tse <- GlobalPatterns
+#' 
+#' # Agglomerate TreeSE by Genus and filter by prevalence
+#' tse_genus <- mergeFeaturesByPrevalence(tse,
+#'                                        rank = "Genus",
+#'                                        prevalence = 50/100)
+#'
+#' # Add relabundance assay
+#' tse_genus <- transformAssay(tse_genus, method = "relabundance")
+#'
+#' # Launch iSEE
+#' if (interactive()) {
+#'   iSEE(tse_genus)
+#' }
+#'
+#' @name AbundanceDensityPlot-class
+NULL
+
 #' @export
 setClass("AbundanceDensityPlot", contains="Panel",
          slots=c(layout="character", assay.type="character", n="numeric"))

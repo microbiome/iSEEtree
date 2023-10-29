@@ -1,4 +1,44 @@
+#' iSEE layout for TreeSE
+#' 
+#' Panel configuration tuned to the specific properties of
+#' \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}.
+#' 
+#' @section Default layout: 
+#' 
+#' The default configuration can be overwritten by defining a different set of
+#' initial panels. By default, the visualized panels include the following:
+#' \itemize{
+#' \item \code{RowTreePlot()}
+#' \item \code{AbundancePlot()}
+#' \item \code{AbundanceDensityPlot()}
+#' \item \code{ReducedDimensionPlot()}
+#' \item \code{ComplexHeatmapPlot()}
+#' }
+#'
+#' @examples
+#' # Import TreeSE
+#' library(mia)
+#' data("GlobalPatterns", package = "mia")
+#' tse <- GlobalPatterns
+#'
+#' # Agglomerate TreeSE by Genus and filter by prevalence
+#' tse_genus <- mergeFeaturesByPrevalence(tse,
+#'                                        rank = "Genus",
+#'                                        prevalence = 50/100)
+#'
+#' # Add relabundance assay
+#' tse_genus <- transformAssay(tse_genus, method = "relabundance")
+#'
+#' # Add rowTree
+#' tse_genus <- addTaxonomyTree(tse_genus)
+#'
+#' # Launch iSEE with custom initial panels
+#' if (interactive()) {
+#'   iSEE(tse_genus, initial = c(RowTreePlot(), AbundancePlot(), AbundanceDensityPlot()))
+#' }
+#' 
 #' @name iSEE-TreeSE
+NULL
 
 #' @export
 setGeneric("iSEE", iSEE::iSEE)

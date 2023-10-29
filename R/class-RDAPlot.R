@@ -1,3 +1,49 @@
+#' RDA plot
+#'
+#' CCA/RDA plot for the rows of a
+#' \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}
+#' object. The reduced dimension can be produced with \code{\link[mia:runCCA]{runRDA}}
+#' and gets stored in the \code{\link[SingleCellExperiment:reducedDims]{reducedDim}}
+#' slot of the experiment object. The panel implements \code{\link[miaViz:plotCCA]{plotRDA}}
+#' to generate the plot.
+#'
+#' @section Slot overview:
+#' The following slots control the thresholds used in the visualization:
+#' \itemize{
+#' \item \code{add.ellipse}, a string specifying ellipse layout (filled, coloured or absent). 
+#' \item \code{colour_by}, a string specifying the parameter to color by.
+#' \item \code{add.vectors}, a logical indicating if vectors should appear in the plot.
+#' \item \code{vec.text}, a logical indicating if text should be encased in a box.
+#' }
+#'
+#' In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
+#'
+#' @section Constructor:
+#' \code{RDAPlot(...)} creates an instance of a RDAPlot class,
+#' where any slot and its value can be passed to \code{...} as a named argument.
+#'
+#' @author Giulio Benedetti
+#' @examples
+#' # Import TreeSE
+#' library(mia)
+#' data("enterotype", package = "mia")
+#' tse <- enterotype
+#'
+#' # Run RDA and store results into TreeSE
+#' tse <- runRDA(tse,
+#'               formula = assay ~ ClinicalStatus + Gender + Age,
+#'               FUN = vegan::vegdist,
+#'               distance = "bray",
+#'               na.action = na.exclude)
+#'
+#' # Launch iSEE with custom initial panels
+#' if (interactive()) {
+#'   iSEE(tse, initial = c(RDAPlot()))
+#' }
+#' 
+#' @name RDAPlot-class
+NULL
+
 setClassUnion("charlog", c("character", "logical"))
 
 #' @export
@@ -23,9 +69,9 @@ setMethod("initialize", "RDAPlot", function(.Object, ...) {
   extra_args <- list(...)
   extra_args <- .emptyDefault(extra_args, "add.ellipse", "fill")
   extra_args <- .emptyDefault(extra_args, "colour_by", NA_character_)
-  extra_args <- .emptyDefault(extra_args, "vec.text", TRUE)
   extra_args <- .emptyDefault(extra_args, "add.vectors", TRUE)
-  
+  extra_args <- .emptyDefault(extra_args, "vec.text", TRUE)
+
   do.call(callNextMethod, c(list(.Object), extra_args))
 })
 

@@ -11,5 +11,5 @@
 #' @keywords internal
 #'
 #' @examples
-#' library("iSEEtree")
+#' library(iSEEtree)
 "_PACKAGE"

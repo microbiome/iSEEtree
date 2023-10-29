@@ -8,18 +8,21 @@ Hierarchical tree for the rows of a
 \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}
 object. The tree can be produced with \code{\link[mia:taxonomy-methods]{addTaxonomyTree}}
 and gets stored in the \code{\link[TreeSummarizedExperiment:rowLinks]{rowTree}}
-slot of the experiment object.
+slot of the experiment object. The panel implements \code{\link[miaViz:plotTree]{plotRowTree}}
+to generate the plot.
 }
 \section{Slot overview}{
 
 The following slots control the thresholds used in the visualization:
 \itemize{
-\item \code{layout}, a string specifying
-\item \code{add_legend}, an integer scalar specifying
-\item \code{colour_tip},
-\item \code{colour_edge_by}, string indicating
-\item \code{colour_tip},
-\item \code{colour_tip_by},
+\item \code{layout}, a string specifying tree layout
+\item \code{add_legend}, a logical indicating if color legend should appear.
+\item \code{colour_edge}, a string specifying color mapping for tree lines.
+\item \code{colour_edge_by}, a string specifying parameter to color lines by
+when \code{colour_edge = "Row data"}.
+\item \code{colour_tip}, a string specifying color mapping for tree nodes.
+\item \code{colour_tip_by}, a string specifying parameter to color nodes by
+when \code{colour_tip = "Row data"}.
 }
 
 In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
@@ -32,23 +35,19 @@ where any slot and its value can be passed to \code{...} as a named argument.
 }
 
 \examples{
+# Import TreeSE
 library(mia)
 data("GlobalPatterns", package = "mia")
 tse <- GlobalPatterns
 
-rowData(tse)$prevalence <- getPrevalence(tse,
-                                         detection = 1/100,
-                                         sort = FALSE,
-                                         assay.type = "counts",
-                                         as_relative = TRUE)
-                                         
+# Agglomerate TreeSE by Genus and filter by prevalence
 tse_genus <- mergeFeaturesByPrevalence(tse,
                                        rank = "Genus",
                                        prevalence = 50/100)
-                                       
+# Add rowTree
 tse_genus <- addTaxonomyTree(tse_genus)
-tse_genus <- transformAssay(tse_genus, method = "relabundance")
 
+# Launch iSEE
 if (interactive()) {
   iSEE(tse_genus)
 }
