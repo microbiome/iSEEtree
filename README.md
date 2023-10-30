@@ -30,9 +30,6 @@ tse_genus <- transformAssay(tse_genus, method = "relabundance")
 # Add PCA
 tse_genus <- scater::runPCA(tse_genus, assay.type = "counts")
 
-# Add rowTree
-tse_genus <- addTaxonomyTree(tse_genus)
-
 # Launch iSEE
 if (interactive()) {
   iSEE(tse_genus)
