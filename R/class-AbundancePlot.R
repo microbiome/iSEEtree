@@ -25,10 +25,10 @@
 #' data("GlobalPatterns", package = "mia")
 #' tse <- GlobalPatterns
 #' 
-#' # Agglomerate TreeSE by Genus and filter by prevalence
-#' tse_genus <- mergeFeaturesByPrevalence(tse,
-#'                                        rank = "Genus",
-#'                                        prevalence = 50/100)
+#' # Agglomerate TreeSE by Genus
+#' tse_genus <- mergeFeaturesByRank(tse,
+#'                                  rank = "Genus",
+#'                                  onRankOnly = TRUE)
 #'
 #' # Launch iSEE
 #' if (interactive()) {
@@ -71,9 +71,7 @@ AbundancePlot <- function(...) {
   new("AbundancePlot", ...)
 }
 
-#' @importFrom SummarizedExperiment rowData assayNames
-#' @importFrom TreeSummarizedExperiment rowTreeNames
-#' @importFrom mia taxonomyRanks
+#' @importFrom SummarizedExperiment rowData
 setMethod(".defineInterface", "AbundancePlot", function(x, se, select_info) {
   tab_name <- .getEncodedName(x)
   
@@ -84,7 +82,7 @@ setMethod(".defineInterface", "AbundancePlot", function(x, se, select_info) {
               # Tree layout
               .selectInput.iSEE(
                 x, field="rank", label="Rank",
-                choices=taxonomyRanks(se), selected=slot(x, "rank")
+                choices=names(rowData(se)), selected=slot(x, "rank")
               ),
               # Colour legend
               .checkboxInput.iSEE(

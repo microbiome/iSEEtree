@@ -21,16 +21,13 @@
 #' data("GlobalPatterns", package = "mia")
 #' tse <- GlobalPatterns
 #'
-#' # Agglomerate TreeSE by Genus and filter by prevalence
-#' tse_genus <- mergeFeaturesByPrevalence(tse,
-#'                                        rank = "Genus",
-#'                                        prevalence = 50/100)
+#' # Agglomerate TreeSE by Genus
+#' tse_genus <- mergeFeaturesByRank(tse,
+#'                                  rank = "Genus",
+#'                                  onRankOnly = TRUE)
 #'
 #' # Add relabundance assay
 #' tse_genus <- transformAssay(tse_genus, method = "relabundance")
-#'
-#' # Add rowTree
-#' tse_genus <- addTaxonomyTree(tse_genus)
 #'
 #' # Launch iSEE with custom initial panels
 #' if (interactive()) {

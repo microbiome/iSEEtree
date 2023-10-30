@@ -15,6 +15,7 @@ Imports:
     miaViz,
     SummarizedExperiment,
     TreeSummarizedExperiment,
+    SingleCellExperiment,
     methods,
     S4Vectors
 Suggests:
