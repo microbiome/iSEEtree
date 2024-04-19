@@ -2,14 +2,10 @@ name: rworkflows
 'on':
   push:
     branches:
-    - main
     - devel
-    - RELEASE_**
   pull_request:
     branches:
-    - main
     - devel
-    - RELEASE_**
 jobs:
   rworkflows:
     permissions: write-all
@@ -26,12 +22,12 @@ jobs:
           cont: ghcr.io/bioconductor/bioconductor_docker:devel
           rspm: ~
         - os: macOS-latest
-          bioc: devel
+          bioc: release
           r: auto
           cont: ~
           rspm: ~
         - os: windows-latest
-          bioc: devel
+          bioc: release
           r: auto
           cont: ~
           rspm: ~
