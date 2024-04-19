@@ -1,0 +1,15 @@
+destination: docs
+reference:
+- title: Panels
+- contents:
+  - AbundanceDensityPlot-class
+  - AbundancePlot-class
+  - RDAPlot-class
+  - RowTreePlot-class
+- title: Other
+- subtitle: Default layout
+- contents:
+  - iSEE-TreeSE
+- subtitle: Package
+- contents:
+  - iSEEtree-pkg

@@ -7,6 +7,7 @@ Authors@R:
 Title: Interactive visualisation for microbiome data
 Description:
     iSEE extension for the TreeSummarizedExperiment container.
+biocViews: Microbiome, Software, Visualization
 License: Artistic-2.0
 Encoding: UTF-8
 Depends:
