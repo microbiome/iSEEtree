@@ -4,6 +4,7 @@
 \name{iSEEtree-pkg}
 \alias{iSEEtree}
 \alias{iSEEtree-package}
+\alias{iSEEtree-pkg}
 \title{iSEE extension for the TreeSummarizedExperiment container}
 \description{
 \code{iSEEtree} is an extension of \pkg{iSEE} that provides panels for the
@@ -12,6 +13,14 @@ container, enabling the interactive visualisation of typical microbiome data.
 }
 \examples{
 library(iSEEtree)
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/RiboRings/iSEEtree}
+  \item Report bugs at \url{https://github.com/RiboRings/iSEEtree/issues}
+}
+
 }
 \author{
 Giulio Benedetti \email{giulio.benedetti@utu.fi}
