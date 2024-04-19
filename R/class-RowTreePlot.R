@@ -52,6 +52,7 @@ setClass("RowTreePlot", contains="Panel",
                  edge_colour="character", edge_colour_by="character",
                  tip_colour="character", tip_colour_by="character"))
 
+#' @importFrom iSEE .singleStringError .validLogicalError
 #' @importFrom S4Vectors setValidity2
 setValidity2("RowTreePlot", function(x) {
   msg <- character(0)
@@ -68,6 +69,7 @@ setValidity2("RowTreePlot", function(x) {
   TRUE
 })
 
+#' @importFrom iSEE .emptyDefault
 #' @importFrom methods callNextMethod
 setMethod("initialize", "RowTreePlot", function(.Object, ...) {
   extra_args <- list(...)
@@ -87,6 +89,7 @@ RowTreePlot <- function(...) {
   new("RowTreePlot", ...)
 }
 
+#' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE
 #' @importFrom SummarizedExperiment rowData assayNames
 #' @importFrom TreeSummarizedExperiment rowTreeNames
 setMethod(".defineInterface", "RowTreePlot", function(x, se, select_info) {
@@ -132,6 +135,7 @@ setMethod(".defineInterface", "RowTreePlot", function(x, se, select_info) {
   )
 })
 
+#' @importFrom iSEE .getEncodedName .createProtectedParameterObservers
 setMethod(".createObservers", "RowTreePlot", function(x, se, input, session, pObjects, rObjects) {
   callNextMethod()
   
@@ -154,6 +158,7 @@ setMethod(".defineOutput", "RowTreePlot", function(x) {
   plotOutput(.getEncodedName(x))
 })
 
+#' @importFrom iSEE .processMultiSelections
 #' @importFrom miaViz plotRowTree
 setMethod(".generateOutput", "RowTreePlot", function(x, se, all_memory, all_contents) {
   plot_env <- new.env()

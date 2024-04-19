@@ -71,6 +71,7 @@ AbundancePlot <- function(...) {
   new("AbundancePlot", ...)
 }
 
+#' @importFrom methods slot
 #' @importFrom SummarizedExperiment rowData
 setMethod(".defineInterface", "AbundancePlot", function(x, se, select_info) {
   tab_name <- .getEncodedName(x)

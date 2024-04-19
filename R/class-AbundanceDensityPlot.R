@@ -46,6 +46,7 @@ NULL
 setClass("AbundanceDensityPlot", contains="Panel",
          slots=c(layout="character", assay.type="character", n="numeric"))
 
+#' @importFrom iSEE .singleStringError .validNumberError
 #' @importFrom S4Vectors setValidity2
 setValidity2("AbundanceDensityPlot", function(x) {
   msg <- character(0)
@@ -62,6 +63,7 @@ setValidity2("AbundanceDensityPlot", function(x) {
   TRUE
 })
 
+#' @importFrom iSEE .emptyDefault
 #' @importFrom methods callNextMethod
 setMethod("initialize", "AbundanceDensityPlot", function(.Object, ...) {
   extra_args <- list(...)
@@ -78,6 +80,9 @@ AbundanceDensityPlot <- function(...) {
   new("AbundanceDensityPlot", ...)
 }
 
+#' @importMethodsFrom iSEE .defineInterface
+#' @importFrom iSEE .getEncodedName collapseBox .selectInput.iSEE .numericInput.iSEE
+#' @importFrom methods slot
 #' @importFrom SummarizedExperiment rowData assayNames
 #' @importFrom TreeSummarizedExperiment rowTreeNames
 setMethod(".defineInterface", "AbundanceDensityPlot", function(x, se, select_info) {
@@ -103,6 +108,7 @@ setMethod(".defineInterface", "AbundanceDensityPlot", function(x, se, select_inf
   )
 })
 
+#' importFrom iSEE .getEncodedName .createProtectedParameterObservers
 setMethod(".createObservers", "AbundanceDensityPlot", function(x, se, input, session, pObjects, rObjects) {
   callNextMethod()
   
@@ -117,14 +123,20 @@ setMethod(".createObservers", "AbundanceDensityPlot", function(x, se, input, ses
   invisible(NULL)
 })
 
+#' @importMethodsFrom iSEE .fullName
 setMethod(".fullName", "AbundanceDensityPlot", function(x) "Abundance density plot")
 
+#' @importMethodsFrom iSEE .panelColor
 setMethod(".panelColor", "AbundanceDensityPlot", function(x) "#8B5A2B")
 
+#' @importMethodsFrom iSEE .defineOutput
+#' @importFrom iSEE .getEncodedName
 setMethod(".defineOutput", "AbundanceDensityPlot", function(x) {
   plotOutput(.getEncodedName(x))
 })
 
+#' @importMethodsFrom iSEE .generateOutput
+#' @importFrom iSEE .processMultiSelections
 #' @importFrom miaViz plotRowTree
 setMethod(".generateOutput", "AbundanceDensityPlot", function(x, se, all_memory, all_contents) {
   plot_env <- new.env()
@@ -155,6 +167,8 @@ setMethod(".generateOutput", "AbundanceDensityPlot", function(x, se, all_memory,
   list(contents=plot_env$gg, commands=list(select=selected, plot=commands))
 })
 
+#' @importMethodsFrom iSEE .renderOutput
+#' @importFrom iSEE .getEncodedName .retrieveOutput
 setMethod(".renderOutput", "AbundanceDensityPlot", function(x, se, output, pObjects, rObjects) {
   plot_name <- .getEncodedName(x)
   force(se) # defensive programming to avoid difficult bugs due to delayed evaluation.
