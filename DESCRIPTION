@@ -24,7 +24,8 @@ Suggests:
     knitr,
     mia,
     rmarkdown,
-    vegan
+    vegan,
+    BiocStyle
 URL: https://github.com/RiboRings/iSEEtree
 BugReports: https://github.com/RiboRings/iSEEtree/issues
 Roxygen: list(markdown = TRUE)
