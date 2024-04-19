@@ -1,12 +1,12 @@
 Package: iSEEtree
-Title: iSEE extension for the TreeSummarizedExperiment container
 Version: 0.1.1
 Authors@R: 
     person(given = "Giulio", family = "Benedetti", role = c("aut", "cre"),
            email = "giulio.benedetti@utu.fi",
            comment = c(ORCID = "0000-0002-8732-7692"))
 Title: Interactive visualisation for microbiome data
-Description: What the package does (one paragraph).
+Description:
+    iSEE extension for the TreeSummarizedExperiment container.
 License: Artistic-2.0
 Encoding: UTF-8
 Depends:
