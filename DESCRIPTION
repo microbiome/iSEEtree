@@ -2,13 +2,13 @@ Package: iSEEtree
 Title: iSEE extension for the TreeSummarizedExperiment container
 Version: 0.1.0
 Authors@R: 
-    person("Giulio", "Benedetti", , "giulio.benedetti@utu.fi", role = c("aut", "cre"),
+    person(given = "Giulio", family = "Benedetti", role = c("aut", "cre"),
+           email = "giulio.benedetti@utu.fi",
            comment = c(ORCID = "0000-0002-8732-7692"))
+Title: Interactive visualisation for microbiome data
 Description: What the package does (one paragraph).
 License: Artistic-2.0
 Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
 Depends:
     iSEE
 Imports:
@@ -20,3 +20,7 @@ Imports:
     S4Vectors
 Suggests:
     mia
+URL: https://github.com/RiboRings/iSEEtree
+BugReports: https://github.com/RiboRings/iSEEtree/issues
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
