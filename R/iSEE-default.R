@@ -22,9 +22,9 @@
 #' tse <- GlobalPatterns
 #'
 #' # Agglomerate TreeSE by Genus
-#' tse_genus <- mergeFeaturesByRank(tse,
-#'                                  rank = "Genus",
-#'                                  onRankOnly = TRUE)
+#' tse_genus <- agglomerateByRank(tse,
+#'                                rank = "Genus",
+#'                                onRankOnly = TRUE)
 #'
 #' # Add relabundance assay
 #' tse_genus <- transformAssay(tse_genus, method = "relabundance")
@@ -34,7 +34,7 @@
 #'   iSEE(tse_genus, initial = c(RowTreePlot(), AbundancePlot(), AbundanceDensityPlot()))
 #' }
 #' 
-#' @name iSEE-TreeSE
+#' @name iSEE
 NULL
 
 #' @export

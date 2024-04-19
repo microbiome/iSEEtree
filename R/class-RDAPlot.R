@@ -41,7 +41,7 @@
 #'   iSEE(tse, initial = c(RDAPlot()))
 #' }
 #' 
-#' @name RDAPlot-class
+#' @name RDAPlot
 NULL
 
 setClassUnion("charlog", c("character", "logical"))

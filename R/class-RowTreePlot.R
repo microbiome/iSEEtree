@@ -34,16 +34,16 @@
 #' tse <- GlobalPatterns
 #' 
 #' # Agglomerate TreeSE by Genus
-#' tse_genus <- mergeFeaturesByRank(tse,
-#'                                  rank = "Genus",
-#'                                  onRankOnly = TRUE)
+#' tse_genus <- agglomerateByRank(tse,
+#'                                rank = "Genus",
+#'                                onRankOnly = TRUE)
 #'
 #' # Launch iSEE
 #' if (interactive()) {
 #'   iSEE(tse_genus)
 #' }
 #'
-#' @name RowTreePlot-class
+#' @name RowTreePlot
 NULL
 
 #' @export

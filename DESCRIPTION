@@ -21,7 +21,8 @@ Imports:
     methods,
     S4Vectors
 Suggests:
-    mia
+    mia,
+    vegan
 URL: https://github.com/RiboRings/iSEEtree
 BugReports: https://github.com/RiboRings/iSEEtree/issues
 Roxygen: list(markdown = TRUE)

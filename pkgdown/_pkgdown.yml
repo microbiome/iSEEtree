@@ -2,14 +2,14 @@ destination: docs
 reference:
 - title: Panels
 - contents:
-  - AbundanceDensityPlot-class
-  - AbundancePlot-class
-  - RDAPlot-class
-  - RowTreePlot-class
+  - AbundanceDensityPlot
+  - AbundancePlot
+  - RDAPlot
+  - RowTreePlot
 - title: Other
 - subtitle: Default layout
 - contents:
-  - iSEE-TreeSE
+  - iSEE
 - subtitle: Package
 - contents:
-  - iSEEtree-pkg
+  - iSEEtree
