@@ -108,7 +108,8 @@ setMethod(".defineInterface", "AbundanceDensityPlot", function(x, se, select_inf
   )
 })
 
-#' importFrom iSEE .getEncodedName .createProtectedParameterObservers
+#' @importMethodsFrom iSEE .createObservers
+#' @importFrom iSEE .getEncodedName .createProtectedParameterObservers
 setMethod(".createObservers", "AbundanceDensityPlot", function(x, se, input, session, pObjects, rObjects) {
   callNextMethod()
   

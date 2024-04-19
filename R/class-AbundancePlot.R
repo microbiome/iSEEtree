@@ -92,6 +92,7 @@ setMethod(".defineInterface", "AbundancePlot", function(x, se, select_info) {
   )
 })
 
+#' @importMethodsFrom iSEE .createObservers
 setMethod(".createObservers", "AbundancePlot", function(x, se, input, session, pObjects, rObjects) {
   callNextMethod()
   
