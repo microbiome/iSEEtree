@@ -34,15 +34,18 @@
 #'   iSEE(tse_genus, initial = c(RowTreePlot(), AbundancePlot(), AbundanceDensityPlot()))
 #' }
 #' 
-#' @name iSEE
+#' @docType methods
+#' @aliases iSEE,TreeSummarizedExperiment-method
+#'   iSEE
+#'
+#' @name iSEE-default
 NULL
 
 #' @export
 setGeneric("iSEE", iSEE::iSEE)
 
 #' @export
-#' @importClassesFrom iSEE ExperimentColorMap
-#' @importFrom iSEE createLandingPage
+#' @importFrom iSEE createLandingPage ExperimentColorMap
 #' @importFrom TreeSummarizedExperiment TreeSummarizedExperiment rowLinks
 #' @importFrom SingleCellExperiment reducedDims
 setMethod("iSEE", "TreeSummarizedExperiment",

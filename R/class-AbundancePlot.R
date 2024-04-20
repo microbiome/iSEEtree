@@ -34,6 +34,10 @@
 #' if (interactive()) {
 #'   iSEE(tse_genus)
 #' }
+#' 
+#' @docType methods
+#' @aliases AbundancePlot-class
+#'   initialize,AbundancePlot-method
 #'
 #' @name AbundancePlot
 NULL
@@ -144,6 +148,9 @@ setMethod(".generateOutput", "AbundancePlot", function(x, se, all_memory, all_co
   list(contents=plot_env$gg, commands=list(select=selected, plot=commands))
 })
 
+#' @importMethodsFrom iSEE .renderOutput
+#' @importFrom iSEE .getEncodedName .retrieveOutput
+#' @importFrom shiny renderPlot
 setMethod(".renderOutput", "AbundancePlot", function(x, se, output, pObjects, rObjects) {
   plot_name <- .getEncodedName(x)
   force(se) # defensive programming to avoid difficult bugs due to delayed evaluation.

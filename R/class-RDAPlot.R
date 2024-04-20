@@ -41,6 +41,10 @@
 #'   iSEE(tse, initial = c(RDAPlot()))
 #' }
 #' 
+#' #' @docType methods
+#' @aliases RDAPlot-class
+#'   initialize,RDAPlot-method
+#'
 #' @name RDAPlot
 NULL
 
@@ -137,7 +141,7 @@ setMethod(".defineOutput", "RDAPlot", function(x) {
   plotOutput(.getEncodedName(x))
 })
 
-#' @importFrom iSEE .processMultiSelections
+#' @importFrom iSEE .processMultiSelections .textEval
 #' @importFrom miaViz plotRowTree
 setMethod(".generateOutput", "RDAPlot", function(x, se, all_memory, all_contents) {
   plot_env <- new.env()
@@ -169,7 +173,9 @@ setMethod(".generateOutput", "RDAPlot", function(x, se, all_memory, all_contents
   list(contents=plot_env$gg, commands=list(select=selected, plot=commands))
 })
 
+#' @importMethodsFrom iSEE .renderOutput
 #' @importFrom iSEE .getEncodedName .retrieveOutput
+#' @importFrom shiny renderPlot
 setMethod(".renderOutput", "RDAPlot", function(x, se, output, pObjects, rObjects) {
   plot_name <- .getEncodedName(x)
   force(se) # defensive programming to avoid difficult bugs due to delayed evaluation.

@@ -38,6 +38,21 @@
 #' if (interactive()) {
 #'   iSEE(tse_genus)
 #' }
+#' 
+#' #' @docType methods
+#' @aliases VolcanoPlot VolcanoPlot-class
+#' initialize,VolcanoPlot-method
+#' .cacheCommonInfo,VolcanoPlot-method
+#' .createObservers,VolcanoPlot-method
+#' .defineDataInterface,VolcanoPlot-method
+#' .fullName,VolcanoPlot-method
+#' .generateDotPlotData,VolcanoPlot-method
+#' .panelColor,VolcanoPlot-method
+#' .refineParameters,VolcanoPlot-method
+#' 
+#' @docType methods
+#' @aliases AbundanceDensityPlot-class
+#'   initialize,AbundanceDensityPlot-method
 #'
 #' @name AbundanceDensityPlot
 NULL
@@ -137,7 +152,7 @@ setMethod(".defineOutput", "AbundanceDensityPlot", function(x) {
 })
 
 #' @importMethodsFrom iSEE .generateOutput
-#' @importFrom iSEE .processMultiSelections
+#' @importFrom iSEE .processMultiSelections .textEval
 #' @importFrom miaViz plotRowTree
 setMethod(".generateOutput", "AbundanceDensityPlot", function(x, se, all_memory, all_contents) {
   plot_env <- new.env()
@@ -170,6 +185,7 @@ setMethod(".generateOutput", "AbundanceDensityPlot", function(x, se, all_memory,
 
 #' @importMethodsFrom iSEE .renderOutput
 #' @importFrom iSEE .getEncodedName .retrieveOutput
+#' @importFrom shiny renderPlot
 setMethod(".renderOutput", "AbundanceDensityPlot", function(x, se, output, pObjects, rObjects) {
   plot_name <- .getEncodedName(x)
   force(se) # defensive programming to avoid difficult bugs due to delayed evaluation.

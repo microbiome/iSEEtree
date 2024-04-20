@@ -14,12 +14,13 @@ Depends:
     R (>= 4.0),
     iSEE
 Imports:
-    miaViz,
-    SummarizedExperiment,
-    TreeSummarizedExperiment,
-    SingleCellExperiment,
     methods,
-    S4Vectors
+    miaViz,
+    S4Vectors,
+    shiny,
+    SingleCellExperiment,
+    SummarizedExperiment,
+    TreeSummarizedExperiment
 Suggests:
     knitr,
     mia,

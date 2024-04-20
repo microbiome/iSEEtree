@@ -2,6 +2,8 @@
 % Please edit documentation in R/class-RDAPlot.R
 \name{RDAPlot}
 \alias{RDAPlot}
+\alias{RDAPlot-class}
+\alias{initialize,RDAPlot-method}
 \title{RDA plot}
 \description{
 CCA/RDA plot for the rows of a
@@ -48,6 +50,7 @@ if (interactive()) {
   iSEE(tse, initial = c(RDAPlot()))
 }
 
+#' @docType methods
 }
 \author{
 Giulio Benedetti

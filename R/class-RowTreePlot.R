@@ -42,6 +42,10 @@
 #' if (interactive()) {
 #'   iSEE(tse_genus)
 #' }
+#' 
+#' @docType methods
+#' @aliases RowTreePlot-class
+#'   initialize,RowTreePlot-method
 #'
 #' @name RowTreePlot
 NULL
@@ -90,6 +94,7 @@ RowTreePlot <- function(...) {
 }
 
 #' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE
+#'   .radioButtons.iSEE .conditionalOnRadio
 #' @importFrom SummarizedExperiment rowData assayNames
 #' @importFrom TreeSummarizedExperiment rowTreeNames
 setMethod(".defineInterface", "RowTreePlot", function(x, se, select_info) {
@@ -154,11 +159,14 @@ setMethod(".fullName", "RowTreePlot", function(x) "Row tree plot")
 
 setMethod(".panelColor", "RowTreePlot", function(x) "#4EEE94")
 
+#' @importMethodsFrom iSEE .defineOutput
+#' @importFrom iSEE .getEncodedName
+#' @importFrom shiny plotOutput
 setMethod(".defineOutput", "RowTreePlot", function(x) {
   plotOutput(.getEncodedName(x))
 })
 
-#' @importFrom iSEE .processMultiSelections
+#' @importFrom iSEE .processMultiSelections .textEval
 #' @importFrom miaViz plotRowTree
 setMethod(".generateOutput", "RowTreePlot", function(x, se, all_memory, all_contents) {
   plot_env <- new.env()
@@ -194,6 +202,9 @@ setMethod(".generateOutput", "RowTreePlot", function(x, se, all_memory, all_cont
   list(contents=plot_env$gg, commands=list(select=selected, plot=commands))
 })
 
+#' @importMethodsFrom iSEE .renderOutput
+#' @importFrom iSEE .getEncodedName .retrieveOutput
+#' @importFrom shiny renderPlot
 setMethod(".renderOutput", "RowTreePlot", function(x, se, output, pObjects, rObjects) {
   plot_name <- .getEncodedName(x)
   force(se) # defensive programming to avoid difficult bugs due to delayed evaluation.

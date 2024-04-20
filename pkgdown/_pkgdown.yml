@@ -9,7 +9,7 @@ reference:
 - title: Other
 - subtitle: Default layout
 - contents:
-  - iSEE
+  - iSEE-default
 - subtitle: Package
 - contents:
   - iSEEtree
