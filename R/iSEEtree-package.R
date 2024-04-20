@@ -6,7 +6,7 @@
 #'
 #' @author Giulio Benedetti \email{giulio.benedetti@@utu.fi}
 #'
-#' @name iSEEtree-pkg
+#' @name iSEEtree
 #' @docType package
 #' @keywords internal
 #'

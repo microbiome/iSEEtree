@@ -34,16 +34,20 @@
 #' tse <- GlobalPatterns
 #' 
 #' # Agglomerate TreeSE by Genus
-#' tse_genus <- mergeFeaturesByRank(tse,
-#'                                  rank = "Genus",
-#'                                  onRankOnly = TRUE)
+#' tse_genus <- agglomerateByRank(tse,
+#'                                rank = "Genus",
+#'                                onRankOnly = TRUE)
 #'
 #' # Launch iSEE
 #' if (interactive()) {
 #'   iSEE(tse_genus)
 #' }
+#' 
+#' @docType methods
+#' @aliases RowTreePlot-class
+#'   initialize,RowTreePlot-method
 #'
-#' @name RowTreePlot-class
+#' @name RowTreePlot
 NULL
 
 #' @export
@@ -52,6 +56,7 @@ setClass("RowTreePlot", contains="Panel",
                  edge_colour="character", edge_colour_by="character",
                  tip_colour="character", tip_colour_by="character"))
 
+#' @importFrom iSEE .singleStringError .validLogicalError
 #' @importFrom S4Vectors setValidity2
 setValidity2("RowTreePlot", function(x) {
   msg <- character(0)
@@ -68,6 +73,7 @@ setValidity2("RowTreePlot", function(x) {
   TRUE
 })
 
+#' @importFrom iSEE .emptyDefault
 #' @importFrom methods callNextMethod
 setMethod("initialize", "RowTreePlot", function(.Object, ...) {
   extra_args <- list(...)
@@ -87,6 +93,8 @@ RowTreePlot <- function(...) {
   new("RowTreePlot", ...)
 }
 
+#' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE
+#'   .radioButtons.iSEE .conditionalOnRadio
 #' @importFrom SummarizedExperiment rowData assayNames
 #' @importFrom TreeSummarizedExperiment rowTreeNames
 setMethod(".defineInterface", "RowTreePlot", function(x, se, select_info) {
@@ -132,6 +140,7 @@ setMethod(".defineInterface", "RowTreePlot", function(x, se, select_info) {
   )
 })
 
+#' @importFrom iSEE .getEncodedName .createProtectedParameterObservers
 setMethod(".createObservers", "RowTreePlot", function(x, se, input, session, pObjects, rObjects) {
   callNextMethod()
   
@@ -150,10 +159,14 @@ setMethod(".fullName", "RowTreePlot", function(x) "Row tree plot")
 
 setMethod(".panelColor", "RowTreePlot", function(x) "#4EEE94")
 
+#' @importMethodsFrom iSEE .defineOutput
+#' @importFrom iSEE .getEncodedName
+#' @importFrom shiny plotOutput
 setMethod(".defineOutput", "RowTreePlot", function(x) {
   plotOutput(.getEncodedName(x))
 })
 
+#' @importFrom iSEE .processMultiSelections .textEval
 #' @importFrom miaViz plotRowTree
 setMethod(".generateOutput", "RowTreePlot", function(x, se, all_memory, all_contents) {
   plot_env <- new.env()
@@ -189,6 +202,9 @@ setMethod(".generateOutput", "RowTreePlot", function(x, se, all_memory, all_cont
   list(contents=plot_env$gg, commands=list(select=selected, plot=commands))
 })
 
+#' @importMethodsFrom iSEE .renderOutput
+#' @importFrom iSEE .getEncodedName .retrieveOutput
+#' @importFrom shiny renderPlot
 setMethod(".renderOutput", "RowTreePlot", function(x, se, output, pObjects, rObjects) {
   plot_name <- .getEncodedName(x)
   force(se) # defensive programming to avoid difficult bugs due to delayed evaluation.

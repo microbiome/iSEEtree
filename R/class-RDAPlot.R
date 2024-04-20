@@ -41,7 +41,11 @@
 #'   iSEE(tse, initial = c(RDAPlot()))
 #' }
 #' 
-#' @name RDAPlot-class
+#' #' @docType methods
+#' @aliases RDAPlot-class
+#'   initialize,RDAPlot-method
+#'
+#' @name RDAPlot
 NULL
 
 setClassUnion("charlog", c("character", "logical"))
@@ -50,6 +54,7 @@ setClassUnion("charlog", c("character", "logical"))
 setClass("RDAPlot", contains="Panel",
          slots=c(add.ellipse="charlog", colour_by="character", vec.text="logical", add.vectors="logical"))
 
+#' @importFrom iSEE .singleStringError .validLogicalError
 #' @importFrom S4Vectors setValidity2
 setValidity2("RDAPlot", function(x) {
   msg <- character(0)
@@ -64,6 +69,7 @@ setValidity2("RDAPlot", function(x) {
   TRUE
 })
 
+#' @importFrom iSEE .emptyDefault
 #' @importFrom methods callNextMethod
 setMethod("initialize", "RDAPlot", function(.Object, ...) {
   extra_args <- list(...)
@@ -81,6 +87,8 @@ RDAPlot <- function(...) {
   new("RDAPlot", ...)
 }
 
+#' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE .conditionalOnCheckSolo
+#' @importFrom methods slot
 #' @importFrom SummarizedExperiment colData
 setMethod(".defineInterface", "RDAPlot", function(x, se, select_info) {
   tab_name <- .getEncodedName(x)
@@ -109,6 +117,7 @@ setMethod(".defineInterface", "RDAPlot", function(x, se, select_info) {
   )
 })
 
+#' @importFrom iSEE .getEncodedName .createProtectedParameterObservers
 setMethod(".createObservers", "RDAPlot", function(x, se, input, session, pObjects, rObjects) {
   callNextMethod()
   
@@ -127,10 +136,12 @@ setMethod(".fullName", "RDAPlot", function(x) "RDA plot")
 
 setMethod(".panelColor", "RDAPlot", function(x) "#CD5B45")
 
+#' @importFrom iSEE .getEncodedName
 setMethod(".defineOutput", "RDAPlot", function(x) {
   plotOutput(.getEncodedName(x))
 })
 
+#' @importFrom iSEE .processMultiSelections .textEval
 #' @importFrom miaViz plotRowTree
 setMethod(".generateOutput", "RDAPlot", function(x, se, all_memory, all_contents) {
   plot_env <- new.env()
@@ -162,6 +173,9 @@ setMethod(".generateOutput", "RDAPlot", function(x, se, all_memory, all_contents
   list(contents=plot_env$gg, commands=list(select=selected, plot=commands))
 })
 
+#' @importMethodsFrom iSEE .renderOutput
+#' @importFrom iSEE .getEncodedName .retrieveOutput
+#' @importFrom shiny renderPlot
 setMethod(".renderOutput", "RDAPlot", function(x, se, output, pObjects, rObjects) {
   plot_name <- .getEncodedName(x)
   force(se) # defensive programming to avoid difficult bugs due to delayed evaluation.

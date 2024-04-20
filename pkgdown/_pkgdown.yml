@@ -1,0 +1,15 @@
+destination: docs
+reference:
+- title: Panels
+- contents:
+  - AbundanceDensityPlot
+  - AbundancePlot
+  - RDAPlot
+  - RowTreePlot
+- title: Other
+- subtitle: Default layout
+- contents:
+  - iSEE-default
+- subtitle: Package
+- contents:
+  - iSEEtree

@@ -22,9 +22,9 @@
 #' tse <- GlobalPatterns
 #'
 #' # Agglomerate TreeSE by Genus
-#' tse_genus <- mergeFeaturesByRank(tse,
-#'                                  rank = "Genus",
-#'                                  onRankOnly = TRUE)
+#' tse_genus <- agglomerateByRank(tse,
+#'                                rank = "Genus",
+#'                                onRankOnly = TRUE)
 #'
 #' # Add relabundance assay
 #' tse_genus <- transformAssay(tse_genus, method = "relabundance")
@@ -34,13 +34,18 @@
 #'   iSEE(tse_genus, initial = c(RowTreePlot(), AbundancePlot(), AbundanceDensityPlot()))
 #' }
 #' 
-#' @name iSEE-TreeSE
+#' @docType methods
+#' @aliases iSEE,TreeSummarizedExperiment-method
+#'   iSEE
+#'
+#' @name iSEE-default
 NULL
 
 #' @export
 setGeneric("iSEE", iSEE::iSEE)
 
 #' @export
+#' @importFrom iSEE createLandingPage ExperimentColorMap
 #' @importFrom TreeSummarizedExperiment TreeSummarizedExperiment rowLinks
 #' @importFrom SingleCellExperiment reducedDims
 setMethod("iSEE", "TreeSummarizedExperiment",
@@ -64,6 +69,7 @@ setMethod("iSEE", "TreeSummarizedExperiment",
                saveState = saveState,...)
 })
 
+#' @importFrom S4Vectors isEmpty
 .check_panel <- function(se, panel_list, panel_class, panel_fun) {
   no_keep <- .is_class_present(panel_list, panel_class)
   if (any(no_keep) && isEmpty(panel_fun(se))) {
@@ -72,4 +78,5 @@ setMethod("iSEE", "TreeSummarizedExperiment",
   return(panel_list)
 }
 
+#' @importFrom methods is
 .is_class_present <- function(x, panel_class) sapply(x, function(y) is(y, panel_class))

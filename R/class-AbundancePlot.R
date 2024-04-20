@@ -26,16 +26,20 @@
 #' tse <- GlobalPatterns
 #' 
 #' # Agglomerate TreeSE by Genus
-#' tse_genus <- mergeFeaturesByRank(tse,
-#'                                  rank = "Genus",
-#'                                  onRankOnly = TRUE)
+#' tse_genus <- agglomerateByRank(tse,
+#'                                rank = "Genus",
+#'                                onRankOnly = TRUE)
 #'
 #' # Launch iSEE
 #' if (interactive()) {
 #'   iSEE(tse_genus)
 #' }
+#' 
+#' @docType methods
+#' @aliases AbundancePlot-class
+#'   initialize,AbundancePlot-method
 #'
-#' @name AbundancePlot-class
+#' @name AbundancePlot
 NULL
 
 #' @export
@@ -71,6 +75,7 @@ AbundancePlot <- function(...) {
   new("AbundancePlot", ...)
 }
 
+#' @importFrom methods slot
 #' @importFrom SummarizedExperiment rowData
 setMethod(".defineInterface", "AbundancePlot", function(x, se, select_info) {
   tab_name <- .getEncodedName(x)
@@ -91,6 +96,7 @@ setMethod(".defineInterface", "AbundancePlot", function(x, se, select_info) {
   )
 })
 
+#' @importMethodsFrom iSEE .createObservers
 setMethod(".createObservers", "AbundancePlot", function(x, se, input, session, pObjects, rObjects) {
   callNextMethod()
   
@@ -142,6 +148,9 @@ setMethod(".generateOutput", "AbundancePlot", function(x, se, all_memory, all_co
   list(contents=plot_env$gg, commands=list(select=selected, plot=commands))
 })
 
+#' @importMethodsFrom iSEE .renderOutput
+#' @importFrom iSEE .getEncodedName .retrieveOutput
+#' @importFrom shiny renderPlot
 setMethod(".renderOutput", "AbundancePlot", function(x, se, output, pObjects, rObjects) {
   plot_name <- .getEncodedName(x)
   force(se) # defensive programming to avoid difficult bugs due to delayed evaluation.
