@@ -3,16 +3,6 @@
 \docType{methods}
 \name{AbundanceDensityPlot}
 \alias{AbundanceDensityPlot}
-\alias{VolcanoPlot}
-\alias{VolcanoPlot-class}
-\alias{initialize,VolcanoPlot-method}
-\alias{.cacheCommonInfo,VolcanoPlot-method}
-\alias{.createObservers,VolcanoPlot-method}
-\alias{.defineDataInterface,VolcanoPlot-method}
-\alias{.fullName,VolcanoPlot-method}
-\alias{.generateDotPlotData,VolcanoPlot-method}
-\alias{.panelColor,VolcanoPlot-method}
-\alias{.refineParameters,VolcanoPlot-method}
 \alias{AbundanceDensityPlot-class}
 \alias{initialize,AbundanceDensityPlot-method}
 \title{Abundance density plot}
@@ -59,7 +49,6 @@ if (interactive()) {
   iSEE(tse_genus)
 }
 
-#' @docType methods
 }
 \author{
 Giulio Benedetti

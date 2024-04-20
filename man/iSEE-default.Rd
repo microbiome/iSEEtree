@@ -3,8 +3,8 @@
 \docType{methods}
 \name{iSEE-default}
 \alias{iSEE-default}
-\alias{iSEE,TreeSummarizedExperiment-method}
 \alias{iSEE}
+\alias{iSEE,TreeSummarizedExperiment-method}
 \title{iSEE layout for TreeSE}
 \description{
 Panel configuration tuned to the specific properties of
