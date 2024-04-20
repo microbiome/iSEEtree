@@ -39,17 +39,6 @@
 #'   iSEE(tse_genus)
 #' }
 #' 
-#' #' @docType methods
-#' @aliases VolcanoPlot VolcanoPlot-class
-#' initialize,VolcanoPlot-method
-#' .cacheCommonInfo,VolcanoPlot-method
-#' .createObservers,VolcanoPlot-method
-#' .defineDataInterface,VolcanoPlot-method
-#' .fullName,VolcanoPlot-method
-#' .generateDotPlotData,VolcanoPlot-method
-#' .panelColor,VolcanoPlot-method
-#' .refineParameters,VolcanoPlot-method
-#' 
 #' @docType methods
 #' @aliases AbundanceDensityPlot-class
 #'   initialize,AbundanceDensityPlot-method

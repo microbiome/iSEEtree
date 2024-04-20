@@ -35,8 +35,8 @@
 #' }
 #' 
 #' @docType methods
-#' @aliases iSEE,TreeSummarizedExperiment-method
-#'   iSEE
+#' @aliases iSEE
+#'   iSEE,TreeSummarizedExperiment-method
 #'
 #' @name iSEE-default
 NULL
@@ -45,7 +45,7 @@ NULL
 setGeneric("iSEE", iSEE::iSEE)
 
 #' @export
-#' @importFrom iSEE createLandingPage ExperimentColorMap
+#' @importFrom iSEE createLandingPage ExperimentColorMap ReducedDimensionPlot ComplexHeatmapPlot
 #' @importFrom TreeSummarizedExperiment TreeSummarizedExperiment rowLinks
 #' @importFrom SingleCellExperiment reducedDims
 setMethod("iSEE", "TreeSummarizedExperiment",
