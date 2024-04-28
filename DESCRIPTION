@@ -32,6 +32,8 @@ Suggests:
     RefManageR,
     remotes,
     rmarkdown,
+    scater,
+    testthat,
     utils,
     vegan
 URL: https://github.com/RiboRings/iSEEtree

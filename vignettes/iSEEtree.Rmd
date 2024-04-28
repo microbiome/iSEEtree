@@ -43,7 +43,6 @@ bib <- c(
     knitr = citation("knitr")[1],
     RefManageR = citation("RefManageR")[1],
     rmarkdown = citation("rmarkdown")[1],
-    sessioninfo = citation("sessioninfo")[1],
     testthat = citation("testthat")[1],
     iSEEtree = citation("iSEEtree")[1]
 )
