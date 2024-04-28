@@ -1,5 +1,11 @@
 # iSEEtree
 
+[![GitHub issues](https://img.shields.io/github/issues/RiboRings/iSEEtree)](https://github.com/RiboRings/iSEEtree/issues)
+[![GitHub pulls](https://img.shields.io/github/issues-pr/RiboRings/iSEEtree)](https://github.com/RiboRings/iSEEtree/pulls)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![R-CMD-check-bioc](https://github.com/RiboRings/iSEEtree/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/RiboRings/iSEEtree/actions)
+[![Codecov test coverage](https://codecov.io/gh/RiboRings/iSEEtree/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/RiboRings/iSEEtree?branch=devel)
+
 The goal of iSEEtree is to provide panels related to TreeSummarizedExperiment
 objects which facilitate the interactive visualisation of microbiome data in
 [iSEE](https://isee.github.io/).

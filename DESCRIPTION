@@ -26,12 +26,14 @@ Imports:
     SummarizedExperiment,
     TreeSummarizedExperiment
 Suggests:
+    BiocStyle,
     knitr,
     mia,
+    RefManageR,
+    remotes,
     rmarkdown,
-    vegan,
-    BiocStyle,
-    utils
+    utils,
+    vegan
 URL: https://github.com/RiboRings/iSEEtree
 BugReports: https://github.com/RiboRings/iSEEtree/issues
 Roxygen: list(markdown = TRUE)
