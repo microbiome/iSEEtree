@@ -173,25 +173,18 @@ Thank you!</p>
 <span></span>
 <span><span class="co"># Agglomerate TreeSE by Genus</span></span>
 <span><span class="va">tse_genus</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mia/man/agglomerate-methods.html" class="external-link">mergeFeaturesByRank</a></span><span class="op">(</span><span class="va">tse</span>,</span>
-<span>                                 rank <span class="op">=</span> <span class="st">"Order"</span>,</span>
+<span>                                 rank <span class="op">=</span> <span class="st">"Genus"</span>,</span>
 <span>                                 onRankOnly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Add relabundance assay</span></span>
 <span><span class="va">tse_genus</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mia/man/transformAssay.html" class="external-link">transformAssay</a></span><span class="op">(</span><span class="va">tse_genus</span>, method <span class="op">=</span> <span class="st">"relabundance"</span><span class="op">)</span></span>
-<span><span class="va">tse_genus</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mia/man/transformAssay.html" class="external-link">transformAssay</a></span><span class="op">(</span><span class="va">tse_genus</span>, method <span class="op">=</span> <span class="st">"clr"</span>,</span>
-<span>                            pseudocount <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">tse_genus</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mia/man/transformAssay.html" class="external-link">transformAssay</a></span><span class="op">(</span><span class="va">tse_genus</span>, method <span class="op">=</span> <span class="st">"z"</span>,</span>
-<span>                            assay.type <span class="op">=</span> <span class="st">"clr"</span>,</span>
-<span>                            MARGIN <span class="op">=</span> <span class="st">"features"</span>,</span>
-<span>                            name <span class="op">=</span> <span class="st">"zclr"</span><span class="op">)</span></span>
-<span></span>
 <span></span>
 <span><span class="co"># Add PCA</span></span>
 <span><span class="va">tse_genus</span> <span class="op">&lt;-</span> <span class="fu">scater</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocSingular/man/runPCA.html" class="external-link">runPCA</a></span><span class="op">(</span><span class="va">tse_genus</span>, assay.type <span class="op">=</span> <span class="st">"counts"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Launch iSEE</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="../reference/iSEE-default.html">iSEE</a></span><span class="op">(</span><span class="va">tse_genus</span>, initial <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/iSEE/man/RowDataTable-class.html" class="external-link">RowDataTable</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/iSEE/man/ComplexHeatmapPlot-class.html" class="external-link">ComplexHeatmapPlot</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="../reference/RowTreePlot.html">RowTreePlot</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/iSEE-default.html">iSEE</a></span><span class="op">(</span><span class="va">tse_genus</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p><img src="screenshots/get_started.png" width="100%"></p>
 </div>
@@ -229,9 +222,9 @@ Cheng, Chang, and Iannone, 2024)</li>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/" class="external-link">knitr</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/knit.html" class="external-link">knit</a></span><span class="op">(</span><span class="st">"iSEEtree.Rmd"</span>, tangle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Date the vignette was generated.</p>
-<pre><code><span><span class="co">#&gt; [1] "2024-04-29 10:21:01 UTC"</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] "2024-04-29 13:21:05 UTC"</span></span></code></pre>
 <p>Wallclock time spent generating the vignette.</p>
-<pre><code><span><span class="co">#&gt; Time difference of 11.068 secs</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; Time difference of 11.527 secs</span></span></code></pre>
 <p>R session information.</p>
 <pre><code><span><span class="co">#&gt; R version 4.4.0 Patched (2024-04-24 r86483)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>
