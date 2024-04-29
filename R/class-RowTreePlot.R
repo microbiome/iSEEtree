@@ -54,8 +54,7 @@ NULL
 setClass("RowTreePlot", contains="Panel",
          slots=c(layout="character", add_legend="logical",
                  edge_colour="character", edge_colour_by="character",
-                 tip_colour="character", tip_colour_by="character",
-                 open_visual_box="logical"))
+                 tip_colour="character", tip_colour_by="character"))
 
 #' @importFrom iSEE .singleStringError .validLogicalError
 #' @importFrom S4Vectors setValidity2
@@ -84,7 +83,6 @@ setMethod("initialize", "RowTreePlot", function(.Object, ...) {
   args <- .emptyDefault(args, "edge_colour_by", NA_character_)
   args <- .emptyDefault(args, "tip_colour", "None")
   args <- .emptyDefault(args, "tip_colour_by", NA_character_)
-  args <- .emptyDefault(args, "open_visual_box", FALSE)
 
   do.call(callNextMethod, c(list(.Object), args))
 })
@@ -95,83 +93,16 @@ RowTreePlot <- function(...) {
   new("RowTreePlot", ...)
 }
 
-#' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE
-#'   .radioButtons.iSEE .conditionalOnRadio .addSpecificTour
-#' @importFrom SummarizedExperiment rowData assayNames
-#' @importFrom TreeSummarizedExperiment rowTreeNames
+#' @importFrom methods callNextMethod
 setMethod(".defineInterface", "RowTreePlot", function(x, se, select_info) {
-  tab_name <- .getEncodedName(x)
   
-  .addSpecificTour(class(x)[1], "layout", function(plot_name) {
-      data.frame(rbind(c(
-          element = paste0("#", plot_name, "_layout + .selectize-control"),
-          intro = "Here, we can select the layout of the tree."
-      )))}
-  )
-  
-  .addSpecificTour(class(x)[1], "add_legend", function(plot_name) {
-      data.frame(rbind(c(
-          element = paste0("#", plot_name, "_add_legend + .selectize-control"),
-          intro = "Here, we can choose whether or not to show the legend."
-      )))}
+  out <- callNextMethod()
+  list(
+    out[1],
+    .create_visual_box_for_rowtree(x, se),
+    out[-1]
   )
   
-  .addSpecificTour(class(x)[1], "edge_colour", function(plot_name) {
-      data.frame(rbind(c(
-          element = paste0("#", plot_name, "_edge_colour + .selectize-control"),
-          intro = "Here, we can choose whether or not to colour the lines by
-          one of the variables in the <code>rowData</code>. When activated, the
-          available options are listed and one of them can be selected."
-      )))}
-  )
-  
-  .addSpecificTour(class(x)[1], "tip_colour", function(plot_name) {
-      data.frame(rbind(c(
-          element = paste0("#", plot_name, "_tip_colour + .selectize-control"),
-          intro = "Here, we can choose whether or not to colour the nodes by
-          one of the variables in the <code>rowData</code>. When activated, the
-          available options are listed and one of them can be selected."
-      )))}
-  )
-
-  # Define what parameters the user can adjust
-  collapseBox(paste0(tab_name, "_Visual"),
-                     title="Visual parameters",
-                     open=FALSE,
-    # Tree layout
-    .selectInput.iSEE(
-      x, field="layout", label="Layout",
-      choices=c("circular", "rectangular", "slanted", "fan", "inward_circular",
-                "radial", "unrooted", "equal_angle", "daylight", "dendrogram",
-                "ape", "ellipse", "roundrect"), selected=slot(x, "layout")
-    ),
-    # Colour legend
-    .checkboxInput.iSEE(
-      x, field="add_legend", label="View legend", value=slot(x, "add_legend")
-    ),
-    .radioButtons.iSEE(
-      x, field="edge_colour", label="Line color:", inline=TRUE,
-      choices=c("None", "Row data"), selected=slot(x, "edge_colour")
-    ),
-    .conditionalOnRadio(
-      paste0(tab_name, "_edge_colour"), "Row data",
-      iSEE:::.selectInputHidden(x, field="edge_colour_by",
-                                label="Color lines by",
-                                choices=names(rowData(se)), 
-                                selected=slot(x, "edge_colour_by"))
-    ),
-    .radioButtons.iSEE(
-      x, field="tip_colour", label="Node color:", inline=TRUE,
-      choices=c("None", "Row data"), selected=slot(x, "tip_colour")
-    ),
-    .conditionalOnRadio(
-      paste0(tab_name, "_tip_colour"), "Row data",
-      iSEE:::.selectInputHidden(x, field="tip_colour_by",
-                                label="Color nodes by",
-                                choices=names(rowData(se)), 
-                                selected=slot(x, "tip_colour_by"))
-    )
-  )
 })
 
 #' @importFrom iSEE .getEncodedName .createProtectedParameterObservers
@@ -245,6 +176,23 @@ setMethod(".renderOutput", "RowTreePlot", function(x, se, output, pObjects, rObj
   })
 })
 
+#' @importFrom methods callNextMethod
+setMethod(".hideInterface", "RowTreePlot", function(x, field) {
+  if (field %in% c("SelectionHistory", "ColumnSelectionRestrict",
+                   "ColumnSelectionDynamicSource", "ColumnSelectionSource")) {
+    TRUE
+  } else {
+    callNextMethod()
+  }
+})
+
+setMethod(".multiSelectionResponsive", "RowTreePlot", function(x, dims = character(0)) {
+  if ("row" %in% dims || slot(x, "RowSelectionRestrict")) {
+      return(TRUE)
+  }
+  return(FALSE)
+})
+
 #' @importFrom iSEE .getEncodedName .getPanelColor .addTourStep
 setMethod(".definePanelTour", "RowTreePlot", function(x) {
   rbind(
@@ -252,10 +200,93 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
       "The <font color=\"%s\">RowTreePlot</font> panel contains a phylogenetic
       tree from the <i><a href='https://microbiome.github.io/miaViz/reference/plotTree.html'>miaViz</a></i>
       package.", .getPanelColor(x))),
-    .addTourStep(x, "open_visual_box", "The <i>Visual parameters</i> box shows
+    .addTourStep(x, "DataBoxOpen", "The <i>Data parameters</i> box shows the
+                 available parameters that can be tweaked to control the data on
+                 the heatmap.<br/><br/><strong>Action:</strong> click on this
+                 box to open up available options."),
+    .addTourStep(x, "VisualBoxOpen", "The <i>Visual parameters</i> box shows
                  the available visual parameters that can be tweaked in this
                  tree.<br/><br/><strong>Action:</strong> click on this box to
                  open up available options."),
     callNextMethod()
   )
 })
+
+#' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE
+#'   .radioButtons.iSEE .conditionalOnRadio .addSpecificTour
+#' @importFrom SummarizedExperiment rowData assayNames
+#' @importFrom TreeSummarizedExperiment rowTreeNames
+.create_visual_box_for_rowtree <- function(x, se) {
+  tab_name <- .getEncodedName(x)
+  
+  .addSpecificTour(class(x)[1], "layout", function(plot_name) {
+    data.frame(rbind(c(
+      element = paste0("#", plot_name, "_layout + .selectize-control"),
+      intro = "Here, we can select the layout of the tree."
+    )))}
+  )
+  
+  .addSpecificTour(class(x)[1], "add_legend", function(plot_name) {
+    data.frame(rbind(c(
+      element = paste0("#", plot_name, "_add_legend + .selectize-control"),
+      intro = "Here, we can choose whether or not to show the legend."
+    )))}
+  )
+  
+  .addSpecificTour(class(x)[1], "edge_colour", function(plot_name) {
+    data.frame(rbind(c(
+      element = paste0("#", plot_name, "_edge_colour + .selectize-control"),
+      intro = "Here, we can choose whether or not to colour the lines by
+          one of the variables in the <code>rowData</code>. When activated, the
+          available options are listed and one of them can be selected."
+    )))}
+  )
+  
+  .addSpecificTour(class(x)[1], "tip_colour", function(plot_name) {
+    data.frame(rbind(c(
+      element = paste0("#", plot_name, "_tip_colour + .selectize-control"),
+      intro = "Here, we can choose whether or not to colour the nodes by
+          one of the variables in the <code>rowData</code>. When activated, the
+          available options are listed and one of them can be selected."
+    )))}
+  )
+  
+  # Define what parameters the user can adjust
+  collapseBox(paste0(tab_name, "_VisualBoxOpen"),
+              title="Visual parameters",
+              open=FALSE,
+              # Tree layout
+              .selectInput.iSEE(
+                x, field="layout", label="Layout",
+                choices=c("circular", "rectangular", "slanted", "fan", "inward_circular",
+                          "radial", "unrooted", "equal_angle", "daylight", "dendrogram",
+                          "ape", "ellipse", "roundrect"), selected=slot(x, "layout")
+              ),
+              # Colour legend
+              .checkboxInput.iSEE(
+                x, field="add_legend", label="View legend", value=slot(x, "add_legend")
+              ),
+              .radioButtons.iSEE(
+                x, field="edge_colour", label="Line color:", inline=TRUE,
+                choices=c("None", "Row data"), selected=slot(x, "edge_colour")
+              ),
+              .conditionalOnRadio(
+                paste0(tab_name, "_edge_colour"), "Row data",
+                iSEE:::.selectInputHidden(x, field="edge_colour_by",
+                                          label="Color lines by",
+                                          choices=names(rowData(se)), 
+                                          selected=slot(x, "edge_colour_by"))
+              ),
+              .radioButtons.iSEE(
+                x, field="tip_colour", label="Node color:", inline=TRUE,
+                choices=c("None", "Row data"), selected=slot(x, "tip_colour")
+              ),
+              .conditionalOnRadio(
+                paste0(tab_name, "_tip_colour"), "Row data",
+                iSEE:::.selectInputHidden(x, field="tip_colour_by",
+                                          label="Color nodes by",
+                                          choices=names(rowData(se)), 
+                                          selected=slot(x, "tip_colour_by"))
+              )
+  )
+}

@@ -70,12 +70,12 @@ setValidity2("AbundanceDensityPlot", function(x) {
 #' @importFrom iSEE .emptyDefault
 #' @importFrom methods callNextMethod
 setMethod("initialize", "AbundanceDensityPlot", function(.Object, ...) {
-  extra_args <- list(...)
-  extra_args <- .emptyDefault(extra_args, "layout", "jitter")
-  extra_args <- .emptyDefault(extra_args, "assay.type", "counts")
-  extra_args <- .emptyDefault(extra_args, "n", 5)
+  args <- list(...)
+  args <- .emptyDefault(args, "layout", "jitter")
+  args <- .emptyDefault(args, "assay.type", "counts")
+  args <- .emptyDefault(args, "n", 5)
   
-  do.call(callNextMethod, c(list(.Object), extra_args))
+  do.call(callNextMethod, c(list(.Object), args))
 })
 
 #' @export
@@ -152,13 +152,13 @@ setMethod(".generateOutput", "AbundanceDensityPlot", function(x, se, all_memory,
   # simplify this to plotRowTree
   fn_call <- "gg <- %s(se"
   
-  extra_args <- list()
-  extra_args[["layout"]] <- deparse(slot(x, "layout"))
-  extra_args[["assay.type"]] <- deparse(slot(x, "assay.type"))
-  extra_args[["n"]] <- deparse(slot(x, "n"))
+  args <- list()
+  args[["layout"]] <- deparse(slot(x, "layout"))
+  args[["assay.type"]] <- deparse(slot(x, "assay.type"))
+  args[["n"]] <- deparse(slot(x, "n"))
 
-  extra_args <- paste(sprintf("%s=%s", names(extra_args), unlist(extra_args)), collapse=", ")
-  fn_call <- paste(fn_call, extra_args, sep = ", ")
+  args <- paste(sprintf("%s=%s", names(args), unlist(args)), collapse=", ")
+  fn_call <- paste(fn_call, args, sep = ", ")
   fn_call <- paste0(fn_call, ")")
   fn_call <- paste(strwrap(fn_call, exdent=4), collapse="\n")
   

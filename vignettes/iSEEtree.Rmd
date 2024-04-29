@@ -110,25 +110,18 @@ tse <- GlobalPatterns
 
 # Agglomerate TreeSE by Genus
 tse_genus <- mergeFeaturesByRank(tse,
-                                 rank = "Order",
+                                 rank = "Genus",
                                  onRankOnly = TRUE)
 
 # Add relabundance assay
 tse_genus <- transformAssay(tse_genus, method = "relabundance")
-tse_genus <- transformAssay(tse_genus, method = "clr",
-                            pseudocount = TRUE)
-tse_genus <- transformAssay(tse_genus, method = "z",
-                            assay.type = "clr",
-                            MARGIN = "features",
-                            name = "zclr")
-
 
 # Add PCA
 tse_genus <- scater::runPCA(tse_genus, assay.type = "counts")
 
 # Launch iSEE
 if (interactive()) {
-  iSEE(tse_genus, initial = c(RowDataTable(), ComplexHeatmapPlot(), RowTreePlot()))
+  iSEE(tse_genus)
 }
 ```
 

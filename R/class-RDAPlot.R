@@ -72,13 +72,13 @@ setValidity2("RDAPlot", function(x) {
 #' @importFrom iSEE .emptyDefault
 #' @importFrom methods callNextMethod
 setMethod("initialize", "RDAPlot", function(.Object, ...) {
-  extra_args <- list(...)
-  extra_args <- .emptyDefault(extra_args, "add.ellipse", "fill")
-  extra_args <- .emptyDefault(extra_args, "colour_by", NA_character_)
-  extra_args <- .emptyDefault(extra_args, "add.vectors", TRUE)
-  extra_args <- .emptyDefault(extra_args, "vec.text", TRUE)
+  args <- list(...)
+  args <- .emptyDefault(args, "add.ellipse", "fill")
+  args <- .emptyDefault(args, "colour_by", NA_character_)
+  args <- .emptyDefault(args, "add.vectors", TRUE)
+  args <- .emptyDefault(args, "vec.text", TRUE)
 
-  do.call(callNextMethod, c(list(.Object), extra_args))
+  do.call(callNextMethod, c(list(.Object), args))
 })
 
 #' @export
@@ -152,14 +152,14 @@ setMethod(".generateOutput", "RDAPlot", function(x, se, all_memory, all_contents
   # simplify this to plotRowTree
   fn_call <- "gg <- %s(se"
   
-  extra_args <- list()
-  extra_args[["add.ellipse"]] <- deparse(slot(x, "add.ellipse"))
-  extra_args[["colour_by"]] <- deparse(slot(x, "colour_by"))
-  extra_args[["vec.text"]] <- deparse(slot(x, "vec.text"))
-  extra_args[["add.vectors"]] <- deparse(slot(x, "add.vectors"))
+  args <- list()
+  args[["add.ellipse"]] <- deparse(slot(x, "add.ellipse"))
+  args[["colour_by"]] <- deparse(slot(x, "colour_by"))
+  args[["vec.text"]] <- deparse(slot(x, "vec.text"))
+  args[["add.vectors"]] <- deparse(slot(x, "add.vectors"))
   
-  extra_args <- paste(sprintf("%s=%s", names(extra_args), unlist(extra_args)), collapse=", ")
-  fn_call <- paste(fn_call, extra_args, sep = ", ")
+  args <- paste(sprintf("%s=%s", names(args), unlist(args)), collapse=", ")
+  fn_call <- paste(fn_call, args, sep = ", ")
   fn_call <- paste0(fn_call, ")")
   fn_call <- paste(strwrap(fn_call, exdent=4), collapse="\n")
   
