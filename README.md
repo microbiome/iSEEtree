@@ -3,12 +3,12 @@
 [![GitHub issues](https://img.shields.io/github/issues/RiboRings/iSEEtree)](https://github.com/RiboRings/iSEEtree/issues)
 [![GitHub pulls](https://img.shields.io/github/issues-pr/RiboRings/iSEEtree)](https://github.com/RiboRings/iSEEtree/pulls)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![R-CMD-check](https://github.com/RiboRings/iSEEtree/workflows/rworkflows/badge.svg)](https://github.com/RiboRings/iSEEtree/actions)
+[![rworkflows](https://github.com/RiboRings/iSEEtree/workflows/rworkflows/badge.svg)](https://github.com/RiboRings/iSEEtree/actions)
 [![Codecov test coverage](https://codecov.io/gh/RiboRings/iSEEtree/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/RiboRings/iSEEtree?branch=devel)
 
 The goal of iSEEtree is to provide panels related to TreeSummarizedExperiment
 objects which facilitate the interactive visualisation of microbiome data in
-[iSEE](https://isee.github.io/).
+[_iSEE_](https://isee.github.io/).
 
 ## Installation instructions
 The development version of iSEEtree can be installed from GitHub as follow:
@@ -47,27 +47,27 @@ if (interactive()) {
 
 Please note that iSEEtree was only made possible thanks to many other R and
 bioinformatics software authors, which are cited either in the vignettes and/or
-the paper(s) describing this package. In particular, iSEEtree implements the [miaViz](https://microbiome.github.io/miaViz/) package for microbiome data
+the paper(s) describing this package. In particular, iSEEtree implements the [_miaViz_](https://microbiome.github.io/miaViz/) package for microbiome data
 visualisation to create panels that are specific for TreeSummarizedExperiment
 objects. Not surprisingly, it also depends on the generic panels from iSEE.
 
 ## Development tools
 - Continuous code testing is performed on
   [GitHub actions](https://github.com/features/actions) and include R CMD check,
-  [BiocCheck](https://bioconductor.org/packages/3.16/bioc/html/BiocCheck.html)
+  [_BiocCheck_](https://bioconductor.org/packages/3.16/bioc/html/BiocCheck.html)
   and testthat.
 - Code coverage assessment is possible thanks to
   [codecov](https://app.codecov.io/gh/).
 - The documentation website is automatically updated thanks to
-  [pkgdown](https://cran.r-project.org/web/packages/pkgdown/).
+  [_pkgdown_](https://cran.r-project.org/web/packages/pkgdown/).
 - The documentation is formatted thanks to
-  [devtools](https://cran.r-project.org/web/packages/devtools/) and
-  [roxygen2](https://cran.r-project.org/web/packages/roxygen2/).
+  [_devtools_](https://cran.r-project.org/web/packages/devtools/) and
+  [_roxygen2_](https://cran.r-project.org/web/packages/roxygen2/).
 - All the actions above are made reproducible by
-  [rworkflows](https://neurogenomics.github.io/rworkflows/)
+  [_rworkflows_](https://neurogenomics.github.io/rworkflows/)
 
 This package was developed using
-[usethis](https://cran.r-project.org/web/packages/usethis/).
+[_usethis_](https://cran.r-project.org/web/packages/usethis/).
 
 ## Code of Conduct
 Please note that the iSEEtree project is released with a

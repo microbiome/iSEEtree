@@ -54,7 +54,8 @@ NULL
 setClass("RowTreePlot", contains="Panel",
          slots=c(layout="character", add_legend="logical",
                  edge_colour="character", edge_colour_by="character",
-                 tip_colour="character", tip_colour_by="character"))
+                 tip_colour="character", tip_colour_by="character",
+                 open_visual_box="logical"))
 
 #' @importFrom iSEE .singleStringError .validLogicalError
 #' @importFrom S4Vectors setValidity2
@@ -76,15 +77,16 @@ setValidity2("RowTreePlot", function(x) {
 #' @importFrom iSEE .emptyDefault
 #' @importFrom methods callNextMethod
 setMethod("initialize", "RowTreePlot", function(.Object, ...) {
-  extra_args <- list(...)
-  extra_args <- .emptyDefault(extra_args, "layout", "circular")
-  extra_args <- .emptyDefault(extra_args, "add_legend", TRUE)
-  extra_args <- .emptyDefault(extra_args, "edge_colour", "None")
-  extra_args <- .emptyDefault(extra_args, "edge_colour_by", NA_character_)
-  extra_args <- .emptyDefault(extra_args, "tip_colour", "None")
-  extra_args <- .emptyDefault(extra_args, "tip_colour_by", NA_character_)
+  args <- list(...)
+  args <- .emptyDefault(args, "layout", "circular")
+  args <- .emptyDefault(args, "add_legend", TRUE)
+  args <- .emptyDefault(args, "edge_colour", "None")
+  args <- .emptyDefault(args, "edge_colour_by", NA_character_)
+  args <- .emptyDefault(args, "tip_colour", "None")
+  args <- .emptyDefault(args, "tip_colour_by", NA_character_)
+  args <- .emptyDefault(args, "open_visual_box", FALSE)
 
-  do.call(callNextMethod, c(list(.Object), extra_args))
+  do.call(callNextMethod, c(list(.Object), args))
 })
 
 #' @export
@@ -94,11 +96,43 @@ RowTreePlot <- function(...) {
 }
 
 #' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE
-#'   .radioButtons.iSEE .conditionalOnRadio
+#'   .radioButtons.iSEE .conditionalOnRadio .addSpecificTour
 #' @importFrom SummarizedExperiment rowData assayNames
 #' @importFrom TreeSummarizedExperiment rowTreeNames
 setMethod(".defineInterface", "RowTreePlot", function(x, se, select_info) {
   tab_name <- .getEncodedName(x)
+  
+  .addSpecificTour(class(x)[1], "layout", function(plot_name) {
+      data.frame(rbind(c(
+          element = paste0("#", plot_name, "_layout + .selectize-control"),
+          intro = "Here, we can select the layout of the tree."
+      )))}
+  )
+  
+  .addSpecificTour(class(x)[1], "add_legend", function(plot_name) {
+      data.frame(rbind(c(
+          element = paste0("#", plot_name, "_add_legend + .selectize-control"),
+          intro = "Here, we can choose whether or not to show the legend."
+      )))}
+  )
+  
+  .addSpecificTour(class(x)[1], "edge_colour", function(plot_name) {
+      data.frame(rbind(c(
+          element = paste0("#", plot_name, "_edge_colour + .selectize-control"),
+          intro = "Here, we can choose whether or not to colour the lines by
+          one of the variables in the <code>rowData</code>. When activated, the
+          available options are listed and one of them can be selected."
+      )))}
+  )
+  
+  .addSpecificTour(class(x)[1], "tip_colour", function(plot_name) {
+      data.frame(rbind(c(
+          element = paste0("#", plot_name, "_tip_colour + .selectize-control"),
+          intro = "Here, we can choose whether or not to colour the nodes by
+          one of the variables in the <code>rowData</code>. When activated, the
+          available options are listed and one of them can be selected."
+      )))}
+  )
 
   # Define what parameters the user can adjust
   collapseBox(paste0(tab_name, "_Visual"),
@@ -159,7 +193,6 @@ setMethod(".fullName", "RowTreePlot", function(x) "Row tree plot")
 
 setMethod(".panelColor", "RowTreePlot", function(x) "#4EEE94")
 
-#' @importMethodsFrom iSEE .defineOutput
 #' @importFrom iSEE .getEncodedName
 #' @importFrom shiny plotOutput
 setMethod(".defineOutput", "RowTreePlot", function(x) {
@@ -177,18 +210,18 @@ setMethod(".generateOutput", "RowTreePlot", function(x, se, all_memory, all_cont
   # simplify this to plotRowTree
   fn_call <- "gg <- %s(se"
   
-  extra_args <- list()
-  extra_args[["layout"]] <- deparse(slot(x, "layout"))
-  extra_args[["add_legend"]] <- deparse(slot(x, "add_legend"))
+  args <- list()
+  args[["layout"]] <- deparse(slot(x, "layout"))
+  args[["add_legend"]] <- deparse(slot(x, "add_legend"))
   if (slot(x, "edge_colour") == "Row data") {
-    extra_args[["edge_colour_by"]] <- deparse(slot(x, "edge_colour_by"))
+    args[["edge_colour_by"]] <- deparse(slot(x, "edge_colour_by"))
   }
   if (slot(x, "tip_colour") == "Row data") {
-    extra_args[["tip_colour_by"]] <- deparse(slot(x, "tip_colour_by"))
+    args[["tip_colour_by"]] <- deparse(slot(x, "tip_colour_by"))
   }
 
-  extra_args <- paste(sprintf("%s=%s", names(extra_args), unlist(extra_args)), collapse=", ")
-  fn_call <- paste(fn_call, extra_args, sep = ", ")
+  args <- paste(sprintf("%s=%s", names(args), unlist(args)), collapse=", ")
+  fn_call <- paste(fn_call, args, sep = ", ")
   fn_call <- paste0(fn_call, ")")
   fn_call <- paste(strwrap(fn_call, exdent=4), collapse="\n")
 
@@ -202,7 +235,6 @@ setMethod(".generateOutput", "RowTreePlot", function(x, se, all_memory, all_cont
   list(contents=plot_env$gg, commands=list(select=selected, plot=commands))
 })
 
-#' @importMethodsFrom iSEE .renderOutput
 #' @importFrom iSEE .getEncodedName .retrieveOutput
 #' @importFrom shiny renderPlot
 setMethod(".renderOutput", "RowTreePlot", function(x, se, output, pObjects, rObjects) {
@@ -211,4 +243,19 @@ setMethod(".renderOutput", "RowTreePlot", function(x, se, output, pObjects, rObj
   output[[plot_name]] <- renderPlot({
     .retrieveOutput(plot_name, se, pObjects, rObjects)$contents
   })
+})
+
+#' @importFrom iSEE .getEncodedName .getPanelColor .addTourStep
+setMethod(".definePanelTour", "RowTreePlot", function(x) {
+  rbind(
+    c(paste0("#", .getEncodedName(x)), sprintf(
+      "The <font color=\"%s\">RowTreePlot</font> panel contains a phylogenetic
+      tree from the <i><a href='https://microbiome.github.io/miaViz/reference/plotTree.html'>miaViz</a></i>
+      package.", .getPanelColor(x))),
+    .addTourStep(x, "open_visual_box", "The <i>Visual parameters</i> box shows
+                 the available visual parameters that can be tweaked in this
+                 tree.<br/><br/><strong>Action:</strong> click on this box to
+                 open up available options."),
+    callNextMethod()
+  )
 })
