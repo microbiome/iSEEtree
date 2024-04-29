@@ -69,8 +69,8 @@
 <div class="section level1">
 <div class="page-header"><h1 id="iseetree">iSEEtree<a class="anchor" aria-label="anchor" href="#iseetree"></a>
 </h1></div>
-<p><a href="https://github.com/RiboRings/iSEEtree/issues" class="external-link"><img src="https://img.shields.io/github/issues/RiboRings/iSEEtree" alt="GitHub issues"></a> <a href="https://github.com/RiboRings/iSEEtree/pulls" class="external-link"><img src="https://img.shields.io/github/issues-pr/RiboRings/iSEEtree" alt="GitHub pulls"></a> <a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a> <a href="https://github.com/RiboRings/iSEEtree/actions" class="external-link"><img src="https://github.com/RiboRings/iSEEtree/workflows/rworkflows/badge.svg" alt="R-CMD-check"></a> <a href="https://app.codecov.io/gh/RiboRings/iSEEtree?branch=devel" class="external-link"><img src="https://codecov.io/gh/RiboRings/iSEEtree/branch/devel/graph/badge.svg" alt="Codecov test coverage"></a></p>
-<p>The goal of iSEEtree is to provide panels related to TreeSummarizedExperiment objects which facilitate the interactive visualisation of microbiome data in <a href="https://isee.github.io/" class="external-link">iSEE</a>.</p>
+<p><a href="https://github.com/RiboRings/iSEEtree/issues" class="external-link"><img src="https://img.shields.io/github/issues/RiboRings/iSEEtree" alt="GitHub issues"></a> <a href="https://github.com/RiboRings/iSEEtree/pulls" class="external-link"><img src="https://img.shields.io/github/issues-pr/RiboRings/iSEEtree" alt="GitHub pulls"></a> <a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a> <a href="https://github.com/RiboRings/iSEEtree/actions" class="external-link"><img src="https://github.com/RiboRings/iSEEtree/workflows/rworkflows/badge.svg" alt="rworkflows"></a> <a href="https://app.codecov.io/gh/RiboRings/iSEEtree?branch=devel" class="external-link"><img src="https://codecov.io/gh/RiboRings/iSEEtree/branch/devel/graph/badge.svg" alt="Codecov test coverage"></a></p>
+<p>The goal of iSEEtree is to provide panels related to TreeSummarizedExperiment objects which facilitate the interactive visualisation of microbiome data in <a href="https://isee.github.io/" class="external-link"><em>iSEE</em></a>.</p>
 <div class="section level2">
 <h2 id="installation-instructions">Installation instructions<a class="anchor" aria-label="anchor" href="#installation-instructions"></a>
 </h2>
@@ -102,20 +102,20 @@
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="reference/iSEE-default.html">iSEE</a></span><span class="op">(</span><span class="va">tse_genus</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
-<p>Please note that iSEEtree was only made possible thanks to many other R and bioinformatics software authors, which are cited either in the vignettes and/or the paper(s) describing this package. In particular, iSEEtree implements the <a href="https://microbiome.github.io/miaViz/" class="external-link">miaViz</a> package for microbiome data visualisation to create panels that are specific for TreeSummarizedExperiment objects. Not surprisingly, it also depends on the generic panels from iSEE.</p>
+<p>Please note that iSEEtree was only made possible thanks to many other R and bioinformatics software authors, which are cited either in the vignettes and/or the paper(s) describing this package. In particular, iSEEtree implements the <a href="https://microbiome.github.io/miaViz/" class="external-link"><em>miaViz</em></a> package for microbiome data visualisation to create panels that are specific for TreeSummarizedExperiment objects. Not surprisingly, it also depends on the generic panels from iSEE.</p>
 </div>
 <div class="section level2">
 <h2 id="development-tools">Development tools<a class="anchor" aria-label="anchor" href="#development-tools"></a>
 </h2>
 <ul>
-<li>Continuous code testing is performed on <a href="https://github.com/features/actions" class="external-link">GitHub actions</a> and include R CMD check, <a href="https://bioconductor.org/packages/3.16/bioc/html/BiocCheck.html" class="external-link">BiocCheck</a> and testthat.</li>
+<li>Continuous code testing is performed on <a href="https://github.com/features/actions" class="external-link">GitHub actions</a> and include R CMD check, <a href="https://bioconductor.org/packages/3.16/bioc/html/BiocCheck.html" class="external-link"><em>BiocCheck</em></a> and testthat.</li>
 <li>Code coverage assessment is possible thanks to <a href="https://app.codecov.io/gh/" class="external-link">codecov</a>.</li>
-<li>The documentation website is automatically updated thanks to <a href="https://cran.r-project.org/web/packages/pkgdown/" class="external-link">pkgdown</a>.</li>
-<li>The documentation is formatted thanks to <a href="https://cran.r-project.org/web/packages/devtools/" class="external-link">devtools</a> and <a href="https://cran.r-project.org/web/packages/roxygen2/" class="external-link">roxygen2</a>.</li>
-<li>All the actions above are made reproducible by <a href="https://neurogenomics.github.io/rworkflows/" class="external-link">rworkflows</a>
+<li>The documentation website is automatically updated thanks to <a href="https://cran.r-project.org/web/packages/pkgdown/" class="external-link"><em>pkgdown</em></a>.</li>
+<li>The documentation is formatted thanks to <a href="https://cran.r-project.org/web/packages/devtools/" class="external-link"><em>devtools</em></a> and <a href="https://cran.r-project.org/web/packages/roxygen2/" class="external-link"><em>roxygen2</em></a>.</li>
+<li>All the actions above are made reproducible by <a href="https://neurogenomics.github.io/rworkflows/" class="external-link"><em>rworkflows</em></a>
 </li>
 </ul>
-<p>This package was developed using <a href="https://cran.r-project.org/web/packages/usethis/" class="external-link">usethis</a>.</p>
+<p>This package was developed using <a href="https://cran.r-project.org/web/packages/usethis/" class="external-link"><em>usethis</em></a>.</p>
 </div>
 <div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
