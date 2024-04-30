@@ -113,7 +113,13 @@ setMethod(".createObservers", "RowTreePlot", function(x, se, input, session, pOb
 
   .createProtectedParameterObservers(
     panel_name,
-    c("layout", "add_legend", "edge_colour", "edge_colour_by", "tip_colour", "tip_colour_by"),
+    c("layout", "add_legend", "RowSelectionSource"),
+    input=input, pObjects=pObjects, rObjects=rObjects
+  )
+  
+  .createUnprotectedParameterObservers(
+    panel_name,
+    c("edge_colour", "edge_colour_by", "tip_colour", "tip_colour_by"),
     input=input, pObjects=pObjects, rObjects=rObjects
   )
   
@@ -126,54 +132,60 @@ setMethod(".panelColor", "RowTreePlot", function(x) "#4EEE94")
 
 #' @importFrom iSEE .getEncodedName
 #' @importFrom shiny plotOutput
+#' @importFrom shinyWidgets addSpinner
 setMethod(".defineOutput", "RowTreePlot", function(x) {
-  plotOutput(.getEncodedName(x))
+  plot_name <- .getEncodedName(x)
+  addSpinner(
+    plotOutput(plot_name, height = paste0(slot(x, "PanelHeight"), "px")),
+    color=.panelColor(x)
+  )
 })
 
 #' @importFrom iSEE .processMultiSelections .textEval
 #' @importFrom miaViz plotRowTree
 setMethod(".generateOutput", "RowTreePlot", function(x, se, all_memory, all_contents) {
   plot_env <- new.env()
-  plot_env$se <- se
+  plot_env[["se"]] <- se
   
-  selected <- .processMultiSelections(x, all_memory, all_contents, plot_env)
+  all_cmds <- list()
+  args <- character(0)
   
-  # simplify this to plotRowTree
-  fn_call <- "gg <- %s(se"
+  all_cmds[["select"]] <- .processMultiSelections(x, all_memory, all_contents, plot_env)
   
-  args <- list()
   args[["layout"]] <- deparse(slot(x, "layout"))
   args[["add_legend"]] <- deparse(slot(x, "add_legend"))
+  
   if (slot(x, "edge_colour") == "Row data") {
     args[["edge_colour_by"]] <- deparse(slot(x, "edge_colour_by"))
   }
+  
   if (slot(x, "tip_colour") == "Row data") {
     args[["tip_colour_by"]] <- deparse(slot(x, "tip_colour_by"))
   }
 
-  args <- paste(sprintf("%s=%s", names(args), unlist(args)), collapse=", ")
-  fn_call <- paste(fn_call, args, sep = ", ")
-  fn_call <- paste0(fn_call, ")")
-  fn_call <- paste(strwrap(fn_call, exdent=4), collapse="\n")
-
-  plot_env$.customFUN <- miaViz::plotRowTree
-  tmp_call <- sprintf(fn_call, ".customFUN")
-  .textEval(tmp_call, plot_env)
+  args <- sprintf("%s=%s", names(args), args)
+  args <- paste(args, collapse=", ")
+  fun_call <- sprintf("p <- miaViz::plotRowTree(se, %s)", args)
   
-  commands <- sprintf(fn_call, "PlotRowTree")
+  fun_cmd <- paste(strwrap(fun_call, width = 80, exdent = 4), collapse = "\n")
+  plot_out <- .textEval(fun_cmd, plot_env)
+  all_cmds[["fun"]] <- fun_cmd
   
-  commands <- sub("^gg <- ", "", commands) # to avoid an unnecessary variable.
-  list(contents=plot_env$gg, commands=list(select=selected, plot=commands))
+  list(commands=all_cmds, plot=plot_out, varname=NULL, contents=NULL)
 })
 
 #' @importFrom iSEE .getEncodedName .retrieveOutput
 #' @importFrom shiny renderPlot
+#' @importFrom methods callNextMethod
 setMethod(".renderOutput", "RowTreePlot", function(x, se, output, pObjects, rObjects) {
   plot_name <- .getEncodedName(x)
   force(se) # defensive programming to avoid difficult bugs due to delayed evaluation.
+  
   output[[plot_name]] <- renderPlot({
-    .retrieveOutput(plot_name, se, pObjects, rObjects)$contents
+      .retrieveOutput(plot_name, se, pObjects, rObjects)
   })
+  
+  callNextMethod()
 })
 
 #' @importFrom methods callNextMethod
@@ -186,13 +198,7 @@ setMethod(".hideInterface", "RowTreePlot", function(x, field) {
   }
 })
 
-setMethod(".multiSelectionResponsive", "RowTreePlot", function(x, dims = character(0)) {
-  if ("row" %in% dims || slot(x, "RowSelectionRestrict")) {
-      return(TRUE)
-  }
-  return(FALSE)
-})
-
+#' @importFrom methods callNextMethod
 #' @importFrom iSEE .getEncodedName .getPanelColor .addTourStep
 setMethod(".definePanelTour", "RowTreePlot", function(x) {
   rbind(

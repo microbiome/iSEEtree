@@ -75,25 +75,16 @@ AbundancePlot <- function(...) {
   new("AbundancePlot", ...)
 }
 
-#' @importFrom methods slot
-#' @importFrom SummarizedExperiment rowData
+#' @importFrom methods callNextMethod
 setMethod(".defineInterface", "AbundancePlot", function(x, se, select_info) {
-  tab_name <- .getEncodedName(x)
   
-  # Define what parameters the user can adjust
-  collapseBox(paste0(tab_name, "_Visual"),
-              title="Visual parameters",
-              open=FALSE,
-              # Tree layout
-              .selectInput.iSEE(
-                x, field="rank", label="Rank",
-                choices=names(rowData(se)), selected=slot(x, "rank")
-              ),
-              # Colour legend
-              .checkboxInput.iSEE(
-                x, field="add_legend", label="View legend", value=slot(x, "add_legend")
-              )
+  out <- callNextMethod()
+  list(
+    out[1],
+    .create_visual_box_for_abund_plot(x, se),
+    out[-1]
   )
+  
 })
 
 #' @importMethodsFrom iSEE .createObservers
@@ -158,3 +149,26 @@ setMethod(".renderOutput", "AbundancePlot", function(x, se, output, pObjects, rO
     .retrieveOutput(plot_name, se, pObjects, rObjects)$contents
   })
 })
+
+#' @importFrom methods slot
+#' @importFrom SummarizedExperiment rowData
+.create_visual_box_for_abund_plot <- function(x, se) {
+  
+  tab_name <- .getEncodedName(x)
+  
+  # Define what parameters the user can adjust
+  collapseBox(paste0(tab_name, "_Visual"),
+              title="Visual parameters",
+              open=FALSE,
+              # Tree layout
+              .selectInput.iSEE(
+                x, field="rank", label="Rank",
+                choices=names(rowData(se)), selected=slot(x, "rank")
+              ),
+              # Colour legend
+              .checkboxInput.iSEE(
+                x, field="add_legend", label="View legend", value=slot(x, "add_legend")
+              )
+  )
+  
+}
