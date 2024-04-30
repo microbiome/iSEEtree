@@ -106,6 +106,7 @@ setMethod(".defineInterface", "RowTreePlot", function(x, se, select_info) {
 })
 
 #' @importFrom iSEE .getEncodedName .createProtectedParameterObservers
+#'   .createUnprotectedParameterObservers
 setMethod(".createObservers", "RowTreePlot", function(x, se, input, session, pObjects, rObjects) {
   callNextMethod()
   
@@ -128,6 +129,7 @@ setMethod(".createObservers", "RowTreePlot", function(x, se, input, session, pOb
 
 setMethod(".fullName", "RowTreePlot", function(x) "Row tree plot")
 
+#' @importMethodsFrom iSEE .panelColor
 setMethod(".panelColor", "RowTreePlot", function(x) "#4EEE94")
 
 #' @importFrom iSEE .getEncodedName

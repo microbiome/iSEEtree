@@ -110,7 +110,7 @@ tse <- GlobalPatterns
 
 # Agglomerate TreeSE by Genus
 tse_genus <- mergeFeaturesByRank(tse,
-                                 rank = "Genus",
+                                 rank = "Order",
                                  onRankOnly = TRUE)
 
 # Add relabundance assay
@@ -121,7 +121,7 @@ tse_genus <- scater::runPCA(tse_genus, assay.type = "counts")
 
 # Launch iSEE
 if (interactive()) {
-  iSEE(tse_genus)
+  iSEE(tse_genus, initial = c(ColumnDataTable(), ComplexHeatmapPlot(), AbundanceDensityPlot()))
 }
 ```
 

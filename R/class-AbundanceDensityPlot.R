@@ -121,6 +121,7 @@ setMethod(".defineInterface", "AbundanceDensityPlot", function(x, se, select_inf
 })
 
 #' @importFrom iSEE .getEncodedName .createProtectedParameterObservers
+#'   .createUnprotectedParameterObservers
 setMethod(".createObservers", "AbundanceDensityPlot", function(x, se, input, session, pObjects, rObjects) {
   callNextMethod()
   
@@ -143,6 +144,7 @@ setMethod(".createObservers", "AbundanceDensityPlot", function(x, se, input, ses
 
 setMethod(".fullName", "AbundanceDensityPlot", function(x) "Abundance density plot")
 
+#' @importMethodsFrom iSEE .panelColor
 setMethod(".panelColor", "AbundanceDensityPlot", function(x) "#8B5A2B")
 
 #' @importFrom iSEE .getEncodedName
@@ -216,10 +218,8 @@ setMethod(".hideInterface", "AbundanceDensityPlot", function(x, field) {
   }
 })
 
-#' @export
 setMethod(".multiSelectionDimension", "AbundanceDensityPlot", function(x) "row")
 
-#' @export
 setMethod(".multiSelectionRestricted", "AbundanceDensityPlot", function(x) {
   slot(x, "RowSelectionRestrict")
 })
