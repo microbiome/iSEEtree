@@ -43,8 +43,7 @@ bib <- c(
     knitr = citation("knitr")[1],
     RefManageR = citation("RefManageR")[1],
     rmarkdown = citation("rmarkdown")[1],
-    testthat = citation("testthat")[1],
-    iSEEtree = citation("iSEEtree")[1]
+    testthat = citation("testthat")[1]
 )
 ```
 
@@ -111,7 +110,7 @@ tse <- GlobalPatterns
 
 # Agglomerate TreeSE by Genus
 tse_genus <- mergeFeaturesByRank(tse,
-                                 rank = "Genus",
+                                 rank = "Order",
                                  onRankOnly = TRUE)
 
 # Add relabundance assay
@@ -122,7 +121,7 @@ tse_genus <- scater::runPCA(tse_genus, assay.type = "counts")
 
 # Launch iSEE
 if (interactive()) {
-  iSEE(tse_genus)
+  iSEE(tse_genus, initial = c(ColumnDataTable(), ComplexHeatmapPlot(), AbundanceDensityPlot()))
 }
 ```
 
@@ -135,6 +134,19 @@ SCREENSHOT("screenshots/get_started.png", delay=20)
 ```
 
 # Reproducibility
+iSEEtree was made possible thanks to:
+
+- R `r Citep(bib[["R"]])`
+- `r Biocpkg("BiocStyle")` `r Citep(bib[["BiocStyle"]])`
+- `r CRANpkg("knitr")` `r Citep(bib[["knitr"]])`
+- `r CRANpkg("RefManageR")` `r Citep(bib[["RefManageR"]])`
+- `r CRANpkg("rmarkdown")` `r Citep(bib[["rmarkdown"]])`
+- `r CRANpkg("testthat")` `r Citep(bib[["testthat"]])`
+
+This package was developed using
+[_usethis_](https://cran.r-project.org/web/packages/usethis/).
+
+Code for creating the vignette.
 
 ```{r createVignette, eval=FALSE}
 ## Create the vignette
@@ -171,7 +183,8 @@ sessionInfo()
 
 # Bibliography
 
-Citations were generated with `r CRANpkg("RefManageR")` `r Citep(bib[["RefManageR"]])`.
+This vignette was generated using `r Biocpkg("BiocStyle")` `r Citep(bib[["BiocStyle"]])`
+with `r CRANpkg("knitr")` `r Citep(bib[["knitr"]])` and `r CRANpkg("rmarkdown")` `r Citep(bib[["rmarkdown"]])` running behind the scenes. Citations were generated with `r CRANpkg("RefManageR")` `r Citep(bib[["RefManageR"]])`.
 
 ```{r vignetteBiblio, results="asis", echo=FALSE, warning=FALSE, message=FALSE}
 ## Print bibliography

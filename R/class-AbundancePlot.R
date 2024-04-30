@@ -62,11 +62,11 @@ setValidity2("AbundancePlot", function(x) {
 
 #' @importFrom methods callNextMethod
 setMethod("initialize", "AbundancePlot", function(.Object, ...) {
-  extra_args <- list(...)
-  extra_args <- .emptyDefault(extra_args, "rank", NA_character_)
-  extra_args <- .emptyDefault(extra_args, "add_legend", TRUE)
+  args <- list(...)
+  args <- .emptyDefault(args, "rank", NA_character_)
+  args <- .emptyDefault(args, "add_legend", TRUE)
   
-  do.call(callNextMethod, c(list(.Object), extra_args))
+  do.call(callNextMethod, c(list(.Object), args))
 })
 
 #' @export
@@ -75,25 +75,16 @@ AbundancePlot <- function(...) {
   new("AbundancePlot", ...)
 }
 
-#' @importFrom methods slot
-#' @importFrom SummarizedExperiment rowData
+#' @importFrom methods callNextMethod
 setMethod(".defineInterface", "AbundancePlot", function(x, se, select_info) {
-  tab_name <- .getEncodedName(x)
   
-  # Define what parameters the user can adjust
-  collapseBox(paste0(tab_name, "_Visual"),
-              title="Visual parameters",
-              open=FALSE,
-              # Tree layout
-              .selectInput.iSEE(
-                x, field="rank", label="Rank",
-                choices=names(rowData(se)), selected=slot(x, "rank")
-              ),
-              # Colour legend
-              .checkboxInput.iSEE(
-                x, field="add_legend", label="View legend", value=slot(x, "add_legend")
-              )
+  out <- callNextMethod()
+  list(
+    out[1],
+    .create_visual_box_for_abund_plot(x, se),
+    out[-1]
   )
+  
 })
 
 #' @importMethodsFrom iSEE .createObservers
@@ -129,12 +120,12 @@ setMethod(".generateOutput", "AbundancePlot", function(x, se, all_memory, all_co
   # simplify this to plotRowTree
   fn_call <- "gg <- %s(se"
   
-  extra_args <- list()
-  extra_args[["rank"]] <- deparse(slot(x, "rank"))
-  extra_args[["add_legend"]] <- deparse(slot(x, "add_legend"))
+  args <- list()
+  args[["rank"]] <- deparse(slot(x, "rank"))
+  args[["add_legend"]] <- deparse(slot(x, "add_legend"))
   
-  extra_args <- paste(sprintf("%s=%s", names(extra_args), unlist(extra_args)), collapse=", ")
-  fn_call <- paste(fn_call, extra_args, sep = ", ")
+  args <- paste(sprintf("%s=%s", names(args), unlist(args)), collapse=", ")
+  fn_call <- paste(fn_call, args, sep = ", ")
   fn_call <- paste0(fn_call, ")")
   fn_call <- paste(strwrap(fn_call, exdent=4), collapse="\n")
   
@@ -158,3 +149,26 @@ setMethod(".renderOutput", "AbundancePlot", function(x, se, output, pObjects, rO
     .retrieveOutput(plot_name, se, pObjects, rObjects)$contents
   })
 })
+
+#' @importFrom methods slot
+#' @importFrom SummarizedExperiment rowData
+.create_visual_box_for_abund_plot <- function(x, se) {
+  
+  tab_name <- .getEncodedName(x)
+  
+  # Define what parameters the user can adjust
+  collapseBox(paste0(tab_name, "_Visual"),
+              title="Visual parameters",
+              open=FALSE,
+              # Tree layout
+              .selectInput.iSEE(
+                x, field="rank", label="Rank",
+                choices=names(rowData(se)), selected=slot(x, "rank")
+              ),
+              # Colour legend
+              .checkboxInput.iSEE(
+                x, field="add_legend", label="View legend", value=slot(x, "add_legend")
+              )
+  )
+  
+}
