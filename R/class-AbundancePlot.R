@@ -120,10 +120,10 @@ setMethod(".generateOutput", "AbundancePlot", function(x, se, all_memory, all_co
   
   all_cmds[["select"]] <- .processMultiSelections(x, all_memory, all_contents, panel_env)
   
-  if (is.null(panel_env[["col_selected"]])){
-    panel_env[["se"]] <- se
+  if (exists("col_selected", envir=panel_env, inherits=FALSE)) {
+      panel_env[["se"]] <- se[ , unlist(panel_env[["col_selected"]])]
   } else {
-    panel_env[["se"]] <- se[ , unlist(panel_env[["col_selected"]])]
+      panel_env[["se"]] <- se
   }
   
   args[["rank"]] <- deparse(slot(x, "rank"))
