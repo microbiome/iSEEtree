@@ -146,13 +146,18 @@ setMethod(".defineOutput", "RowTreePlot", function(x) {
 #' @importFrom iSEE .processMultiSelections .textEval
 #' @importFrom miaViz plotRowTree
 setMethod(".generateOutput", "RowTreePlot", function(x, se, all_memory, all_contents) {
-  plot_env <- new.env()
-  plot_env[["se"]] <- se
-  
+  panel_env <- new.env()
+
   all_cmds <- list()
   args <- character(0)
-  
-  all_cmds[["select"]] <- .processMultiSelections(x, all_memory, all_contents, plot_env)
+
+  all_cmds[["select"]] <- .processMultiSelections(x, all_memory, all_contents, panel_env)
+
+  if (is.null(panel_env[["row_selected"]])){
+    panel_env[["se"]] <- se
+  } else {
+    panel_env[["se"]] <- se[unlist(panel_env[["row_selected"]]), ]
+  }
   
   args[["layout"]] <- deparse(slot(x, "layout"))
   args[["add_legend"]] <- deparse(slot(x, "add_legend"))
@@ -164,15 +169,15 @@ setMethod(".generateOutput", "RowTreePlot", function(x, se, all_memory, all_cont
   if (slot(x, "tip_colour") == "Row data") {
     args[["tip_colour_by"]] <- deparse(slot(x, "tip_colour_by"))
   }
-
+  
   args <- sprintf("%s=%s", names(args), args)
   args <- paste(args, collapse=", ")
   fun_call <- sprintf("p <- miaViz::plotRowTree(se, %s)", args)
-  
+
   fun_cmd <- paste(strwrap(fun_call, width = 80, exdent = 4), collapse = "\n")
-  plot_out <- .textEval(fun_cmd, plot_env)
+  plot_out <- .textEval(fun_cmd, panel_env)
   all_cmds[["fun"]] <- fun_cmd
-  
+
   list(commands=all_cmds, plot=plot_out, varname=NULL, contents=NULL)
 })
 
@@ -180,11 +185,11 @@ setMethod(".generateOutput", "RowTreePlot", function(x, se, all_memory, all_cont
 #' @importFrom shiny renderPlot
 #' @importFrom methods callNextMethod
 setMethod(".renderOutput", "RowTreePlot", function(x, se, output, pObjects, rObjects) {
-  plot_name <- .getEncodedName(x)
+  panel_name <- .getEncodedName(x)
   force(se) # defensive programming to avoid difficult bugs due to delayed evaluation.
   
-  output[[plot_name]] <- renderPlot({
-      .retrieveOutput(plot_name, se, pObjects, rObjects)
+  output[[panel_name]] <- renderPlot({
+      .retrieveOutput(panel_name, se, pObjects, rObjects)
   })
   
   callNextMethod()
@@ -198,6 +203,17 @@ setMethod(".hideInterface", "RowTreePlot", function(x, field) {
   } else {
     callNextMethod()
   }
+})
+
+setMethod(".multiSelectionRestricted", "RowTreePlot", function(x) {
+  slot(x, "RowSelectionRestrict")
+})
+
+setMethod(".multiSelectionResponsive", "RowTreePlot", function(x, dims = character(0)) {
+  if ("row" %in% dims) {
+    return(TRUE)
+  }
+  return(FALSE)
 })
 
 #' @importFrom methods callNextMethod

@@ -111,43 +111,64 @@ setMethod(".defineOutput", "AbundancePlot", function(x) {
 })
 
 #' @importFrom miaViz plotRowTree
+#' @importFrom iSEE .processMultiSelections
 setMethod(".generateOutput", "AbundancePlot", function(x, se, all_memory, all_contents) {
-  plot_env <- new.env()
-  plot_env$se <- se
+  panel_env <- new.env()
   
-  selected <- .processMultiSelections(x, all_memory, all_contents, plot_env)
+  all_cmds <- list()
+  args <- character(0)
   
-  # simplify this to plotRowTree
-  fn_call <- "gg <- %s(se"
+  all_cmds[["select"]] <- .processMultiSelections(x, all_memory, all_contents, panel_env)
   
-  args <- list()
+  if (is.null(panel_env[["col_selected"]])){
+    panel_env[["se"]] <- se
+  } else {
+    panel_env[["se"]] <- se[ , unlist(panel_env[["col_selected"]])]
+  }
+  
   args[["rank"]] <- deparse(slot(x, "rank"))
   args[["add_legend"]] <- deparse(slot(x, "add_legend"))
   
-  args <- paste(sprintf("%s=%s", names(args), unlist(args)), collapse=", ")
-  fn_call <- paste(fn_call, args, sep = ", ")
-  fn_call <- paste0(fn_call, ")")
-  fn_call <- paste(strwrap(fn_call, exdent=4), collapse="\n")
+  args <- sprintf("%s=%s", names(args), args)
+  args <- paste(args, collapse=", ")
+  fun_call <- sprintf("p <- miaViz::plotAbundance(se, %s)", args)
   
-  plot_env$.customFUN <- miaViz::plotAbundance
-  tmp_call <- sprintf(fn_call, ".customFUN")
-  .textEval(tmp_call, plot_env)
+  fun_cmd <- paste(strwrap(fun_call, width = 80, exdent = 4), collapse = "\n")
+  plot_out <- .textEval(fun_cmd, panel_env)
+  all_cmds[["fun"]] <- fun_cmd
   
-  commands <- sprintf(fn_call, "AbundancePlot")
-  
-  commands <- sub("^gg <- ", "", commands) # to avoid an unnecessary variable.
-  list(contents=plot_env$gg, commands=list(select=selected, plot=commands))
+  list(commands=all_cmds, plot=plot_out, varname=NULL, contents=NULL)
 })
 
-#' @importMethodsFrom iSEE .renderOutput
 #' @importFrom iSEE .getEncodedName .retrieveOutput
 #' @importFrom shiny renderPlot
+#' @importFrom methods callNextMethod
 setMethod(".renderOutput", "AbundancePlot", function(x, se, output, pObjects, rObjects) {
   plot_name <- .getEncodedName(x)
   force(se) # defensive programming to avoid difficult bugs due to delayed evaluation.
+  
   output[[plot_name]] <- renderPlot({
-    .retrieveOutput(plot_name, se, pObjects, rObjects)$contents
+    .retrieveOutput(plot_name, se, pObjects, rObjects)
   })
+  
+  callNextMethod()
+})
+
+#' @importFrom methods callNextMethod
+setMethod(".hideInterface", "AbundancePlot", function(x, field) {
+  if (field %in% c("SelectionHistory", "RowSelectionRestrict",
+                   "RowSelectionDynamicSource", "RowSelectionSource")) {
+    TRUE
+  } else {
+    callNextMethod()
+  }
+})
+
+setMethod(".multiSelectionResponsive", "AbundancePlot", function(x, dims = character(0)) {
+  if ("column" %in% dims) {
+    return(TRUE)
+  }
+  return(FALSE)
 })
 
 #' @importFrom methods slot

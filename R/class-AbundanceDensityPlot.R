@@ -162,14 +162,19 @@ setMethod(".defineOutput", "AbundanceDensityPlot", function(x) {
 #' @importFrom iSEE .processMultiSelections .textEval
 #' @importFrom miaViz plotRowTree
 setMethod(".generateOutput", "AbundanceDensityPlot", function(x, se, all_memory, all_contents) {
-  plot_env <- new.env()
-  plot_env[["se"]] <- se
-  
+  panel_env <- new.env()
+
   all_cmds <- list()
   args <- character(0)
   
-  all_cmds[["select"]] <- .processMultiSelections(x, all_memory, all_contents, plot_env)
+  all_cmds[["select"]] <- .processMultiSelections(x, all_memory, all_contents, panel_env)
 
+  if (is.null(panel_env[["row_selected"]])){
+    panel_env[["se"]] <- se
+  } else {
+    panel_env[["se"]] <- se[unlist(panel_env[["row_selected"]]), ]
+  }
+  
   args[["layout"]] <- deparse(slot(x, "layout"))
   args[["add_legend"]] <- deparse(slot(x, "add_legend"))
   args[["assay.type"]] <- deparse(slot(x, "assay.type"))
@@ -189,7 +194,7 @@ setMethod(".generateOutput", "AbundanceDensityPlot", function(x, se, all_memory,
   fun_call <- sprintf("p <- miaViz::plotAbundanceDensity(se, %s)", args)
   
   fun_cmd <- paste(strwrap(fun_call, width = 80, exdent = 4), collapse = "\n")
-  plot_out <- .textEval(fun_cmd, plot_env)
+  plot_out <- .textEval(fun_cmd, panel_env)
   all_cmds[["fun"]] <- fun_cmd
   
   list(commands=all_cmds, plot=plot_out, varname=NULL, contents=NULL)
@@ -218,8 +223,6 @@ setMethod(".hideInterface", "AbundanceDensityPlot", function(x, field) {
   }
 })
 
-setMethod(".multiSelectionDimension", "AbundanceDensityPlot", function(x) "row")
-
 setMethod(".multiSelectionRestricted", "AbundanceDensityPlot", function(x) {
   slot(x, "RowSelectionRestrict")
 })
@@ -230,8 +233,6 @@ setMethod(".multiSelectionResponsive", "AbundanceDensityPlot", function(x, dims 
   }
   return(FALSE)
 })
-
-setMethod(".singleSelectionDimension", "AbundanceDensityPlot", function(x) "feature")
 
 #' @importFrom iSEE .getEncodedName collapseBox .selectInput.iSEE
 #'   .radioButtons.iSEE .conditionalOnRadio
