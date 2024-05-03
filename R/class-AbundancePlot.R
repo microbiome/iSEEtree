@@ -106,8 +106,15 @@ setMethod(".fullName", "AbundancePlot", function(x) "Abundance plot")
 
 setMethod(".panelColor", "AbundancePlot", function(x) "#00E5EE")
 
+#' @importFrom iSEE .getEncodedName
+#' @importFrom shiny plotOutput
+#' @importFrom shinyWidgets addSpinner
 setMethod(".defineOutput", "AbundancePlot", function(x) {
-  plotOutput(.getEncodedName(x))
+  panel_name <- .getEncodedName(x)
+  addSpinner(
+    plotOutput(panel_name, height = paste0(slot(x, "PanelHeight"), "px")),
+    color=.panelColor(x)
+  )
 })
 
 #' @importFrom miaViz plotRowTree

@@ -136,9 +136,9 @@ setMethod(".panelColor", "RowTreePlot", function(x) "#4EEE94")
 #' @importFrom shiny plotOutput
 #' @importFrom shinyWidgets addSpinner
 setMethod(".defineOutput", "RowTreePlot", function(x) {
-  plot_name <- .getEncodedName(x)
+  panel_name <- .getEncodedName(x)
   addSpinner(
-    plotOutput(plot_name, height = paste0(slot(x, "PanelHeight"), "px")),
+    plotOutput(panel_name, height = paste0(slot(x, "PanelHeight"), "px")),
     color=.panelColor(x)
   )
 })
