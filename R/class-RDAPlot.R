@@ -52,14 +52,16 @@ setClassUnion("charlog", c("character", "logical"))
 
 #' @export
 setClass("RDAPlot", contains="Panel",
-         slots=c(add.ellipse="charlog", colour_by="character", vec.text="logical", add.vectors="logical"))
+         slots=c(dimred="character", add.ellipse="charlog",
+                 colour_by="character", vec.text="logical",
+                 add.vectors="logical"))
 
 #' @importFrom iSEE .singleStringError .validLogicalError
 #' @importFrom S4Vectors setValidity2
 setValidity2("RDAPlot", function(x) {
   msg <- character(0)
   
-  msg <- .singleStringError(msg, x, fields="colour_by")
+  msg <- .singleStringError(msg, x, fields=c("dimred", "colour_by"))
   
   msg <- .validLogicalError(msg, x, fields=c("vec.text", "add.vectors"))
   
@@ -73,6 +75,7 @@ setValidity2("RDAPlot", function(x) {
 #' @importFrom methods callNextMethod
 setMethod("initialize", "RDAPlot", function(.Object, ...) {
   args <- list(...)
+  args <- .emptyDefault(args, "dimred", "RDA")
   args <- .emptyDefault(args, "add.ellipse", "fill")
   args <- .emptyDefault(args, "colour_by", NA_character_)
   args <- .emptyDefault(args, "add.vectors", TRUE)
@@ -87,14 +90,136 @@ RDAPlot <- function(...) {
   new("RDAPlot", ...)
 }
 
-#' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE .conditionalOnCheckSolo
+#' @importFrom iSEE .getEncodedName .selectInput.iSEE .numericInput.iSEE
+#' @importFrom methods slot
+#' @importFrom SingleCellExperiment reducedDimNames
+setMethod(".defineDataInterface", "RDAPlot", function(x, se, select_info) {
+  panel_name <- .getEncodedName(x)
+  
+  list(
+    .selectInput.iSEE(
+      x, field="dimred", label="Reduced dimension",
+      choices=reducedDimNames(se), selected=slot(x, "dimred")
+    )
+  )
+  
+})
+
+#' @importFrom methods callNextMethod
+setMethod(".defineInterface", "RDAPlot", function(x, se, select_info) {
+  
+  out <- callNextMethod()
+  list(
+    out[1],
+    .create_visual_box_for_rda(x, se),
+    out[-1]
+  )
+  
+})
+
+#' @importFrom iSEE .getEncodedName .createProtectedParameterObservers
+setMethod(".createObservers", "RDAPlot", function(x, se, input, session, pObjects, rObjects) {
+  callNextMethod()
+  
+  panel_name <- .getEncodedName(x)
+  
+  .createProtectedParameterObservers(
+    panel_name,
+    c("dimred", "add.ellipse", "colour_by", "vec.text", "add.vectors"),
+    input=input, pObjects=pObjects, rObjects=rObjects
+  )
+  
+  invisible(NULL)
+})
+
+setMethod(".fullName", "RDAPlot", function(x) "RDA plot")
+
+setMethod(".panelColor", "RDAPlot", function(x) "#CD5B45")
+
+#' @importFrom iSEE .getEncodedName
+#' @importFrom shiny plotOutput
+#' @importFrom shinyWidgets addSpinner
+setMethod(".defineOutput", "RDAPlot", function(x) {
+  panel_name <- .getEncodedName(x)
+  addSpinner(
+    plotOutput(panel_name, height = paste0(slot(x, "PanelHeight"), "px")),
+    color=.panelColor(x)
+  )
+})
+
+#' @importFrom iSEE .processMultiSelections .textEval
+#' @importFrom miaViz plotRowTree
+setMethod(".generateOutput", "RDAPlot", function(x, se, all_memory, all_contents) {
+  panel_env <- new.env()
+  
+  all_cmds <- list()
+  args <- character(0)
+  
+  all_cmds[["select"]] <- .processMultiSelections(x, all_memory, all_contents, panel_env)
+  
+  if (is.null(panel_env[["col_selected"]])){
+    panel_env[["se"]] <- se
+  } else {
+    panel_env[["se"]] <- se[ , unlist(panel_env[["col_selected"]])]
+  }
+
+  args[["dimred"]] <- deparse(slot(x, "dimred"))
+  args[["add.ellipse"]] <- deparse(slot(x, "add.ellipse"))
+  args[["colour_by"]] <- deparse(slot(x, "colour_by"))
+  args[["vec.text"]] <- deparse(slot(x, "vec.text"))
+  args[["add.vectors"]] <- deparse(slot(x, "add.vectors"))
+  
+  args <- sprintf("%s=%s", names(args), args)
+  args <- paste(args, collapse=", ")
+  fun_call <- sprintf("p <- miaViz::plotRDA(se, %s)", args)
+  
+  fun_cmd <- paste(strwrap(fun_call, width = 80, exdent = 4), collapse = "\n")
+  plot_out <- .textEval(fun_cmd, panel_env)
+  all_cmds[["fun"]] <- fun_cmd
+  
+  list(commands=all_cmds, plot=plot_out, varname=NULL, contents=NULL)
+})
+
+#' @importMethodsFrom iSEE .renderOutput
+#' @importFrom iSEE .getEncodedName .retrieveOutput
+#' @importFrom shiny renderPlot
+setMethod(".renderOutput", "RDAPlot", function(x, se, output, pObjects, rObjects) {
+  panel_name <- .getEncodedName(x)
+  force(se) # defensive programming to avoid difficult bugs due to delayed evaluation.
+  
+  output[[panel_name]] <- renderPlot({
+    .retrieveOutput(panel_name, se, pObjects, rObjects)
+  })
+  
+  callNextMethod()
+})
+
+#' @importFrom methods callNextMethod
+setMethod(".hideInterface", "RDAPlot", function(x, field) {
+  if (field %in% c("SelectionHistory", "RowSelectionRestrict",
+                   "RowSelectionDynamicSource", "RowSelectionSource")) {
+    TRUE
+  } else {
+    callNextMethod()
+  }
+})
+
+setMethod(".multiSelectionResponsive", "RDAPlot", function(x, dims = character(0)) {
+  if ("column" %in% dims) {
+    return(TRUE)
+  }
+  return(FALSE)
+})
+
+#' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE
+#'   .conditionalOnCheckSolo
 #' @importFrom methods slot
 #' @importFrom SummarizedExperiment colData
-setMethod(".defineInterface", "RDAPlot", function(x, se, select_info) {
-  tab_name <- .getEncodedName(x)
+.create_visual_box_for_rda <- function(x, se) {
+  panel_name <- .getEncodedName(x)
   
   # Define what parameters the user can adjust
-  collapseBox(paste0(tab_name, "_Visual"),
+  collapseBox(paste0(panel_name, "_Visual"),
               title="Visual parameters",
               open=FALSE,
               .selectInput.iSEE(
@@ -109,77 +234,10 @@ setMethod(".defineInterface", "RDAPlot", function(x, se, select_info) {
                 x, field="add.vectors", label="Add vectors", value=slot(x, "add.vectors")
               ),
               .conditionalOnCheckSolo(
-                paste0(tab_name, "_add.vectors"), TRUE,
+                paste0(panel_name, "_add.vectors"), TRUE,
                 .checkboxInput.iSEE(x, field="vec.text",
                                     label="Unboxed labels",
                                     value=slot(x, "vec.text"))
               )
   )
-})
-
-#' @importFrom iSEE .getEncodedName .createProtectedParameterObservers
-setMethod(".createObservers", "RDAPlot", function(x, se, input, session, pObjects, rObjects) {
-  callNextMethod()
-  
-  panel_name <- .getEncodedName(x)
-  
-  .createProtectedParameterObservers(
-    panel_name,
-    c("add.ellipse", "colour_by", "vec.text", "add.vectors"),
-    input=input, pObjects=pObjects, rObjects=rObjects
-  )
-  
-  invisible(NULL)
-})
-
-setMethod(".fullName", "RDAPlot", function(x) "RDA plot")
-
-setMethod(".panelColor", "RDAPlot", function(x) "#CD5B45")
-
-#' @importFrom iSEE .getEncodedName
-setMethod(".defineOutput", "RDAPlot", function(x) {
-  plotOutput(.getEncodedName(x))
-})
-
-#' @importFrom iSEE .processMultiSelections .textEval
-#' @importFrom miaViz plotRowTree
-setMethod(".generateOutput", "RDAPlot", function(x, se, all_memory, all_contents) {
-  plot_env <- new.env()
-  plot_env$se <- se
-  
-  selected <- .processMultiSelections(x, all_memory, all_contents, plot_env)
-  
-  # simplify this to plotRowTree
-  fn_call <- "gg <- %s(se"
-  
-  args <- list()
-  args[["add.ellipse"]] <- deparse(slot(x, "add.ellipse"))
-  args[["colour_by"]] <- deparse(slot(x, "colour_by"))
-  args[["vec.text"]] <- deparse(slot(x, "vec.text"))
-  args[["add.vectors"]] <- deparse(slot(x, "add.vectors"))
-  
-  args <- paste(sprintf("%s=%s", names(args), unlist(args)), collapse=", ")
-  fn_call <- paste(fn_call, args, sep = ", ")
-  fn_call <- paste0(fn_call, ")")
-  fn_call <- paste(strwrap(fn_call, exdent=4), collapse="\n")
-  
-  plot_env$.customFUN <- function(se, ...) miaViz::plotRDA(se, "RDA", ...)
-  tmp_call <- sprintf(fn_call, ".customFUN")
-  .textEval(tmp_call, plot_env)
-  
-  commands <- sprintf(fn_call, "plotRDA")
-
-  commands <- sub("^gg <- ", "", commands) # to avoid an unnecessary variable.
-  list(contents=plot_env$gg, commands=list(select=selected, plot=commands))
-})
-
-#' @importMethodsFrom iSEE .renderOutput
-#' @importFrom iSEE .getEncodedName .retrieveOutput
-#' @importFrom shiny renderPlot
-setMethod(".renderOutput", "RDAPlot", function(x, se, output, pObjects, rObjects) {
-  plot_name <- .getEncodedName(x)
-  force(se) # defensive programming to avoid difficult bugs due to delayed evaluation.
-  output[[plot_name]] <- renderPlot({
-    .retrieveOutput(plot_name, se, pObjects, rObjects)$contents
-  })
-})
+}
