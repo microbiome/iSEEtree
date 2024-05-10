@@ -216,15 +216,12 @@ setMethod(".renderOutput", "AbundanceDensityPlot", function(x, se, output, pObje
 
 #' @importFrom methods callNextMethod
 setMethod(".hideInterface", "AbundanceDensityPlot", function(x, field) {
-  if (field %in% c("SelectionHistory")) {
+  if (field %in% c("SelectionHistory", "ColumnSelectionRestrict",
+                   "ColumnSelectionDynamicSource", "ColumnSelectionSource")) {
     TRUE
   } else {
     callNextMethod()
   }
-})
-
-setMethod(".multiSelectionRestricted", "AbundanceDensityPlot", function(x) {
-  slot(x, "RowSelectionRestrict")
 })
 
 setMethod(".multiSelectionResponsive", "AbundanceDensityPlot", function(x, dims = character(0)) {

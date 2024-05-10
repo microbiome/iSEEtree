@@ -205,10 +205,6 @@ setMethod(".hideInterface", "RowTreePlot", function(x, field) {
   }
 })
 
-setMethod(".multiSelectionRestricted", "RowTreePlot", function(x) {
-  slot(x, "RowSelectionRestrict")
-})
-
 setMethod(".multiSelectionResponsive", "RowTreePlot", function(x, dims = character(0)) {
   if ("row" %in% dims) {
     return(TRUE)
