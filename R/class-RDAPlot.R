@@ -91,8 +91,8 @@ RDAPlot <- function(...) {
 }
 
 #' @importFrom iSEE .getEncodedName .selectInput.iSEE .numericInput.iSEE
-#' @importFrom methods slot
 #' @importFrom SingleCellExperiment reducedDimNames
+#' @importFrom methods slot
 setMethod(".defineDataInterface", "RDAPlot", function(x, se, select_info) {
   panel_name <- .getEncodedName(x)
   

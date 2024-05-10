@@ -6,6 +6,8 @@ name: rworkflows
   pull_request:
     branches:
     - devel
+env:
+  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 jobs:
   rworkflows:
     permissions: write-all
