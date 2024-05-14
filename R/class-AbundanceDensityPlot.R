@@ -15,9 +15,10 @@
 #'
 #' In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
 #'
-#' @section Constructor:
-#' \code{AbundanceDensityPlot(...)} creates an instance of an AbundanceDensityPlot
-#' class, where any slot and its value can be passed to \code{...} as a named argument.
+#' @return
+#' The \code{AbundanceDensityPlot(...)} constructor creates an instance of an
+#' AbundanceDensityPlot class, where any slot and its value can be passed to
+#' \code{...} as a named argument.
 #'
 #' @author Giulio Benedetti
 #' @examples
@@ -55,94 +56,82 @@ setClass("AbundanceDensityPlot", contains="Panel",
 #' @importFrom iSEE .singleStringError .validNumberError
 #' @importFrom S4Vectors setValidity2
 setValidity2("AbundanceDensityPlot", function(x) {
-  msg <- character(0)
+    msg <- character(0)
   
-  msg <- .singleStringError(msg, x,
-                            fields=c("layout", "assay.type")
-  )
-
-  msg <- .validNumberError(msg, x, "n", lower=1, upper=Inf)
+    msg <- .singleStringError(msg, x, fields=c("layout", "assay.type"))
+    msg <- .validNumberError(msg, x, "n", lower=1, upper=Inf)
   
-  if (length(msg)) {
-    return(msg)
-  }
-  TRUE
+    if( length(msg) ){
+        return(msg)
+    }
+    
+    TRUE
 })
 
 #' @importFrom iSEE .emptyDefault
 #' @importFrom methods callNextMethod
 setMethod("initialize", "AbundanceDensityPlot", function(.Object, ...) {
-  args <- list(...)
-  args <- .emptyDefault(args, "layout", "jitter")
-  args <- .emptyDefault(args, "assay.type", "counts")
-  args <- .emptyDefault(args, "n", 5)
-  args <- .emptyDefault(args, "add_legend", TRUE)
-  args <- .emptyDefault(args, "dots_colour", "None")
-  args <- .emptyDefault(args, "dots_colour_by", NA_character_)
+    args <- list(...)
+    args <- .emptyDefault(args, "layout", "jitter")
+    args <- .emptyDefault(args, "assay.type", "counts")
+    args <- .emptyDefault(args, "n", 5)
+    args <- .emptyDefault(args, "add_legend", TRUE)
+    args <- .emptyDefault(args, "dots_colour", "None")
+    args <- .emptyDefault(args, "dots_colour_by", NA_character_)
   
-  do.call(callNextMethod, c(list(.Object), args))
+    do.call(callNextMethod, c(list(.Object), args))
 })
 
 #' @export
 #' @importFrom methods new
 AbundanceDensityPlot <- function(...) {
-  new("AbundanceDensityPlot", ...)
+    new("AbundanceDensityPlot", ...)
 }
 
 #' @importFrom iSEE .getEncodedName .selectInput.iSEE .numericInput.iSEE
 #' @importFrom methods slot
 #' @importFrom SummarizedExperiment assayNames
-setMethod(".defineDataInterface", "AbundanceDensityPlot", function(x, se, select_info) {
-  panel_name <- .getEncodedName(x)
+setMethod(".defineDataInterface", "AbundanceDensityPlot",
+    function(x, se, select_info) {
+    
+    panel_name <- .getEncodedName(x)
   
-  list(
-      .selectInput.iSEE(
-          x, field="assay.type", label="Assay type",
-          choices=assayNames(se), selected=slot(x, "assay.type")
-      ),
-      # Number of taxa
-      .numericInput.iSEE(
-        x, field="n", label="Number of taxa", value=slot(x, "n")
-      )
-  )
-
+    list(.selectInput.iSEE(x, field="assay.type", label="Assay type",
+            choices=assayNames(se), selected=slot(x, "assay.type")),
+        # Number of taxa
+        .numericInput.iSEE(x, field="n", label="Number of taxa",
+            value=slot(x, "n")))
 })
 
 #' @importFrom methods callNextMethod
-setMethod(".defineInterface", "AbundanceDensityPlot", function(x, se, select_info) {
+setMethod(".defineInterface", "AbundanceDensityPlot",
+    function(x, se, select_info) {
   
-  out <- callNextMethod()
-  list(
-    out[1],
-    .create_visual_box_for_abunddens_plot(x, se),
-    out[-1]
-  )
-  
+    out <- callNextMethod()
+    list(out[1], .create_visual_box_for_abunddens_plot(x, se), out[-1])
 })
 
 #' @importFrom iSEE .getEncodedName .createProtectedParameterObservers
 #'   .createUnprotectedParameterObservers
-setMethod(".createObservers", "AbundanceDensityPlot", function(x, se, input, session, pObjects, rObjects) {
-  callNextMethod()
+setMethod(".createObservers", "AbundanceDensityPlot",
+    function(x, se, input, session, pObjects, rObjects) {
+    
+    callNextMethod()
+    panel_name <- .getEncodedName(x)
   
-  panel_name <- .getEncodedName(x)
+    .createProtectedParameterObservers(panel_name,
+        c("layout", "assay.type", "n", "add_legend"),
+        input=input, pObjects=pObjects, rObjects=rObjects)
   
-  .createProtectedParameterObservers(
-    panel_name,
-    c("layout", "assay.type", "n", "add_legend"),
-    input=input, pObjects=pObjects, rObjects=rObjects
-  )
+    .createUnprotectedParameterObservers(panel_name,
+        c("dots_colour", "dots_colour_by"),
+        input=input, pObjects=pObjects, rObjects=rObjects)
   
-  .createUnprotectedParameterObservers(
-    panel_name,
-    c("dots_colour", "dots_colour_by"),
-    input=input, pObjects=pObjects, rObjects=rObjects
-  )
-  
-  invisible(NULL)
+    invisible(NULL)
 })
 
-setMethod(".fullName", "AbundanceDensityPlot", function(x) "Abundance density plot")
+setMethod(".fullName", "AbundanceDensityPlot",
+    function(x) "Abundance density plot")
 
 #' @importMethodsFrom iSEE .panelColor
 setMethod(".panelColor", "AbundanceDensityPlot", function(x) "#8B5A2B")
@@ -151,84 +140,92 @@ setMethod(".panelColor", "AbundanceDensityPlot", function(x) "#8B5A2B")
 #' @importFrom shiny plotOutput
 #' @importFrom shinyWidgets addSpinner
 setMethod(".defineOutput", "AbundanceDensityPlot", function(x) {
-  plot_name <- .getEncodedName(x)
-  addSpinner(
-    plotOutput(plot_name, height = paste0(slot(x, "PanelHeight"), "px")),
-    color=.panelColor(x)
-  )
+    plot_name <- .getEncodedName(x)
+    
+    addSpinner(
+        plotOutput(plot_name, height = paste0(slot(x, "PanelHeight"), "px")),
+        color=.panelColor(x))
 })
 
 #' @importMethodsFrom iSEE .generateOutput
 #' @importFrom iSEE .processMultiSelections .textEval
 #' @importFrom miaViz plotRowTree
-setMethod(".generateOutput", "AbundanceDensityPlot", function(x, se, all_memory, all_contents) {
-  panel_env <- new.env()
+setMethod(".generateOutput", "AbundanceDensityPlot",
+    function(x, se, all_memory, all_contents) {
+    
+    panel_env <- new.env()
+    all_cmds <- list()
+    args <- character(0)
+  
+    all_cmds[["select"]] <- .processMultiSelections(
+        x, all_memory, all_contents, panel_env
+    )
+  
+    if( exists("row_selected", envir=panel_env, inherits=FALSE) ){
+        panel_env[["se"]] <- se[unlist(panel_env[["row_selected"]]), ]
+    } else {
+        panel_env[["se"]] <- se
+    }
+  
+    args[["layout"]] <- deparse(slot(x, "layout"))
+    args[["add_legend"]] <- deparse(slot(x, "add_legend"))
+    args[["assay.type"]] <- deparse(slot(x, "assay.type"))
+  
+    if (is.na(slot(x, "n")) || slot(x, "n") <= 0) {
+        args[["n"]] <- 5
+    } else {
+        args[["n"]] <- deparse(slot(x, "n"))
+    }
+  
+    if( slot(x, "dots_colour") == "Column data" ){
+        args[["colour_by"]] <- deparse(slot(x, "dots_colour_by"))
+    }
 
-  all_cmds <- list()
-  args <- character(0)
+    args <- sprintf("%s=%s", names(args), args)
+    args <- paste(args, collapse=", ")
+    fun_call <- sprintf("p <- miaViz::plotAbundanceDensity(se, %s)", args)
   
-  all_cmds[["select"]] <- .processMultiSelections(x, all_memory, all_contents, panel_env)
+    fun_cmd <- paste(strwrap(fun_call, width = 80, exdent = 4), collapse = "\n")
+    plot_out <- .textEval(fun_cmd, panel_env)
+    all_cmds[["fun"]] <- fun_cmd
   
-  if (exists("row_selected", envir=panel_env, inherits=FALSE)) {
-      panel_env[["se"]] <- se[unlist(panel_env[["row_selected"]]), ]
-  } else {
-      panel_env[["se"]] <- se
-  }
-  
-  args[["layout"]] <- deparse(slot(x, "layout"))
-  args[["add_legend"]] <- deparse(slot(x, "add_legend"))
-  args[["assay.type"]] <- deparse(slot(x, "assay.type"))
-  
-  if (is.na(slot(x, "n")) || slot(x, "n") <= 0) {
-      args[["n"]] <- 5
-  } else {
-      args[["n"]] <- deparse(slot(x, "n"))
-  }
-  
-  if (slot(x, "dots_colour") == "Column data") {
-    args[["colour_by"]] <- deparse(slot(x, "dots_colour_by"))
-  }
-
-  args <- sprintf("%s=%s", names(args), args)
-  args <- paste(args, collapse=", ")
-  fun_call <- sprintf("p <- miaViz::plotAbundanceDensity(se, %s)", args)
-  
-  fun_cmd <- paste(strwrap(fun_call, width = 80, exdent = 4), collapse = "\n")
-  plot_out <- .textEval(fun_cmd, panel_env)
-  all_cmds[["fun"]] <- fun_cmd
-  
-  list(commands=all_cmds, plot=plot_out, varname=NULL, contents=NULL)
+    list(commands=all_cmds, plot=plot_out, varname=NULL, contents=NULL)
 })
 
 #' @importFrom iSEE .getEncodedName .retrieveOutput
 #' @importFrom shiny renderPlot
 #' @importFrom methods callNextMethod
-setMethod(".renderOutput", "AbundanceDensityPlot", function(x, se, output, pObjects, rObjects) {
-  plot_name <- .getEncodedName(x)
-  force(se) # defensive programming to avoid difficult bugs due to delayed evaluation.
+setMethod(".renderOutput", "AbundanceDensityPlot",
+            function(x, se, output, pObjects, rObjects) {
+    
+    plot_name <- .getEncodedName(x)
+    force(se) # defensive programming to avoid bugs due to delayed evaluation
   
-  output[[plot_name]] <- renderPlot({
-    .retrieveOutput(plot_name, se, pObjects, rObjects)
-  })
+    output[[plot_name]] <- renderPlot({
+        .retrieveOutput(plot_name, se, pObjects, rObjects)
+    })
   
-  callNextMethod()
+    callNextMethod()
 })
 
 #' @importFrom methods callNextMethod
 setMethod(".hideInterface", "AbundanceDensityPlot", function(x, field) {
-  if (field %in% c("SelectionHistory", "ColumnSelectionRestrict",
-                   "ColumnSelectionDynamicSource", "ColumnSelectionSource")) {
-    TRUE
-  } else {
-    callNextMethod()
-  }
+    
+    if ( field %in% c("SelectionHistory", "ColumnSelectionRestrict",
+                     "ColumnSelectionDynamicSource", "ColumnSelectionSource") ){
+        TRUE
+    } else {
+        callNextMethod()
+    }
 })
 
-setMethod(".multiSelectionResponsive", "AbundanceDensityPlot", function(x, dims = character(0)) {
-  if ("row" %in% dims) {
-    return(TRUE)
-  }
-  return(FALSE)
+setMethod(".multiSelectionResponsive", "AbundanceDensityPlot",
+            function(x, dims = character(0)) {
+    
+    if ("row" %in% dims) {
+        return(TRUE)
+    }
+        return(FALSE)
 })
 
 #' @importFrom iSEE .getEncodedName collapseBox .selectInput.iSEE
@@ -237,32 +234,25 @@ setMethod(".multiSelectionResponsive", "AbundanceDensityPlot", function(x, dims 
 #' @importFrom SummarizedExperiment colData
 .create_visual_box_for_abunddens_plot <- function(x, se) {
   
-  panel_name <- .getEncodedName(x)
+    panel_name <- .getEncodedName(x)
   
-  # Define what parameters the user can adjust
-  collapseBox(paste0(panel_name, "_Visual"),
-              title="Visual parameters",
-              open=FALSE,
-              # Tree layout
-              .selectInput.iSEE(
-                x, field="layout", label="Layout",
-                choices=c("jitter", "density", "point"), selected=slot(x, "layout")
-              ),
-              # Colour legend
-              .checkboxInput.iSEE(
-                x, field="add_legend", label="View legend", value=slot(x, "add_legend")
-              ),
-              .radioButtons.iSEE(
+    # Define what parameters the user can adjust
+    collapseBox(
+        paste0(panel_name, "_Visual"), title="Visual parameters", open=FALSE,
+            # Tree layout
+            .selectInput.iSEE(x, field="layout", label="Layout",
+                choices=c("jitter", "density", "point"),
+                selected=slot(x, "layout")),
+            # Colour legend
+            .checkboxInput.iSEE(x, field="add_legend", label="View legend",
+                value=slot(x, "add_legend")),
+            .radioButtons.iSEE(
                 x, field="dots_colour", label="Dot color:", inline=TRUE,
-                choices=c("None", "Column data"), selected=slot(x, "dots_colour")
-              ),
-              .conditionalOnRadio(
+                choices=c("None", "Column data"),
+                selected=slot(x, "dots_colour")),
+            .conditionalOnRadio(
                 paste0(panel_name, "_dots_colour"), "Column data",
                 iSEE:::.selectInputHidden(x, field="dots_colour_by",
-                                          label="Color dots by",
-                                          choices=names(colData(se)), 
-                                          selected=slot(x, "dots_colour_by"))
-              )
-  )
-  
+                    label="Color dots by", choices=names(colData(se)), 
+                    selected=slot(x, "dots_colour_by"))))
 }

@@ -11,7 +11,7 @@ Description:
     visualisation to create panels that are specific for
     TreeSummarizedExperiment objects. Not surprisingly, it also depends on the
     generic panels from iSEE.
-biocViews: Microbiome, Software, Visualization
+biocViews: Microbiome, Software, Visualization, DataImport
 License: Artistic-2.0
 Encoding: UTF-8
 Depends:

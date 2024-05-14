@@ -6,6 +6,11 @@
 \alias{RowTreePlot-class}
 \alias{initialize,RowTreePlot-method}
 \title{Row tree plot}
+\value{
+The \code{RowTreePlot(...)} constructor creates an instance of a RowTreePlot
+class, where any slot and its value can be passed to \code{...} as a named
+argument.
+}
 \description{
 Hierarchical tree for the rows of a
 \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}
@@ -29,12 +34,6 @@ when \code{colour_tip = "Row data"}.
 }
 
 In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
-}
-
-\section{Constructor}{
-
-\code{RowTreePlot(...)} creates an instance of a RowTreePlot class,
-where any slot and its value can be passed to \code{...} as a named argument.
 }
 
 \examples{
