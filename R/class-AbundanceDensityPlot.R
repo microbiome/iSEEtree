@@ -100,7 +100,7 @@ setMethod(".defineDataInterface", "AbundanceDensityPlot",
             choices=assayNames(se), selected=slot(x, "assay.type")),
         # Number of taxa
         .numericInput.iSEE(x, field="n", label="Number of taxa",
-            value=slot(x, "n")))
+            value=slot(x, "n"), min=1, max=nrow(se), step=1))
 })
 
 #' @importFrom methods callNextMethod
@@ -171,8 +171,10 @@ setMethod(".generateOutput", "AbundanceDensityPlot",
     args[["add_legend"]] <- deparse(slot(x, "add_legend"))
     args[["assay.type"]] <- deparse(slot(x, "assay.type"))
   
-    if (is.na(slot(x, "n")) || slot(x, "n") <= 0) {
+    if( is.na(slot(x, "n")) || slot(x, "n") <= 0 ){
         args[["n"]] <- 5
+    } else if( slot(x, "n") > nrow(se) ){
+        args[["n"]] <- nrow(se)
     } else {
         args[["n"]] <- deparse(slot(x, "n"))
     }

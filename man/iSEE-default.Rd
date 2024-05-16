@@ -7,7 +7,7 @@
 \alias{iSEE,TreeSummarizedExperiment-method}
 \title{iSEE layout for TreeSE}
 \value{
-The iSEE method for the TreeSE containers returns a default set of panels
+The iSEE method for the TreeSE container returns a default set of panels
 typically relevant for microbiome data. This configuration can be modified
 by defining a different set of initial panels. By default, the visualised
 panels include the following:

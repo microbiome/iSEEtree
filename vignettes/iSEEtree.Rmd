@@ -103,25 +103,21 @@ citation("iSEEtree")
 ```{r start, message=FALSE, warning=FALSE}
 library(iSEEtree)
 library(mia)
+library(scater)
 
 # Import TreeSE
-data("GlobalPatterns", package = "mia")
-tse <- GlobalPatterns
-
-# Agglomerate TreeSE by Genus
-tse_genus <- mergeFeaturesByRank(tse,
-                                 rank = "Genus",
-                                 onRankOnly = TRUE)
+data("Tengeler2020", package = "mia")
+tse <- Tengeler2020
 
 # Add relabundance assay
-tse_genus <- transformAssay(tse_genus, method = "relabundance")
+tse <- transformAssay(tse, method = "relabundance")
 
-# Add PCA
-tse_genus <- scater::runPCA(tse_genus, assay.type = "counts")
+# Add reduced dimensions
+tse <- runMDS(tse, assay.type = "relabundance")
 
 # Launch iSEE
 if (interactive()) {
-  iSEE(tse_genus)
+  iSEE(tse)
 }
 ```
 

@@ -3,7 +3,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/RiboRings/iSEEtree)](https://github.com/RiboRings/iSEEtree/issues)
 [![GitHub pulls](https://img.shields.io/github/issues-pr/RiboRings/iSEEtree)](https://github.com/RiboRings/iSEEtree/pulls)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![rworkflows](https://github.com/RiboRings/iSEEtree/workflows/rworkflows/badge.svg)](https://github.com/RiboRings/iSEEtree/actions)
+[![rworkflows](https://github.com/RiboRings/iSEEtree/workflows/rworkflows.yml/badge.svg?branch=devel)](https://github.com/RiboRings/iSEEtree/actions/workflows/rworkflows.yml)
 [![Codecov test coverage](https://codecov.io/gh/RiboRings/iSEEtree/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/RiboRings/iSEEtree?branch=devel)
 
 The goal of iSEEtree is to provide panels related to TreeSummarizedExperiment
@@ -23,25 +23,23 @@ In the future, this package may be submitted to Bioconductor.
 The basic functionality of iSEEtree can be explored as follows:
 
 ```
-# Import TreeSE
+library(iSEEtree)
 library(mia)
-data("GlobalPatterns", package = "mia")
-tse <- GlobalPatterns
+library(scater)
 
-# Agglomerate TreeSE by Genus
-tse_genus <- mergeFeaturesByRank(tse,
-                                 rank = "Genus",
-                                 onRankOnly = TRUE)
+# Import TreeSE
+data("Tengeler2020", package = "mia")
+tse <- Tengeler2020
 
 # Add relabundance assay
-tse_genus <- transformAssay(tse_genus, method = "relabundance")
+tse <- transformAssay(tse, method = "relabundance")
 
-# Add PCA
-tse_genus <- scater::runPCA(tse_genus, assay.type = "counts")
+# Add reduced dimensions
+tse <- runMDS(tse, assay.type = "relabundance")
 
 # Launch iSEE
 if (interactive()) {
-  iSEE(tse_genus)
+  iSEE(tse)
 }
 ```
 
