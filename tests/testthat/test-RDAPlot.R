@@ -4,7 +4,7 @@ test_that("RDAPlot", {
   tse <- enterotype
   panel <- RDAPlot()
   
-  tse <- scater::runRDA(tse,
+  tse <- mia::runRDA(tse,
       formula = assay ~ ClinicalStatus + Gender + Age,
       na.action = na.exclude)
   
