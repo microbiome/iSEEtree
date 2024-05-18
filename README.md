@@ -2,7 +2,7 @@
 
 [![issues](https://img.shields.io/github/issues/RiboRings/iSEEtree)](https://github.com/RiboRings/iSEEtree/issues)
 [![pulls](https://img.shields.io/github/issues-pr/RiboRings/iSEEtree)](https://github.com/RiboRings/iSEEtree/pulls)
-[![rworkflows](https://github.com/RiboRings/iSEEtree/workflows/rworkflows/badge.svg?branch=devel)](https://github.com/RiboRings/iSEEtree/actions/workflows/rworkflows)
+[![rworkflows](https://github.com/RiboRings/iSEEtree/workflows/rworkflows/badge.svg?branch=devel)](https://github.com/RiboRings/iSEEtree/actions)
 [![codecov](https://codecov.io/gh/RiboRings/iSEEtree/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/RiboRings/iSEEtree?branch=devel)
 [![codefactor](https://www.codefactor.io/repository/github/riborings/iseetree/badge)](https://www.codefactor.io/repository/github/riborings/iseetree)
 
