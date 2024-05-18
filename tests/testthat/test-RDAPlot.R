@@ -4,9 +4,9 @@ test_that("RDAPlot", {
   tse <- enterotype
   panel <- RDAPlot()
   
-  tse <- runRDA(tse,
-                formula = assay ~ ClinicalStatus + Gender + Age,
-                na.action = na.exclude)
+  tse <- scater::runRDA(tse,
+      formula = assay ~ ClinicalStatus + Gender + Age,
+      na.action = na.exclude)
   
   panel[["colour_by"]] <- "ClinicalStatus"
 
