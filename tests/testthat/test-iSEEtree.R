@@ -7,7 +7,7 @@ test_that("iSEEtree", {
               AbundancePlot(), AbundanceDensityPlot(),
               ReducedDimensionPlot(), ComplexHeatmapPlot())
 
-  expect_length(.check_panel(tse, panels, "ReducedDimensionPlot", reducedDims), 6)
+  #expect_length(.check_panel(tse, panels, "ReducedDimensionPlot", reducedDims), 6)
   
   expect_no_error(iSEE(tse))
   

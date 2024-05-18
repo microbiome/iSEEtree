@@ -4,11 +4,16 @@ test_that("RowTreePlot", {
   tse <- Tengeler2020
   panel <- RowTreePlot()
   
+  panel[["layout"]] <- "rectangular"
+  
   expect_identical(.getEncodedName(panel), "RowTreePlotNA")
   expect_identical(.fullName(panel), "Row tree plot")
   expect_identical(.panelColor(panel), "#4EEE94")
   
-  expect_s3_class(.defineOutput(panel), "shiny.tag.list")  
+  expect_s3_class(.defineOutput(panel), "shiny.tag.list")
+  expect_match(.generateOutput(panel, tse)[["commands"]][["fun"]],
+      'p <- miaViz::plotRowTree(se, layout="rectangular", add_legend=TRUE)',
+      fixed = TRUE)
   
   expect_true(.hideInterface(panel, "ColumnSelectionSource"))
   expect_false(.multiSelectionResponsive(panel, "column"))

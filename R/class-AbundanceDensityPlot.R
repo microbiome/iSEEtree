@@ -48,10 +48,9 @@
 NULL
 
 #' @export
-setClass("AbundanceDensityPlot", contains="Panel",
-         slots=c(layout="character", assay.type="character", n="numeric",
-                 dots_colour="character", dots_colour_by="character",
-                 add_legend="logical"))
+setClass("AbundanceDensityPlot", contains="Panel", slots=c(layout="character",
+    assay.type="character", n="numeric", dots_colour="character",
+    dots_colour_by="character", add_legend="logical"))
 
 #' @importFrom iSEE .singleStringError .validNumberError
 #' @importFrom S4Vectors setValidity2
