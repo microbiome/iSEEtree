@@ -6,16 +6,14 @@
 \alias{iSEE}
 \alias{iSEE,TreeSummarizedExperiment-method}
 \title{iSEE layout for TreeSE}
-\description{
-Panel configuration tuned to the specific properties of
-\code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}.
-}
-\section{Default layout}{
-
-
-The default configuration can be overwritten by defining a different set of
-initial panels. By default, the visualized panels include the following:
+\value{
+The iSEE method for the TreeSE container returns a default set of panels
+typically relevant for microbiome data. This configuration can be modified
+by defining a different set of initial panels. By default, the visualised
+panels include the following:
 \itemize{
+\item \code{RowDataTable()}
+\item \code{ColumnDataTable()}
 \item \code{RowTreePlot()}
 \item \code{AbundancePlot()}
 \item \code{AbundanceDensityPlot()}
@@ -23,7 +21,10 @@ initial panels. By default, the visualized panels include the following:
 \item \code{ComplexHeatmapPlot()}
 }
 }
-
+\description{
+Panel configuration tuned to the specific properties of
+\code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}.
+}
 \examples{
 # Import TreeSE
 library(mia)

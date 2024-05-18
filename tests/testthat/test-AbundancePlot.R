@@ -4,11 +4,16 @@ test_that("AbundancePlot", {
   tse <- Tengeler2020
   panel <- AbundancePlot()
   
+  panel[["rank"]] <- "Kingdom"
+  
   expect_identical(.getEncodedName(panel), "AbundancePlotNA")
   expect_identical(.fullName(panel), "Abundance plot")
   expect_identical(.panelColor(panel), "#00E5EE")
   
-  expect_s3_class(.defineOutput(panel), "shiny.tag.list")  
+  expect_s3_class(.defineOutput(panel), "shiny.tag.list")
+  expect_match(.generateOutput(panel, tse)[["commands"]][["fun"]],
+      'p <- miaViz::plotAbundance(se, rank="Kingdom", add_legend=TRUE)',
+      fixed = TRUE)
   
   expect_true(.hideInterface(panel, "RowSelectionSource"))
   expect_false(.multiSelectionResponsive(panel, "row"))

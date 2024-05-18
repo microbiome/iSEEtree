@@ -8,7 +8,10 @@ test_that("AbundanceDensityPlot", {
   expect_identical(.fullName(panel), "Abundance density plot")
   expect_identical(.panelColor(panel), "#8B5A2B")
   
-  expect_s3_class(.defineOutput(panel), "shiny.tag.list")  
+  expect_s3_class(.defineOutput(panel), "shiny.tag.list")
+  expect_match(.generateOutput(panel, tse)[["commands"]][["fun"]],
+    'p <- miaViz::plotAbundanceDensity(se, layout="jitter", add_legend=TRUE,\n',
+    'assay.type="counts", n=5)', fixed = TRUE)
   
   expect_true(.hideInterface(panel, "ColumnSelectionSource"))
   expect_false(.multiSelectionResponsive(panel, "column"))

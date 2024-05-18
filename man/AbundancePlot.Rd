@@ -6,6 +6,11 @@
 \alias{AbundancePlot-class}
 \alias{initialize,AbundancePlot-method}
 \title{Abundance plot}
+\value{
+The \code{AbundancePlot(...)} constructor creates an instance of an
+AbundancePlot class, where any slot and its value can be passed to \code{...}
+as a named argument.
+}
 \description{
 Composite abundance profile of all features in a
 \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}
@@ -21,12 +26,6 @@ The following slots control the thresholds used in the visualization:
 }
 
 In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
-}
-
-\section{Constructor}{
-
-\code{AbundancePlot(...)} creates an instance of a AbundancePlot class,
-where any slot and its value can be passed to \code{...} as a named argument.
 }
 
 \examples{

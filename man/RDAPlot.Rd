@@ -5,6 +5,10 @@
 \alias{RDAPlot-class}
 \alias{initialize,RDAPlot-method}
 \title{RDA plot}
+\value{
+The \code{RDAPlot(...)} contructor creates an instance of a RDAPlot class,
+where any slot and its value can be passed to \code{...} as a named argument.
+}
 \description{
 CCA/RDA plot for the rows of a
 \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}
@@ -24,12 +28,6 @@ The following slots control the thresholds used in the visualization:
 }
 
 In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
-}
-
-\section{Constructor}{
-
-\code{RDAPlot(...)} creates an instance of a RDAPlot class,
-where any slot and its value can be passed to \code{...} as a named argument.
 }
 
 \examples{
