@@ -1,10 +1,10 @@
 # iSEEtree
 
-[![issues](https://img.shields.io/github/issues/RiboRings/iSEEtree)](https://github.com/RiboRings/iSEEtree/issues)
-[![pulls](https://img.shields.io/github/issues-pr/RiboRings/iSEEtree)](https://github.com/RiboRings/iSEEtree/pulls)
-[![rworkflows](https://github.com/RiboRings/iSEEtree/workflows/rworkflows/badge.svg?branch=devel)](https://github.com/RiboRings/iSEEtree/actions)
-[![codecov](https://codecov.io/gh/RiboRings/iSEEtree/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/RiboRings/iSEEtree?branch=devel)
-[![codefactor](https://www.codefactor.io/repository/github/riborings/iseetree/badge)](https://www.codefactor.io/repository/github/riborings/iseetree)
+[![issues](https://img.shields.io/github/issues/microbiome/iSEEtree)](https://github.com/microbiome/iSEEtree/issues)
+[![pulls](https://img.shields.io/github/issues-pr/microbiome/iSEEtree)](https://github.com/microbiome/iSEEtree/pulls)
+[![R-CMD-check](https://github.com/microbiome/iSEEtree/workflows/rworkflows/badge.svg)](https://github.com/microbiome/iSEEtree/actions)
+[![codecov](https://codecov.io/gh/microbiome/iSEEtree/branch/devel/graph/badge.svg)](https://app.codecov.io/gh/microbiome/iSEEtree?branch=devel)
+[![codefactor](https://www.codefactor.io/repository/github/microbiome/iseetree/badge)](https://www.codefactor.io/repository/github/microbiome/iseetree)
 
 The goal of iSEEtree is to provide panels related to TreeSummarizedExperiment
 objects which facilitate the interactive visualisation of microbiome data in
@@ -14,7 +14,7 @@ objects which facilitate the interactive visualisation of microbiome data in
 The development version of iSEEtree can be installed from GitHub as follow:
 
 ```
-remotes::install_github("RiboRings/iSEEtree")
+remotes::install_github("microbiome/iSEEtree")
 ```
 
 In the future, this package may be submitted to Bioconductor.
@@ -73,5 +73,5 @@ Please note that the iSEEtree project is released with a
 By contributing to this project, you agree to abide by its terms. If you come
 across a bug or see potential for improvement, feel free to open an issue and we
 will plan the next move. is missing or could be improved. If you are interested
-in contributing, you can check [our issues](https://github.com/RiboRings/iSEEtree/issues)
+in contributing, you can check [our issues](https://github.com/microbiome/iSEEtree/issues)
 and try to find a solution. Either way, contributions are very much appreciated.
