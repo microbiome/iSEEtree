@@ -17,13 +17,14 @@ Encoding: UTF-8
 Depends:
     R (>= 4.0),
     iSEE,
-    SummarizedExperiment
 Imports:
+    DelayedArray,
     methods,
     miaViz,
     S4Vectors,
     shiny,
     shinyWidgets,
+    SummarizedExperiment,
     SingleCellExperiment,
     TreeSummarizedExperiment
 Suggests:
