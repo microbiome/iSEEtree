@@ -27,7 +27,6 @@ Imports:
     SummarizedExperiment,
     TreeSummarizedExperiment
 Suggests:
-    BiocGenerics,
     BiocStyle,
     knitr,
     mia,
