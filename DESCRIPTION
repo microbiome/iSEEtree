@@ -16,18 +16,18 @@ License: Artistic-2.0
 Encoding: UTF-8
 Depends:
     R (>= 4.0),
-    iSEE,
+    iSEE
 Imports:
-    DelayedArray,
     methods,
     miaViz,
     S4Vectors,
     shiny,
     shinyWidgets,
-    SummarizedExperiment,
     SingleCellExperiment,
+    SummarizedExperiment,
     TreeSummarizedExperiment
 Suggests:
+    BiocGenerics,
     BiocStyle,
     knitr,
     mia,
