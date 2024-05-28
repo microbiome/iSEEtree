@@ -168,6 +168,7 @@ setMethod(".hideInterface", "AbundancePlot", function(x, field) {
     }
 })
 
+
 setMethod(".multiSelectionResponsive", "AbundancePlot",
     function(x, dims = character(0)) {
     
@@ -177,11 +178,40 @@ setMethod(".multiSelectionResponsive", "AbundancePlot",
     return(FALSE)
 })
 
+#' @importFrom methods callNextMethod
+#' @importFrom iSEE .getEncodedName .addTourStep
+setMethod(".definePanelTour", "AbundancePlot", function(x) {
+  rbind(c(paste0("#", .getEncodedName(x)), sprintf(
+    "The <font color=\"%s\">Abundance Plot</font> panel contains a representation
+        of the relative abundance for each taxonomic rank. Each column corresponds to a sample of 
+        the <code>SummarizedExperiment</code> object.", .getPanelColor(x))),
+    .addTourStep(x, "DataBoxOpen", "The <i>Data parameters</i> box shows the
+        available parameters that can be tweaked to control the data on
+        the heatmap.<br/><br/><strong>Action:</strong> click on this
+        box to open up available options."),
+    .addTourStep(x, "Visual", "The <i>Visual parameters</i> box shows
+        the available visual parameters that can be tweaked in this
+        plot.<br/><br/><strong>Action:</strong> click on this box to
+        open up available options."),
+    callNextMethod())
+})
+
+#' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE
+# .addSpecificTour
 #' @importFrom methods slot
 #' @importFrom SummarizedExperiment rowData
 .create_visual_box_for_abund_plot <- function(x, se) {
   
     panel_name <- .getEncodedName(x)
+    
+    .addSpecificTour(class(x)[1], "rank", function(plot_name) {
+      data.frame(rbind(c(element = paste0("#", plot_name,
+                                          "_rank + .selectize-control"), intro = "Here, we can select the
+            taxonomic rank.")))})
+    .addSpecificTour(class(x)[1], "add_legend", function(plot_name) {
+      data.frame(rbind(c(element = paste0("#", plot_name,
+                                          "_add_legend + .selectize-control"), intro = "Here, we can choose
+            whether or not to show a legend.")))})
   
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_Visual"),
