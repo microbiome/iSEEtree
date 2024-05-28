@@ -168,7 +168,6 @@ setMethod(".hideInterface", "AbundancePlot", function(x, field) {
     }
 })
 
-
 setMethod(".multiSelectionResponsive", "AbundancePlot",
     function(x, dims = character(0)) {
     

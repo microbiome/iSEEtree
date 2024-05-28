@@ -229,6 +229,25 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
 #' @importFrom SummarizedExperiment colData
 .create_visual_box_for_rda <- function(x, se) {
     panel_name <- .getEncodedName(x)
+    
+    
+    .addSpecificTour(class(x)[1], "colour_by", function(plot_name) {
+      data.frame(rbind(c(element = paste0("#", plot_name,
+                                          "_colour_by + .selectize-control"), intro = "Here, we can select how
+            colours are mapped on the plot.")))})
+    .addSpecificTour(class(x)[1], "add.ellipse", function(plot_name) {
+      data.frame(rbind(c(element = paste0("#", plot_name,
+                                          "_add.ellispe + .selectize-control"), intro = "Here, we can choose
+            whether or not to add an ellispe.")))})
+    .addSpecificTour(class(x)[1], "add.vectors", function(plot_name) {
+      data.frame(rbind(c(element = paste0("#", plot_name,
+                                          "_add.vectors + .selectize-control"), intro = "Here, we can choose
+            whether or not to add vectors")))})
+    .addSpecificTour(class(x)[1], "vec.text", function(plot_name) {
+      data.frame(rbind(c(element = paste0("#", plot_name,
+                                          "vec.text + .selectize-control"), intro = "Here, we can choose
+            the vectors text.")))})
+    
   
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_Visual"),
