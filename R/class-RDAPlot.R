@@ -206,6 +206,23 @@ setMethod(".multiSelectionResponsive", "RDAPlot", function(x, dims = character(0
     return(FALSE)
 })
 
+#' @importFrom methods callNextMethod
+#' @importFrom iSEE .getEncodedName .addTourStep
+setMethod(".definePanelTour", "RDAPlot", function(x) {
+  rbind(c(paste0("#", .getEncodedName(x)), sprintf(
+    "The <font color=\"%s\">RDA Plot</font> panel contains a representation
+        of the correlation between variables of our dataset.", .getPanelColor(x))),
+    .addTourStep(x, "DataBoxOpen", "The <i>Data parameters</i> box shows the
+        available parameters that can be tweaked to control the data on
+        the plot.<br/><br/><strong>Action:</strong> click on this
+        box to open up available options."),
+    .addTourStep(x, "Visual", "The <i>Visual parameters</i> box shows
+        the available visual parameters that can be tweaked in this
+        plot.<br/><br/><strong>Action:</strong> click on this box to
+        open up available options."),
+    callNextMethod())
+})
+
 #' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE
 #'   .conditionalOnCheckSolo
 #' @importFrom methods slot

@@ -229,6 +229,23 @@ setMethod(".multiSelectionResponsive", "AbundanceDensityPlot",
         return(FALSE)
 })
 
+#' @importFrom methods callNextMethod
+#' @importFrom iSEE .getEncodedName .addTourStep
+setMethod(".definePanelTour", "AbundanceDensityPlot", function(x) {
+  rbind(c(paste0("#", .getEncodedName(x)), sprintf(
+    "The <font color=\"%s\">Abundance Density Plot</font> panel contains a representation
+        of the abundance density (i.e. most abundant taxa).", .getPanelColor(x))),
+    .addTourStep(x, "DataBoxOpen", "The <i>Data parameters</i> box shows the
+        available parameters that can be tweaked to control the data on
+        the plot.<br/><br/><strong>Action:</strong> click on this
+        box to open up available options."),
+    .addTourStep(x, "Visual", "The <i>Visual parameters</i> box shows
+        the available visual parameters that can be tweaked in this
+        plot.<br/><br/><strong>Action:</strong> click on this box to
+        open up available options."),
+    callNextMethod())
+})
+
 #' @importFrom iSEE .getEncodedName collapseBox .selectInput.iSEE
 #'   .radioButtons.iSEE .conditionalOnRadio
 #' @importFrom methods slot
@@ -236,6 +253,25 @@ setMethod(".multiSelectionResponsive", "AbundanceDensityPlot",
 .create_visual_box_for_abunddens_plot <- function(x, se) {
   
     panel_name <- .getEncodedName(x)
+    
+    .addSpecificTour(class(x)[1], "layout", function(plot_name) {
+      data.frame(rbind(c(element = paste0("#", plot_name,
+                                          "_layout + .selectize-control"), intro = "Here, we can select the
+            layout of the plot.")))})
+    .addSpecificTour(class(x)[1], "add_legend", function(plot_name) {
+      data.frame(rbind(c(element = paste0("#", plot_name,
+                                          "_add_legend + .selectize-control"), intro = "Here, we can choose
+            whether or not to show a legend.")))})
+    .addSpecificTour(class(x)[1], "dots_colour", function(plot_name) {
+      data.frame(rbind(c(element = paste0("#", plot_name,
+                                          "_dots_colour + .selectize-control"), intro = "Here, we can choose
+            whether or not to show colors.")))})
+    .addSpecificTour(class(x)[1], "dots_colour_by", function(plot_name) {
+      data.frame(rbind(c(element = paste0("#", plot_name,
+                                          "_dots_colour_by + .selectize-control"), intro = "Here, we can choose
+            the way you want to map the colors.")))})
+    
+    
   
     # Define what parameters the user can adjust
     collapseBox(
