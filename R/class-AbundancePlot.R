@@ -203,13 +203,13 @@ setMethod(".definePanelTour", "AbundancePlot", function(x) {
   
     panel_name <- .getEncodedName(x)
     
-    .addSpecificTour(class(x)[1], "rank", function(plot_name) {
-      data.frame(rbind(c(element = paste0("#", plot_name,
+    .addSpecificTour(class(x)[1], "rank", function(panel_name) {
+      data.frame(rbind(c(element = paste0("#", panel_name,
                                           "_rank + .selectize-control"), intro = "Here, we can select the
             taxonomic rank.")))})
-    .addSpecificTour(class(x)[1], "add_legend", function(plot_name) {
-      data.frame(rbind(c(element = paste0("#", plot_name,
-                                          "_add_legend + .selectize-control"), intro = "Here, we can choose
+    .addSpecificTour(class(x)[1], "add_legend", function(panel_name) {
+      data.frame(rbind(c(element = paste0("#", panel_name,
+                                          "_add_legend"), intro = "Here, we can choose
             whether or not to show a legend.")))})
   
     # Define what parameters the user can adjust
