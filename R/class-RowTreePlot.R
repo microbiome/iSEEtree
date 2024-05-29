@@ -235,22 +235,22 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
 #' @importFrom TreeSummarizedExperiment rowTreeNames
 .create_visual_box_for_rowtree <- function(x, se) {
     panel_name <- .getEncodedName(x)
-    .addSpecificTour(class(x)[1], "layout", function(plot_name) {
-        data.frame(rbind(c(element = paste0("#", plot_name,
+    .addSpecificTour(class(x)[1], "layout", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
             "_layout + .selectize-control"), intro = "Here, we can select the
             layout of the tree.")))})
-    .addSpecificTour(class(x)[1], "add_legend", function(plot_name) {
-        data.frame(rbind(c(element = paste0("#", plot_name,
+    .addSpecificTour(class(x)[1], "add_legend", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
             "_add_legend + .selectize-control"), intro = "Here, we can choose
             whether or not to show a legend.")))})
-    .addSpecificTour(class(x)[1], "edge_colour", function(plot_name) {
-        data.frame(rbind(c(element = paste0("#", plot_name,
+    .addSpecificTour(class(x)[1], "edge_colour", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
             "_edge_colour + .selectize-control"), intro = "Here, we can choose
             whether or not to colour the lines by a variable from the
             <code>rowData</code>. When active, the available options are listed
             and one of them can be selected.")))})
-    .addSpecificTour(class(x)[1], "tip_colour", function(plot_name) {
-        data.frame(rbind(c(element = paste0("#", plot_name,
+    .addSpecificTour(class(x)[1], "tip_colour", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
             "_tip_colour + .selectize-control"), intro = "Here, we can choose
             whether or not to colour the nodes by a variable from the
             <code>rowData</code>. When active, the available options are listed

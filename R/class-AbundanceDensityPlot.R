@@ -254,20 +254,20 @@ setMethod(".definePanelTour", "AbundanceDensityPlot", function(x) {
   
     panel_name <- .getEncodedName(x)
     
-    .addSpecificTour(class(x)[1], "layout", function(plot_name) {
-      data.frame(rbind(c(element = paste0("#", plot_name,
+    .addSpecificTour(class(x)[1], "layout", function(panel_name) {
+      data.frame(rbind(c(element = paste0("#", panel_name,
                                           "_layout + .selectize-control"), intro = "Here, we can select the
             layout of the plot.")))})
-    .addSpecificTour(class(x)[1], "add_legend", function(plot_name) {
-      data.frame(rbind(c(element = paste0("#", plot_name,
+    .addSpecificTour(class(x)[1], "add_legend", function(panel_name) {
+      data.frame(rbind(c(element = paste0("#", panel_name,
                                           "_add_legend + .selectize-control"), intro = "Here, we can choose
             whether or not to show a legend.")))})
-    .addSpecificTour(class(x)[1], "dots_colour", function(plot_name) {
-      data.frame(rbind(c(element = paste0("#", plot_name,
+    .addSpecificTour(class(x)[1], "dots_colour", function(panel_name) {
+      data.frame(rbind(c(element = paste0("#", panel_name,
                                           "_dots_colour + .selectize-control"), intro = "Here, we can choose
             whether or not to show colors.")))})
-    .addSpecificTour(class(x)[1], "dots_colour_by", function(plot_name) {
-      data.frame(rbind(c(element = paste0("#", plot_name,
+    .addSpecificTour(class(x)[1], "dots_colour_by", function(panel_name) {
+      data.frame(rbind(c(element = paste0("#", panel_name,
                                           "_dots_colour_by + .selectize-control"), intro = "Here, we can choose
             the way you want to map the colors.")))})
     

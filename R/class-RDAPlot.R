@@ -231,20 +231,20 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
     panel_name <- .getEncodedName(x)
     
     
-    .addSpecificTour(class(x)[1], "colour_by", function(plot_name) {
-      data.frame(rbind(c(element = paste0("#", plot_name,
+    .addSpecificTour(class(x)[1], "colour_by", function(panel_name) {
+      data.frame(rbind(c(element = paste0("#", panel_name,
                                           "_colour_by + .selectize-control"), intro = "Here, we can select how
             colours are mapped on the plot.")))})
-    .addSpecificTour(class(x)[1], "add.ellipse", function(plot_name) {
-      data.frame(rbind(c(element = paste0("#", plot_name,
-                                          "_add.ellispe + .selectize-control"), intro = "Here, we can choose
+    .addSpecificTour(class(x)[1], "add.ellipse", function(panel_name) {
+      data.frame(rbind(c(element = paste0("#", panel_name,
+                                          "_add.ellipse + .selectize-control"), intro = "Here, we can choose
             whether or not to add an ellispe.")))})
-    .addSpecificTour(class(x)[1], "add.vectors", function(plot_name) {
-      data.frame(rbind(c(element = paste0("#", plot_name,
+    .addSpecificTour(class(x)[1], "add.vectors", function(panel_name) {
+      data.frame(rbind(c(element = paste0("#", panel_name,
                                           "_add.vectors + .selectize-control"), intro = "Here, we can choose
             whether or not to add vectors")))})
-    .addSpecificTour(class(x)[1], "vec.text", function(plot_name) {
-      data.frame(rbind(c(element = paste0("#", plot_name,
+    .addSpecificTour(class(x)[1], "vec.text", function(panel_name) {
+      data.frame(rbind(c(element = paste0("#", panel_name,
                                           "vec.text + .selectize-control"), intro = "Here, we can choose
             the vectors text.")))})
     
