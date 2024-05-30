@@ -59,10 +59,10 @@ setClass("RDAPlot", contains="Panel", slots=c(dimred="character",
 #' @importFrom S4Vectors setValidity2
 setValidity2("RDAPlot", function(x) {
     msg <- character(0)
-  
+    
     msg <- .singleStringError(msg, x, fields=c("dimred", "colour_by"))
     msg <- .validLogicalError(msg, x, fields=c("vec.text", "add.vectors"))
-  
+    
     if( length(msg) ){
         return(msg)
     }
@@ -79,7 +79,7 @@ setMethod("initialize", "RDAPlot", function(.Object, ...) {
     args <- .emptyDefault(args, "colour_by", NA_character_)
     args <- .emptyDefault(args, "add.vectors", TRUE)
     args <- .emptyDefault(args, "vec.text", TRUE)
-
+    
     do.call(callNextMethod, c(list(.Object), args))
 })
 
@@ -94,14 +94,14 @@ RDAPlot <- function(...) {
 #' @importFrom methods slot
 setMethod(".defineDataInterface", "RDAPlot", function(x, se, select_info) {
     panel_name <- .getEncodedName(x)
-  
+    
     list(.selectInput.iSEE(x, field="dimred", label="Reduced dimension",
         choices=reducedDimNames(se), selected=slot(x, "dimred")))
 })
 
 #' @importFrom methods callNextMethod
 setMethod(".defineInterface", "RDAPlot", function(x, se, select_info) {
-  
+    
     out <- callNextMethod()
     list(out[1], .create_visual_box_for_rda(x, se), out[-1])
 })
@@ -112,11 +112,11 @@ setMethod(".createObservers", "RDAPlot",
     
     callNextMethod()
     panel_name <- .getEncodedName(x)
-  
+    
     .createProtectedParameterObservers(panel_name, c("dimred", "add.ellipse",
         "colour_by", "vec.text", "add.vectors"), input=input, pObjects=pObjects,
         rObjects=rObjects)
-  
+    
     invisible(NULL)
 })
 
@@ -129,7 +129,7 @@ setMethod(".panelColor", "RDAPlot", function(x) "#CD5B45")
 #' @importFrom shinyWidgets addSpinner
 setMethod(".defineOutput", "RDAPlot", function(x) {
     panel_name <- .getEncodedName(x)
-  
+    
     addSpinner(plotOutput(panel_name,
         height = paste0(slot(x, "PanelHeight"), "px")), color=.panelColor(x))
 })
@@ -142,11 +142,11 @@ setMethod(".generateOutput", "RDAPlot",
     panel_env <- new.env()
     all_cmds <- list()
     args <- character(0)
-  
+    
     all_cmds[["select"]] <- .processMultiSelections(
         x, all_memory, all_contents, panel_env
     )
-  
+    
     if( is.null(panel_env[["col_selected"]]) ){
         panel_env[["se"]] <- se
     } else {
@@ -158,15 +158,15 @@ setMethod(".generateOutput", "RDAPlot",
     args[["colour_by"]] <- deparse(slot(x, "colour_by"))
     args[["vec.text"]] <- deparse(slot(x, "vec.text"))
     args[["add.vectors"]] <- deparse(slot(x, "add.vectors"))
-  
+    
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse=", ")
     fun_call <- sprintf("p <- miaViz::plotRDA(se, %s)", args)
-  
+    
     fun_cmd <- paste(strwrap(fun_call, width = 80, exdent = 4), collapse = "\n")
     plot_out <- .textEval(fun_cmd, panel_env)
     all_cmds[["fun"]] <- fun_cmd
-  
+    
     list(commands=all_cmds, plot=plot_out, varname=NULL, contents=NULL)
 })
 
@@ -178,11 +178,11 @@ setMethod(".renderOutput", "RDAPlot",
     
     panel_name <- .getEncodedName(x)
     force(se) # defensive programming to avoid bugs due to delayed evaluation
-  
+    
     output[[panel_name]] <- renderPlot({
         .retrieveOutput(panel_name, se, pObjects, rObjects)
     })
-  
+
     callNextMethod()
 })
 
@@ -209,8 +209,8 @@ setMethod(".multiSelectionResponsive", "RDAPlot", function(x, dims = character(0
 #' @importFrom methods callNextMethod
 #' @importFrom iSEE .getEncodedName .addTourStep
 setMethod(".definePanelTour", "RDAPlot", function(x) {
-  rbind(c(paste0("#", .getEncodedName(x)), sprintf(
-    "The <font color=\"%s\">RDA Plot</font> panel contains a representation
+    rbind(c(paste0("#", .getEncodedName(x)), sprintf(
+        "The <font color=\"%s\">RDA Plot</font> panel contains a representation
         of the correlation between variables of our dataset.", .getPanelColor(x))),
     .addTourStep(x, "DataBoxOpen", "The <i>Data parameters</i> box shows the
         available parameters that can be tweaked to control the data on
@@ -230,25 +230,23 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
 .create_visual_box_for_rda <- function(x, se) {
     panel_name <- .getEncodedName(x)
     
-    
     .addSpecificTour(class(x)[1], "colour_by", function(panel_name) {
-      data.frame(rbind(c(element = paste0("#", panel_name,
-                                          "_colour_by + .selectize-control"), intro = "Here, we can select how
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_colour_by + .selectize-control"), intro = "Here, we can select how
             colours are mapped on the plot.")))})
     .addSpecificTour(class(x)[1], "add.ellipse", function(panel_name) {
-      data.frame(rbind(c(element = paste0("#", panel_name,
-                                          "_add.ellipse + .selectize-control"), intro = "Here, we can choose
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_add.ellipse + .selectize-control"), intro = "Here, we can choose
             whether or not to add an ellispe.")))})
     .addSpecificTour(class(x)[1], "add.vectors", function(panel_name) {
-      data.frame(rbind(c(element = paste0("#", panel_name,
-                                          "_add.vectors + .selectize-control"), intro = "Here, we can choose
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_add.vectors + .selectize-control"), intro = "Here, we can choose
             whether or not to add vectors")))})
     .addSpecificTour(class(x)[1], "vec.text", function(panel_name) {
-      data.frame(rbind(c(element = paste0("#", panel_name,
-                                          "vec.text + .selectize-control"), intro = "Here, we can choose
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "vec.text + .selectize-control"), intro = "Here, we can choose
             the vectors text.")))})
     
-  
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_Visual"),
         title="Visual parameters", open=FALSE,

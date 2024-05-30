@@ -241,17 +241,17 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
             layout of the tree.")))})
     .addSpecificTour(class(x)[1], "add_legend", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_add_legend + .selectize-control"), intro = "Here, we can choose
+            "_add_legend"), intro = "Here, we can choose
             whether or not to show a legend.")))})
     .addSpecificTour(class(x)[1], "edge_colour", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_edge_colour + .selectize-control"), intro = "Here, we can choose
+            "_edge_colour"), intro = "Here, we can choose
             whether or not to colour the lines by a variable from the
             <code>rowData</code>. When active, the available options are listed
             and one of them can be selected.")))})
     .addSpecificTour(class(x)[1], "tip_colour", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_tip_colour + .selectize-control"), intro = "Here, we can choose
+            "_tip_colour"), intro = "Here, we can choose
             whether or not to colour the nodes by a variable from the
             <code>rowData</code>. When active, the available options are listed
             and one of them can be selected.")))})
