@@ -23,17 +23,12 @@
 #' @examples
 #' # Import TreeSE
 #' library(mia)
-#' data("GlobalPatterns", package = "mia")
-#' tse <- GlobalPatterns
+#' data("Tengeler2020", package = "mia")
+#' tse <- Tengeler2020
 #' 
-#' # Agglomerate TreeSE by Genus
-#' tse_genus <- agglomerateByRank(tse,
-#'                                rank = "Genus",
-#'                                onRankOnly = TRUE)
-#'
 #' # Launch iSEE
 #' if (interactive()) {
-#'   iSEE(tse_genus)
+#'   iSEE(tse)
 #' }
 #' 
 #' @docType methods
@@ -53,7 +48,7 @@ setValidity2("AbundancePlot", function(x) {
     msg <- character(0)
     msg <- .singleStringError(msg, x, fields="rank")
     msg <- .validLogicalError(msg, x, fields="add_legend")
-  
+    
     if( length(msg) ){
         return(msg)
     }
@@ -65,7 +60,7 @@ setMethod("initialize", "AbundancePlot", function(.Object, ...) {
     args <- list(...)
     args <- .emptyDefault(args, "rank", NA_character_)
     args <- .emptyDefault(args, "add_legend", TRUE)
-  
+    
     do.call(callNextMethod, c(list(.Object), args))
 })
 
@@ -77,7 +72,7 @@ AbundancePlot <- function(...) {
 
 #' @importFrom methods callNextMethod
 setMethod(".defineInterface", "AbundancePlot", function(x, se, select_info) {
-  
+    
     out <- callNextMethod()
     list(out[1], .create_visual_box_for_abund_plot(x, se), out[-1])
 })
@@ -85,13 +80,13 @@ setMethod(".defineInterface", "AbundancePlot", function(x, se, select_info) {
 #' @importMethodsFrom iSEE .createObservers
 setMethod(".createObservers", "AbundancePlot",
     function(x, se, input, session, pObjects, rObjects) {
-   
+    
     callNextMethod()
     panel_name <- .getEncodedName(x)
-  
+    
     .createProtectedParameterObservers(panel_name, c("rank", "add_legend"),
         input=input, pObjects=pObjects, rObjects=rObjects)
-  
+    
     invisible(NULL)
 })
 
@@ -117,28 +112,28 @@ setMethod(".generateOutput", "AbundancePlot",
     panel_env <- new.env()
     all_cmds <- list()
     args <- character(0)
-  
+    
     all_cmds[["select"]] <- .processMultiSelections(
         x, all_memory, all_contents, panel_env
     )
-  
+    
     if( exists("col_selected", envir=panel_env, inherits=FALSE) ){
         panel_env[["se"]] <- se[ , unlist(panel_env[["col_selected"]])]
     } else {
         panel_env[["se"]] <- se
     }
-  
+    
     args[["rank"]] <- deparse(slot(x, "rank"))
     args[["add_legend"]] <- deparse(slot(x, "add_legend"))
-  
+    
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse=", ")
     fun_call <- sprintf("p <- miaViz::plotAbundance(se, %s)", args)
-  
+    
     fun_cmd <- paste(strwrap(fun_call, width = 80, exdent = 4), collapse = "\n")
     plot_out <- .textEval(fun_cmd, panel_env)
     all_cmds[["fun"]] <- fun_cmd
-  
+    
     list(commands=all_cmds, plot=plot_out, varname=NULL, contents=NULL)
 })
 
@@ -150,11 +145,11 @@ setMethod(".renderOutput", "AbundancePlot",
     
     panel_name <- .getEncodedName(x)
     force(se) # defensive programming to avoid bugs due to delayed evaluation
-  
+    
     output[[panel_name]] <- renderPlot({
         .retrieveOutput(panel_name, se, pObjects, rObjects)
     })
-  
+    
     callNextMethod()
 })
 
@@ -177,12 +172,43 @@ setMethod(".multiSelectionResponsive", "AbundancePlot",
     return(FALSE)
 })
 
+#' @importFrom methods callNextMethod
+#' @importFrom iSEE .getEncodedName .addTourStep
+setMethod(".definePanelTour", "AbundancePlot", function(x) {
+    rbind(c(paste0("#", .getEncodedName(x)), sprintf(
+        "The <font color=\"%s\">Abundance Plot</font> panel
+        contains a representation of the relative abundance
+        for each taxonomic rank. Each column corresponds to
+        a sample of the <code>SummarizedExperiment</code>
+        object.", .getPanelColor(x))),
+    .addTourStep(x, "DataBoxOpen", "The <i>Data parameters</i> box shows the
+        available parameters that can be tweaked to control the data on
+        the plot.<br/><br/><strong>Action:</strong> click on this
+        box to open up available options."),
+    .addTourStep(x, "Visual", "The <i>Visual parameters</i> box shows
+        the available visual parameters that can be tweaked in this
+        plot.<br/><br/><strong>Action:</strong> click on this box to
+        open up available options."),
+    callNextMethod())
+})
+
+#' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE
+# .addSpecificTour
 #' @importFrom methods slot
 #' @importFrom SummarizedExperiment rowData
 .create_visual_box_for_abund_plot <- function(x, se) {
-  
+    
     panel_name <- .getEncodedName(x)
-  
+    
+    .addSpecificTour(class(x)[1], "rank", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_rank + .selectize-control"), intro = "Here, we can select the
+            taxonomic rank.")))})
+    .addSpecificTour(class(x)[1], "add_legend", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_add_legend"), intro = "Here, we can choose
+            whether or not to show a legend.")))})
+    
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_Visual"),
         title="Visual parameters", open=FALSE,
@@ -192,5 +218,5 @@ setMethod(".multiSelectionResponsive", "AbundancePlot",
         # Colour legend
         .checkboxInput.iSEE(x, field="add_legend", label="View legend",
             value=slot(x, "add_legend")))
-  
+    
 }

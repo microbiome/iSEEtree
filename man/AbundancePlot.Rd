@@ -31,17 +31,12 @@ In addition, this class inherits all slots from its parent \linkS4class{Panel} c
 \examples{
 # Import TreeSE
 library(mia)
-data("GlobalPatterns", package = "mia")
-tse <- GlobalPatterns
-
-# Agglomerate TreeSE by Genus
-tse_genus <- agglomerateByRank(tse,
-                               rank = "Genus",
-                               onRankOnly = TRUE)
+data("Tengeler2020", package = "mia")
+tse <- Tengeler2020
 
 # Launch iSEE
 if (interactive()) {
-  iSEE(tse_genus)
+  iSEE(tse)
 }
 
 }

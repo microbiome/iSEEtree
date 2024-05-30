@@ -31,17 +31,12 @@
 #' @examples
 #' # Import TreeSE
 #' library(mia)
-#' data("GlobalPatterns", package = "mia")
-#' tse <- GlobalPatterns
+#' data("Tengeler2020", package = "mia")
+#' tse <- Tengeler2020
 #' 
-#' # Agglomerate TreeSE by Genus
-#' tse_genus <- agglomerateByRank(tse,
-#'                                rank = "Genus",
-#'                                onRankOnly = TRUE)
-#'
 #' # Launch iSEE
 #' if (interactive()) {
-#'   iSEE(tse_genus)
+#'   iSEE(tse)
 #' }
 #' 
 #' @docType methods
@@ -60,11 +55,11 @@ setClass("RowTreePlot", contains="Panel", slots=c(layout="character",
 #' @importFrom S4Vectors setValidity2
 setValidity2("RowTreePlot", function(x) {
     msg <- character(0)
-  
+    
     msg <- .singleStringError(msg, x, fields=c("layout", "edge_colour",
         "edge_colour_by", "tip_colour", "tip_colour_by"))
     msg <- .validLogicalError(msg, x, fields="add_legend")
-  
+    
     if (length(msg)) {
         return(msg)
     }
@@ -110,11 +105,11 @@ setMethod(".createObservers", "RowTreePlot",
     .createProtectedParameterObservers(panel_name, c("layout", "add_legend",
         "RowSelectionSource"), input=input, pObjects=pObjects,
         rObjects=rObjects)
-  
+    
     .createUnprotectedParameterObservers(panel_name, c("edge_colour",
         "edge_colour_by", "tip_colour", "tip_colour_by"), input=input,
         pObjects=pObjects, rObjects=rObjects)
-  
+    
     invisible(NULL)
 })
 
@@ -151,18 +146,18 @@ setMethod(".generateOutput", "RowTreePlot",
     } else {
         panel_env[["se"]] <- se
     }
-  
+    
     args[["layout"]] <- deparse(slot(x, "layout"))
     args[["add_legend"]] <- deparse(slot(x, "add_legend"))
-  
+    
     if( slot(x, "edge_colour") == "Row data" ){
         args[["edge_colour_by"]] <- deparse(slot(x, "edge_colour_by"))
     }
-  
+    
     if( slot(x, "tip_colour") == "Row data" ){
         args[["tip_colour_by"]] <- deparse(slot(x, "tip_colour_by"))
     }
-  
+    
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse=", ")
     fun_call <- sprintf("p <- miaViz::plotRowTree(se, %s)", args)
@@ -179,20 +174,20 @@ setMethod(".generateOutput", "RowTreePlot",
 #' @importFrom methods callNextMethod
 setMethod(".renderOutput", "RowTreePlot",
     function(x, se, output, pObjects, rObjects) {
-      
+
     panel_name <- .getEncodedName(x)
     force(se) # defensive programming to avoid bugs due to delayed evaluation
-  
+    
     output[[panel_name]] <- renderPlot({
         .retrieveOutput(panel_name, se, pObjects, rObjects)
     })
-  
+    
     callNextMethod()
 })
 
 #' @importFrom methods callNextMethod
 setMethod(".hideInterface", "RowTreePlot", function(x, field) {
-  
+    
     if( field %in% c("SelectionHistory", "ColumnSelectionRestrict",
         "ColumnSelectionDynamicSource", "ColumnSelectionSource") ){
         TRUE
@@ -216,7 +211,8 @@ setMethod(".multiSelectionResponsive", "RowTreePlot",
 setMethod(".definePanelTour", "RowTreePlot", function(x) {
     rbind(c(paste0("#", .getEncodedName(x)), sprintf(
         "The <font color=\"%s\">RowTreePlot</font> panel contains a phylogenetic
-        tree from the <i><a href='https://microbiome.github.io/miaViz/reference/plotTree.html'>miaViz</a></i>
+        tree from the 
+        <i><a href='https://microbiome.github.io/miaViz/reference/plotTree.html'>miaViz</a></i>
         package.", .getPanelColor(x))),
     .addTourStep(x, "DataBoxOpen", "The <i>Data parameters</i> box shows the
         available parameters that can be tweaked to control the data on
@@ -235,23 +231,23 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
 #' @importFrom TreeSummarizedExperiment rowTreeNames
 .create_visual_box_for_rowtree <- function(x, se) {
     panel_name <- .getEncodedName(x)
-    .addSpecificTour(class(x)[1], "layout", function(plot_name) {
-        data.frame(rbind(c(element = paste0("#", plot_name,
+    .addSpecificTour(class(x)[1], "layout", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
             "_layout + .selectize-control"), intro = "Here, we can select the
             layout of the tree.")))})
-    .addSpecificTour(class(x)[1], "add_legend", function(plot_name) {
-        data.frame(rbind(c(element = paste0("#", plot_name,
-            "_add_legend + .selectize-control"), intro = "Here, we can choose
+    .addSpecificTour(class(x)[1], "add_legend", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_add_legend"), intro = "Here, we can choose
             whether or not to show a legend.")))})
-    .addSpecificTour(class(x)[1], "edge_colour", function(plot_name) {
-        data.frame(rbind(c(element = paste0("#", plot_name,
-            "_edge_colour + .selectize-control"), intro = "Here, we can choose
+    .addSpecificTour(class(x)[1], "edge_colour", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_edge_colour"), intro = "Here, we can choose
             whether or not to colour the lines by a variable from the
             <code>rowData</code>. When active, the available options are listed
             and one of them can be selected.")))})
-    .addSpecificTour(class(x)[1], "tip_colour", function(plot_name) {
-        data.frame(rbind(c(element = paste0("#", plot_name,
-            "_tip_colour + .selectize-control"), intro = "Here, we can choose
+    .addSpecificTour(class(x)[1], "tip_colour", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_tip_colour"), intro = "Here, we can choose
             whether or not to colour the nodes by a variable from the
             <code>rowData</code>. When active, the available options are listed
             and one of them can be selected.")))})
