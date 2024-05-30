@@ -241,15 +241,15 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
             colours are mapped on the plot.")))})
     .addSpecificTour(class(x)[1], "add.ellipse", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_add.ellipse + .selectize-control"), intro = "Here, we can choose
+            "_add\\.ellipse + .selectize-control"), intro = "Here, we can choose
             whether or not to add an ellipse and adjust its style.")))})
     .addSpecificTour(class(x)[1], "add.vectors", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_add.vectors"), intro = "Here, we can choose
+            "_add\\.vectors"), intro = "Here, we can choose
             whether or not to add vectors")))})
     .addSpecificTour(class(x)[1], "vec.text", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_vec.text"), intro = "Here, we can choose
+            "_vec\\.text"), intro = "Here, we can choose
             whether or not to add a box around labels.")))})
     
     # Define what parameters the user can adjust
