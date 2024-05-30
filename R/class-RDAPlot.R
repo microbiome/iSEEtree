@@ -211,7 +211,8 @@ setMethod(".multiSelectionResponsive", "RDAPlot", function(x, dims = character(0
 setMethod(".definePanelTour", "RDAPlot", function(x) {
     rbind(c(paste0("#", .getEncodedName(x)), sprintf(
         "The <font color=\"%s\">RDA Plot</font> panel contains a representation
-        of the correlation between variables of our dataset.", .getPanelColor(x))),
+        of the correlation between variables of our dataset."
+        , .getPanelColor(x))),
     .addTourStep(x, "DataBoxOpen", "The <i>Data parameters</i> box shows the
         available parameters that can be tweaked to control the data on
         the plot.<br/><br/><strong>Action:</strong> click on this
@@ -230,6 +231,10 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
 .create_visual_box_for_rda <- function(x, se) {
     panel_name <- .getEncodedName(x)
     
+    .addSpecificTour(class(x)[1], "dimred", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_dimred + .selectize-control"), intro = "Here, we can select the
+            ordination method used.")))})
     .addSpecificTour(class(x)[1], "colour_by", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_colour_by + .selectize-control"), intro = "Here, we can select how
@@ -237,15 +242,15 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
     .addSpecificTour(class(x)[1], "add.ellipse", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_add.ellipse + .selectize-control"), intro = "Here, we can choose
-            whether or not to add an ellispe.")))})
+            whether or not to add an ellipse and adjust its style.")))})
     .addSpecificTour(class(x)[1], "add.vectors", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_add.vectors + .selectize-control"), intro = "Here, we can choose
+            "_add.vectors"), intro = "Here, we can choose
             whether or not to add vectors")))})
     .addSpecificTour(class(x)[1], "vec.text", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "vec.text + .selectize-control"), intro = "Here, we can choose
-            the vectors text.")))})
+            "_vec.text"), intro = "Here, we can choose
+            whether or not to add a box around labels.")))})
     
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_Visual"),

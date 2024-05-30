@@ -216,7 +216,8 @@ setMethod(".multiSelectionResponsive", "RowTreePlot",
 setMethod(".definePanelTour", "RowTreePlot", function(x) {
     rbind(c(paste0("#", .getEncodedName(x)), sprintf(
         "The <font color=\"%s\">RowTreePlot</font> panel contains a phylogenetic
-        tree from the <i><a href='https://microbiome.github.io/miaViz/reference/plotTree.html'>miaViz</a></i>
+        tree from the 
+        <i><a href='https://microbiome.github.io/miaViz/reference/plotTree.html'>miaViz</a></i>
         package.", .getPanelColor(x))),
     .addTourStep(x, "DataBoxOpen", "The <i>Data parameters</i> box shows the
         available parameters that can be tweaked to control the data on
