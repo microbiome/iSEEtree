@@ -266,6 +266,14 @@ setMethod(".definePanelTour", "AbundanceDensityPlot", function(x) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_dots_colour_by"), intro = "Here, we can choose
             the way you want to map the colors.")))})
+    .addSpecificTour(class(x)[1], "assay.type", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_assay\\.type + .selectize-control"), intro = "Here, we can choose
+            the assay to be transformed.")))})
+    .addSpecificTour(class(x)[1], "n", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_n"), intro = "Here, we can choose
+            the number of taxa to be selected.")))})
     
     # Define what parameters the user can adjust
     collapseBox(
