@@ -31,17 +31,12 @@
 #' @examples
 #' # Import TreeSE
 #' library(mia)
-#' data("GlobalPatterns", package = "mia")
-#' tse <- GlobalPatterns
+#' data("Tengeler2020", package = "mia")
+#' tse <- Tengeler2020
 #' 
-#' # Agglomerate TreeSE by Genus
-#' tse_genus <- agglomerateByRank(tse,
-#'                                rank = "Genus",
-#'                                onRankOnly = TRUE)
-#'
 #' # Launch iSEE
 #' if (interactive()) {
-#'   iSEE(tse_genus)
+#'   iSEE(tse)
 #' }
 #' 
 #' @docType methods
