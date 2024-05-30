@@ -60,11 +60,11 @@ setClass("RowTreePlot", contains="Panel", slots=c(layout="character",
 #' @importFrom S4Vectors setValidity2
 setValidity2("RowTreePlot", function(x) {
     msg <- character(0)
-  
+    
     msg <- .singleStringError(msg, x, fields=c("layout", "edge_colour",
         "edge_colour_by", "tip_colour", "tip_colour_by"))
     msg <- .validLogicalError(msg, x, fields="add_legend")
-  
+    
     if (length(msg)) {
         return(msg)
     }
@@ -110,11 +110,11 @@ setMethod(".createObservers", "RowTreePlot",
     .createProtectedParameterObservers(panel_name, c("layout", "add_legend",
         "RowSelectionSource"), input=input, pObjects=pObjects,
         rObjects=rObjects)
-  
+    
     .createUnprotectedParameterObservers(panel_name, c("edge_colour",
         "edge_colour_by", "tip_colour", "tip_colour_by"), input=input,
         pObjects=pObjects, rObjects=rObjects)
-  
+    
     invisible(NULL)
 })
 
@@ -151,18 +151,18 @@ setMethod(".generateOutput", "RowTreePlot",
     } else {
         panel_env[["se"]] <- se
     }
-  
+    
     args[["layout"]] <- deparse(slot(x, "layout"))
     args[["add_legend"]] <- deparse(slot(x, "add_legend"))
-  
+    
     if( slot(x, "edge_colour") == "Row data" ){
         args[["edge_colour_by"]] <- deparse(slot(x, "edge_colour_by"))
     }
-  
+    
     if( slot(x, "tip_colour") == "Row data" ){
         args[["tip_colour_by"]] <- deparse(slot(x, "tip_colour_by"))
     }
-  
+    
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse=", ")
     fun_call <- sprintf("p <- miaViz::plotRowTree(se, %s)", args)
@@ -179,20 +179,20 @@ setMethod(".generateOutput", "RowTreePlot",
 #' @importFrom methods callNextMethod
 setMethod(".renderOutput", "RowTreePlot",
     function(x, se, output, pObjects, rObjects) {
-      
+
     panel_name <- .getEncodedName(x)
     force(se) # defensive programming to avoid bugs due to delayed evaluation
-  
+    
     output[[panel_name]] <- renderPlot({
         .retrieveOutput(panel_name, se, pObjects, rObjects)
     })
-  
+    
     callNextMethod()
 })
 
 #' @importFrom methods callNextMethod
 setMethod(".hideInterface", "RowTreePlot", function(x, field) {
-  
+    
     if( field %in% c("SelectionHistory", "ColumnSelectionRestrict",
         "ColumnSelectionDynamicSource", "ColumnSelectionSource") ){
         TRUE
