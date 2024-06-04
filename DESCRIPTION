@@ -1,5 +1,5 @@
 Package: iSEEtree
-Version: 0.1.4
+Version: 0.1.5
 Authors@R: 
     person(given = "Giulio", family = "Benedetti", role = c("aut", "cre"),
            email = "giulio.benedetti@utu.fi",
@@ -25,7 +25,6 @@ Imports:
     shinyWidgets,
     SingleCellExperiment,
     SummarizedExperiment,
-    SparseArray,
     TreeSummarizedExperiment
 Suggests:
     BiocStyle,
