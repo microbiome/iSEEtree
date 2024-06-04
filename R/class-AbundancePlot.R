@@ -9,6 +9,7 @@
 #' The following slots control the thresholds used in the visualization:
 #' \itemize{
 #' \item \code{rank}, a string specifying the taxonomic rank to visualize.
+#' \item \code{use_relative}, a logical indicating if the relative values should be calculated. 
 #' \item \code{add_legend}, a logical indicating if the color legend should appear.
 #' }
 #'
@@ -22,14 +23,14 @@
 #' @author Giulio Benedetti
 #' @examples
 #' # Import TreeSE
-#' library(mia)
-#' data("Tengeler2020", package = "mia")
-#' tse <- Tengeler2020
-#' 
-#' # Launch iSEE
-#' if (interactive()) {
-#'   iSEE(tse)
-#' }
+# library(mia)
+# data("Tengeler2020", package = "mia")
+# tse <- Tengeler2020
+# 
+# # Launch iSEE
+# if (interactive()) {
+#   iSEE(tse)
+# }
 #' 
 #' @docType methods
 #' @aliases AbundancePlot-class
@@ -40,14 +41,14 @@ NULL
 
 #' @export
 setClass("AbundancePlot", contains="Panel",
-    slots=c(rank="character", add_legend="logical"))
+    slots=c(rank="character", use_relative="logical", add_legend="logical"))
 
 #' @importFrom S4Vectors setValidity2
 setValidity2("AbundancePlot", function(x) {
     
     msg <- character(0)
     msg <- .singleStringError(msg, x, fields="rank")
-    msg <- .validLogicalError(msg, x, fields="add_legend")
+    msg <- .validLogicalError(msg, x, fields=c("add_legend", "use_relative"))
     
     if( length(msg) ){
         return(msg)
@@ -60,6 +61,7 @@ setMethod("initialize", "AbundancePlot", function(.Object, ...) {
     args <- list(...)
     args <- .emptyDefault(args, "rank", NA_character_)
     args <- .emptyDefault(args, "add_legend", TRUE)
+    args <- .emptyDefault(args, "use_relative", TRUE)
     
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -70,9 +72,18 @@ AbundancePlot <- function(...) {
     new("AbundancePlot", ...)
 }
 
+#' @importFrom iSEE .getEncodedName .checkboxInput.iSEE
+#' @importFrom methods slot
+setMethod(".defineDataInterface", "AbundancePlot", function(x, se, select_info) {
+    panel_name <- .getEncodedName(x)
+          
+    list(.checkboxInput.iSEE(x, field="use_relative", label="Relative Values",
+                            value=slot(x, "use_relative")))
+})
+
 #' @importFrom methods callNextMethod
 setMethod(".defineInterface", "AbundancePlot", function(x, se, select_info) {
-    
+     
     out <- callNextMethod()
     list(out[1], .create_visual_box_for_abund_plot(x, se), out[-1])
 })
@@ -84,7 +95,7 @@ setMethod(".createObservers", "AbundancePlot",
     callNextMethod()
     panel_name <- .getEncodedName(x)
     
-    .createProtectedParameterObservers(panel_name, c("rank", "add_legend"),
+    .createProtectedParameterObservers(panel_name, c("rank", "use_relative", "add_legend"),
         input=input, pObjects=pObjects, rObjects=rObjects)
     
     invisible(NULL)
@@ -125,6 +136,7 @@ setMethod(".generateOutput", "AbundancePlot",
     
     args[["rank"]] <- deparse(slot(x, "rank"))
     args[["add_legend"]] <- deparse(slot(x, "add_legend"))
+    args[["use_relative"]] <- deparse(slot(x, "use_relative"))
     
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse=", ")
@@ -181,14 +193,6 @@ setMethod(".definePanelTour", "AbundancePlot", function(x) {
         for each taxonomic rank. Each column corresponds to
         a sample of the <code>SummarizedExperiment</code>
         object.", .getPanelColor(x))),
-    .addTourStep(x, "DataBoxOpen", "The <i>Data parameters</i> box shows the
-        available parameters that can be tweaked to control the data on
-        the plot.<br/><br/><strong>Action:</strong> click on this
-        box to open up available options."),
-    .addTourStep(x, "Visual", "The <i>Visual parameters</i> box shows
-        the available visual parameters that can be tweaked in this
-        plot.<br/><br/><strong>Action:</strong> click on this box to
-        open up available options."),
     callNextMethod())
 })
 
@@ -208,6 +212,10 @@ setMethod(".definePanelTour", "AbundancePlot", function(x) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_add_legend"), intro = "Here, we can choose
             whether or not to show a legend.")))})
+    .addSpecificTour(class(x)[1], "use_relative", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_use_relative"), intro = "Here, we can choose
+            whether or not to use relative values.")))})
     
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_Visual"),
