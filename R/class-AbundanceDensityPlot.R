@@ -11,6 +11,7 @@
 #' \item \code{layout}, a string specifying abundance layout (jitter, density or points). 
 #' \item \code{assay.type}, a string specifying the assay to visualize.
 #' \item \code{n}, a number indicating the number of top taxa to visualize.
+#' \item \code{flipped}, a logical specifying if the axis should be switched.
 #' }
 #'
 #' In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
@@ -45,7 +46,7 @@ NULL
 #' @export
 setClass("AbundanceDensityPlot", contains="Panel", slots=c(layout="character",
     assay.type="character", n="numeric", dots_colour="character",
-    dots_colour_by="character", add_legend="logical"))
+    dots_colour_by="character", add_legend="logical", flipped="logical"))
 
 #' @importFrom iSEE .singleStringError .validNumberError
 #' @importFrom S4Vectors setValidity2
@@ -54,6 +55,7 @@ setValidity2("AbundanceDensityPlot", function(x) {
     
     msg <- .singleStringError(msg, x, fields=c("layout", "assay.type"))
     msg <- .validNumberError(msg, x, "n", lower=1, upper=Inf)
+    msg <- .validLogicalError(msg, x, fields=c("add_legend", "flipped"))
     
     if( length(msg) ){
         return(msg)
@@ -70,6 +72,7 @@ setMethod("initialize", "AbundanceDensityPlot", function(.Object, ...) {
     args <- .emptyDefault(args, "assay.type", "counts")
     args <- .emptyDefault(args, "n", 5)
     args <- .emptyDefault(args, "add_legend", TRUE)
+    args <- .emptyDefault(args, "flipped", FALSE)
     args <- .emptyDefault(args, "dots_colour", "None")
     args <- .emptyDefault(args, "dots_colour_by", NA_character_)
     
@@ -94,7 +97,10 @@ setMethod(".defineDataInterface", "AbundanceDensityPlot",
             choices=assayNames(se), selected=slot(x, "assay.type")),
         # Number of taxa
         .numericInput.iSEE(x, field="n", label="Number of taxa",
-            value=slot(x, "n"), min=1, max=nrow(se), step=1))
+            value=slot(x, "n"), min=1, max=nrow(se), step=1),
+        
+        .checkboxInput.iSEE(x, field="flipped", label="Switch axis",
+                            value=slot(x, "flipped")))
 })
 
 #' @importFrom methods callNextMethod
@@ -114,7 +120,7 @@ setMethod(".createObservers", "AbundanceDensityPlot",
     panel_name <- .getEncodedName(x)
     
     .createProtectedParameterObservers(panel_name,
-        c("layout", "assay.type", "n", "add_legend"),
+        c("layout", "assay.type", "n", "add_legend", "flipped"),
         input=input, pObjects=pObjects, rObjects=rObjects)
     
     .createUnprotectedParameterObservers(panel_name,
@@ -164,6 +170,7 @@ setMethod(".generateOutput", "AbundanceDensityPlot",
     args[["layout"]] <- deparse(slot(x, "layout"))
     args[["add_legend"]] <- deparse(slot(x, "add_legend"))
     args[["assay.type"]] <- deparse(slot(x, "assay.type"))
+    args[["flipped"]] <- deparse(slot(x , "flipped"))
     
     if( is.na(slot(x, "n")) || slot(x, "n") <= 0 ){
         args[["n"]] <- 5
@@ -274,6 +281,10 @@ setMethod(".definePanelTour", "AbundanceDensityPlot", function(x) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_n"), intro = "Here, we can choose
             the number of taxa to be selected.")))})
+    .addSpecificTour(class(x)[1], "flipped", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_flipped"), intro = "Here, we can choose
+            whether or not to switch the axis.")))})
     
     # Define what parameters the user can adjust
     collapseBox(
