@@ -18,6 +18,8 @@
 #' \item \code{colour_tip}, a string specifying color mapping for tree nodes.
 #' \item \code{colour_tip_by}, a string specifying parameter to color nodes by
 #'   when \code{colour_tip = "Row data"}.
+#' \item \code{order_tree}, a logical indicating if tree is ordered by
+#'   alphabetic order of taxonomic levels.
 #' }
 #'
 #' In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
@@ -49,7 +51,7 @@ NULL
 #' @export
 setClass("RowTreePlot", contains="Panel", slots=c(layout="character",
     add_legend="logical", edge_colour="character", edge_colour_by="character",
-    tip_colour="character", tip_colour_by="character"))
+    tip_colour="character", tip_colour_by="character", order_tree="logical"))
 
 #' @importFrom iSEE .singleStringError .validLogicalError
 #' @importFrom S4Vectors setValidity2
@@ -58,7 +60,7 @@ setValidity2("RowTreePlot", function(x) {
     
     msg <- .singleStringError(msg, x, fields=c("layout", "edge_colour",
         "edge_colour_by", "tip_colour", "tip_colour_by"))
-    msg <- .validLogicalError(msg, x, fields="add_legend")
+    msg <- .validLogicalError(msg, x, fields=c("add_legend", "order_tree"))
     
     if (length(msg)) {
         return(msg)
@@ -77,6 +79,7 @@ setMethod("initialize", "RowTreePlot", function(.Object, ...) {
     args <- .emptyDefault(args, "edge_colour_by", NA_character_)
     args <- .emptyDefault(args, "tip_colour", "None")
     args <- .emptyDefault(args, "tip_colour_by", NA_character_)
+    args <- .emptyDefault(args, "order_tree", FALSE)
 
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -86,6 +89,15 @@ setMethod("initialize", "RowTreePlot", function(.Object, ...) {
 RowTreePlot <- function(...) {
     new("RowTreePlot", ...)
 }
+
+#' @importFrom iSEE .getEncodedName .checkboxInput.iSEE
+#' @importFrom methods slot
+setMethod(".defineDataInterface", "RowTreePlot", function(x, se, select_info) {
+  panel_name <- .getEncodedName(x)
+  
+  list(.checkboxInput.iSEE(x, field="order_tree", label="Tree order",
+                           value=slot(x, "order_tree")))
+})
 
 #' @importFrom methods callNextMethod
 setMethod(".defineInterface", "RowTreePlot", function(x, se, select_info) {
@@ -103,7 +115,7 @@ setMethod(".createObservers", "RowTreePlot",
     panel_name <- .getEncodedName(x)
 
     .createProtectedParameterObservers(panel_name, c("layout", "add_legend",
-        "RowSelectionSource"), input=input, pObjects=pObjects,
+        "RowSelectionSource", "order_tree"), input=input, pObjects=pObjects,
         rObjects=rObjects)
     
     .createUnprotectedParameterObservers(panel_name, c("edge_colour",
@@ -149,6 +161,7 @@ setMethod(".generateOutput", "RowTreePlot",
     
     args[["layout"]] <- deparse(slot(x, "layout"))
     args[["add_legend"]] <- deparse(slot(x, "add_legend"))
+    args[["order_tree"]] <- deparse(slot(x, "order_tree"))
     
     if( slot(x, "edge_colour") == "Row data" ){
         args[["edge_colour_by"]] <- deparse(slot(x, "edge_colour_by"))
@@ -251,6 +264,11 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
             whether or not to colour the nodes by a variable from the
             <code>rowData</code>. When active, the available options are listed
             and one of them can be selected.")))})
+    .addSpecificTour(class(x)[1], "order_tree", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_order_tree"), intro = "Here, we can choose
+            whether or use alphabetic order of taxonomic
+            levels to order the tree.")))})
     
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_VisualBoxOpen"),
