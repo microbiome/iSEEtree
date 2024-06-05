@@ -47,7 +47,8 @@ NULL
 #' @export
 setClass("AbundanceDensityPlot", contains="Panel", slots=c(layout="character",
     assay.type="character", n="numeric", dots_colour="character",
-    dots_colour_by="character", add_legend="logical", flipped="logical", order_descending="logical"))
+    dots_colour_by="character", add_legend="logical", flipped="logical",
+    order_descending="logical", dots_shape_by="character"))
 
 #' @importFrom iSEE .singleStringError .validNumberError
 #' @importFrom S4Vectors setValidity2
@@ -76,6 +77,7 @@ setMethod("initialize", "AbundanceDensityPlot", function(.Object, ...) {
     args <- .emptyDefault(args, "flipped", FALSE)
     args <- .emptyDefault(args, "dots_colour", "None")
     args <- .emptyDefault(args, "dots_colour_by", NA_character_)
+    args <- .emptyDefault(args, "dots_shape_by", NA_character_)
     args <- .emptyDefault(args, "order_descending", TRUE)
     
     do.call(callNextMethod, c(list(.Object), args))
@@ -130,7 +132,7 @@ setMethod(".createObservers", "AbundanceDensityPlot",
         input=input, pObjects=pObjects, rObjects=rObjects)
     
     .createUnprotectedParameterObservers(panel_name,
-        c("dots_colour", "dots_colour_by"),
+        c("dots_colour", "dots_colour_by", "dots_shape_by"),
         input=input, pObjects=pObjects, rObjects=rObjects)
     
     invisible(NULL)
@@ -189,6 +191,10 @@ setMethod(".generateOutput", "AbundanceDensityPlot",
     
     if( slot(x, "dots_colour") == "Column data" ){
         args[["colour_by"]] <- deparse(slot(x, "dots_colour_by"))
+    }
+    
+    if (slot(x, "layout") != "density") {
+        args[["shape_by"]] <- deparse(slot(x, "dots_shape_by"))
     }
     
     args <- sprintf("%s=%s", names(args), args)
@@ -298,6 +304,10 @@ setMethod(".definePanelTour", "AbundanceDensityPlot", function(x) {
             whether or not to use descending order.
             If NA uses the order found in the <code>SummarizedExperiment</code>
             object.")))})
+    .addSpecificTour(class(x)[1], "dots_shape_by", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_dots_shape_by"), intro = "Here, we can choose
+            to group by the different point shape groups.")))})
     
     # Define what parameters the user can adjust
     collapseBox(
@@ -317,6 +327,11 @@ setMethod(".definePanelTour", "AbundanceDensityPlot", function(x) {
                 paste0(panel_name, "_dots_colour"), "Column data",
                 iSEE:::.selectInputHidden(x, field="dots_colour_by",
                     label="Color dots by", choices=names(colData(se)), 
-                    selected=slot(x, "dots_colour_by"))))
+                    selected=slot(x, "dots_colour_by"))),
+            .conditionalOnRadio(
+                paste0(panel_name, "_layout"), "density",
+                iSEE:::.selectInputHidden(x, field="dots_shape_by",
+                    label="Shape by", choices=names(colData(se)),
+                    selected=slot(x, "dots_shape_by"))))
     
 }
