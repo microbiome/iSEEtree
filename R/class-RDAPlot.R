@@ -14,6 +14,12 @@
 #' \item \code{colour_by}, a string specifying the parameter to color by.
 #' \item \code{add.vectors}, a logical indicating if vectors should appear in the plot.
 #' \item \code{vec.text}, a logical indicating if text should be encased in a box.
+#' \item \code{confidence.level}, a numeric between 0 and 1 to adjust confidence level.
+#' \item \code{ellipse.alpha}, a numeric between 0 and 1 t o adjust ellipse opacity.
+#' \item \code{add.significance}, a logical indicating if variance and p-value
+#'  should appear in the labels.
+#' \item \code{add.expl.var}, a logical indicating if variance shoud appear 
+#'  on the coordinate axes.
 #' }
 #'
 #' In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
@@ -53,7 +59,8 @@ setClassUnion("charlog", c("character", "logical"))
 #' @export
 setClass("RDAPlot", contains="Panel", slots=c(dimred="character",
     add.ellipse="charlog", colour_by="character", vec.text="logical",
-    add.vectors="logical", ellipse.alpha="numeric", confidence.level="numeric"))
+    add.vectors="logical", ellipse.alpha="numeric", confidence.level="numeric",
+    add.significance="logical", add.expl.var="logical"))
 
 #' @importFrom iSEE .singleStringError .validLogicalError
 #' @importFrom S4Vectors setValidity2
@@ -61,7 +68,8 @@ setValidity2("RDAPlot", function(x) {
     msg <- character(0)
     
     msg <- .singleStringError(msg, x, fields=c("dimred", "colour_by"))
-    msg <- .validLogicalError(msg, x, fields=c("vec.text", "add.vectors"))
+    msg <- .validLogicalError(msg, x, fields=c("vec.text", "add.vectors",
+                                    "add.significance", "add.expl.var"))
     msg <- .validNumberError(msg, x, "ellipse.alpha", lower=0, upper=1)
     msg <- .validNumberError(msg, x, "confidence.level", lower=0, upper=1)
     
@@ -82,6 +90,8 @@ setMethod("initialize", "RDAPlot", function(.Object, ...) {
     args <- .emptyDefault(args, "colour_by", NA_character_)
     args <- .emptyDefault(args, "add.vectors", TRUE)
     args <- .emptyDefault(args, "vec.text", TRUE)
+    args <- .emptyDefault(args, "add.expl.var", TRUE)
+    args <- .emptyDefault(args, "add.significance", TRUE)
     args <- .emptyDefault(args, "ellipse.alpha", 0.2)
     args <- .emptyDefault(args, "confidence.level", 0.95)
     
@@ -103,7 +113,11 @@ setMethod(".defineDataInterface", "RDAPlot", function(x, se, select_info) {
     list(.selectInput.iSEE(x, field="dimred", label="Reduced dimension",
             choices=reducedDimNames(se), selected=slot(x, "dimred")),
         .sliderInput.iSEE(x, field="confidence.level", label="Confidence level",
-            min = 0, max = 1, step= 20, value=slot(x, "confidence.level")))
+            min = 0, max = 1, step= 20, value=slot(x, "confidence.level")),
+        .checkboxInput.iSEE(x, field="add.significance", label="Variance in labels",
+            value=slot(x, "add.significance")),
+        .checkboxInput.iSEE(x, field="add.expl.var", label="Variance in axes",
+            value=slot(x, "add.expl.var")))
 })
 
 #' @importFrom methods callNextMethod
@@ -121,8 +135,8 @@ setMethod(".createObservers", "RDAPlot",
     panel_name <- .getEncodedName(x)
     
     .createProtectedParameterObservers(panel_name, c("dimred", "add.ellipse",
-        "colour_by", "vec.text", "add.vectors"), input=input, pObjects=pObjects,
-        rObjects=rObjects)
+        "colour_by", "vec.text", "add.vectors", "add.expl.var", "add.significance"),
+        input=input, pObjects=pObjects, rObjects=rObjects)
     
     invisible(NULL)
 })
@@ -167,6 +181,8 @@ setMethod(".generateOutput", "RDAPlot",
     args[["add.vectors"]] <- deparse(slot(x, "add.vectors"))
     args[["ellipse.alpha"]] <- deparse(slot(x, "ellipse.alpha"))
     args[["confidence.level"]] <- deparse(slot(x, "confidence.level"))
+    args[["add.expl.var"]] <- deparse(slot(x, "add.expl.var"))
+    args[["add.significance"]] <- deparse(slot(x, "add.significance"))
     
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse=", ")
@@ -268,6 +284,14 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_ellipse\\.alpha"), intro = "Here, we can choose
             the ellipse opacity.")))})
+    .addSpecificTour(class(x)[1], "add.expl.var", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_add\\.expl\\.var"), intro = "Here, we can choose
+            whether or not to add variance in the labels.")))})
+    .addSpecificTour(class(x)[1], "add.significance", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_add\\.significance"), intro = "Here, we can choose
+            whether or not to add variance in the axes.")))})
     
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_Visual"),
