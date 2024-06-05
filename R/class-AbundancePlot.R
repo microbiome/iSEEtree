@@ -23,14 +23,14 @@
 #' @author Giulio Benedetti
 #' @examples
 #' # Import TreeSE
-# library(mia)
-# data("Tengeler2020", package = "mia")
-# tse <- Tengeler2020
-# 
-# # Launch iSEE
-# if (interactive()) {
-#   iSEE(tse)
-# }
+#' library(mia)
+#' data("Tengeler2020", package = "mia")
+#' tse <- Tengeler2020
+#' 
+#' # Launch iSEE
+#' if (interactive()) {
+#'   iSEE(tse)
+#' }
 #' 
 #' @docType methods
 #' @aliases AbundancePlot-class

@@ -31,6 +31,8 @@ when \code{colour_edge = "Row data"}.
 \item \code{colour_tip}, a string specifying color mapping for tree nodes.
 \item \code{colour_tip_by}, a string specifying parameter to color nodes by
 when \code{colour_tip = "Row data"}.
+\item \code{order_tree}, a logical indicating if tree is ordered by
+alphabetic order of taxonomic levels.
 }
 
 In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
