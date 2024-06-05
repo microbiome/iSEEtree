@@ -12,6 +12,7 @@
 #' \item \code{assay.type}, a string specifying the assay to visualize.
 #' \item \code{n}, a number indicating the number of top taxa to visualize.
 #' \item \code{flipped}, a logical specifying if the axis should be switched.
+#' \item \code{order_descending}, a string specifying the descending order.
 #' }
 #'
 #' In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
@@ -46,7 +47,7 @@ NULL
 #' @export
 setClass("AbundanceDensityPlot", contains="Panel", slots=c(layout="character",
     assay.type="character", n="numeric", dots_colour="character",
-    dots_colour_by="character", add_legend="logical", flipped="logical"))
+    dots_colour_by="character", add_legend="logical", flipped="logical", order_descending="logical"))
 
 #' @importFrom iSEE .singleStringError .validNumberError
 #' @importFrom S4Vectors setValidity2
@@ -55,7 +56,7 @@ setValidity2("AbundanceDensityPlot", function(x) {
     
     msg <- .singleStringError(msg, x, fields=c("layout", "assay.type"))
     msg <- .validNumberError(msg, x, "n", lower=1, upper=Inf)
-    msg <- .validLogicalError(msg, x, fields=c("add_legend", "flipped"))
+    msg <- .validLogicalError(msg, x, fields=c("add_legend", "flipped", "order_descending"))
     
     if( length(msg) ){
         return(msg)
@@ -75,6 +76,7 @@ setMethod("initialize", "AbundanceDensityPlot", function(.Object, ...) {
     args <- .emptyDefault(args, "flipped", FALSE)
     args <- .emptyDefault(args, "dots_colour", "None")
     args <- .emptyDefault(args, "dots_colour_by", NA_character_)
+    args <- .emptyDefault(args, "order_descending", TRUE)
     
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -100,7 +102,11 @@ setMethod(".defineDataInterface", "AbundanceDensityPlot",
             value=slot(x, "n"), min=1, max=nrow(se), step=1),
         
         .checkboxInput.iSEE(x, field="flipped", label="Switch axis",
-                            value=slot(x, "flipped")))
+            value=slot(x, "flipped")),
+        
+        .selectInput.iSEE(x, field="order_descending", label="Descending order",
+            choices=c(TRUE, FALSE, NA),
+            selected=slot(x, "order_descending")))
 })
 
 #' @importFrom methods callNextMethod
@@ -120,7 +126,7 @@ setMethod(".createObservers", "AbundanceDensityPlot",
     panel_name <- .getEncodedName(x)
     
     .createProtectedParameterObservers(panel_name,
-        c("layout", "assay.type", "n", "add_legend", "flipped"),
+        c("layout", "assay.type", "n", "add_legend", "flipped", "order_descending"),
         input=input, pObjects=pObjects, rObjects=rObjects)
     
     .createUnprotectedParameterObservers(panel_name,
@@ -171,6 +177,7 @@ setMethod(".generateOutput", "AbundanceDensityPlot",
     args[["add_legend"]] <- deparse(slot(x, "add_legend"))
     args[["assay.type"]] <- deparse(slot(x, "assay.type"))
     args[["flipped"]] <- deparse(slot(x , "flipped"))
+    args[["order_descending"]] <- deparse(slot(x, "order_descending"))
     
     if( is.na(slot(x, "n")) || slot(x, "n") <= 0 ){
         args[["n"]] <- 5
@@ -285,6 +292,12 @@ setMethod(".definePanelTour", "AbundanceDensityPlot", function(x) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_flipped"), intro = "Here, we can choose
             whether or not to switch the axis.")))})
+    .addSpecificTour(class(x)[1], "order_descending", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_order_descending + .selectize-control"), intro = "Here, we can choose
+            whether or not to use descending order.
+            If NA uses the order found in the <code>SummarizedExperiment</code>
+            object.")))})
     
     # Define what parameters the user can adjust
     collapseBox(
