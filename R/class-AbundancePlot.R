@@ -192,7 +192,15 @@ setMethod(".definePanelTour", "AbundancePlot", function(x) {
         contains a representation of the relative abundance
         for each taxonomic rank. Each column corresponds to
         a sample of the <code>SummarizedExperiment</code>
-        object.", .getPanelColor(x))),
+        object.", .getPanelColor(x
+    .addTourStep(x, "DataBoxOpen", "The <i>Data parameters</i> box shows the
+        available parameters that can be tweaked to control the data on
+        the plot.<br/><br/><strong>Action:</strong> click on this
+        box to open up available options."),
+   .addTourStep(x, "Visual", "The <i>Visual parameters</i> box shows
+        the available visual parameters that can be tweaked in this
+        plot.<br/><br/><strong>Action:</strong> click on this box to
+        open up available options."),
     callNextMethod())
 })
 
