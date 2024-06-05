@@ -53,7 +53,7 @@ setClassUnion("charlog", c("character", "logical"))
 #' @export
 setClass("RDAPlot", contains="Panel", slots=c(dimred="character",
     add.ellipse="charlog", colour_by="character", vec.text="logical",
-    add.vectors="logical"))
+    add.vectors="logical", ellipse.alpha="numeric", confidence.level="numeric"))
 
 #' @importFrom iSEE .singleStringError .validLogicalError
 #' @importFrom S4Vectors setValidity2
@@ -62,6 +62,9 @@ setValidity2("RDAPlot", function(x) {
     
     msg <- .singleStringError(msg, x, fields=c("dimred", "colour_by"))
     msg <- .validLogicalError(msg, x, fields=c("vec.text", "add.vectors"))
+    msg <- .validNumberError(msg, x, "ellipse.alpha", lower=0, upper=1)
+    msg <- .validNumberError(msg, x, "confidence.level", lower=0, upper=1)
+    
     
     if( length(msg) ){
         return(msg)
@@ -79,6 +82,8 @@ setMethod("initialize", "RDAPlot", function(.Object, ...) {
     args <- .emptyDefault(args, "colour_by", NA_character_)
     args <- .emptyDefault(args, "add.vectors", TRUE)
     args <- .emptyDefault(args, "vec.text", TRUE)
+    args <- .emptyDefault(args, "ellipse.alpha", 0.2)
+    args <- .emptyDefault(args, "confidence.level", 0.95)
     
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -89,14 +94,16 @@ RDAPlot <- function(...) {
     new("RDAPlot", ...)
 }
 
-#' @importFrom iSEE .getEncodedName .selectInput.iSEE .numericInput.iSEE
+#' @importFrom iSEE .getEncodedName .selectInput.iSEE .numericInput.iSEE .sliderInput.iSEE
 #' @importFrom SingleCellExperiment reducedDimNames
 #' @importFrom methods slot
 setMethod(".defineDataInterface", "RDAPlot", function(x, se, select_info) {
     panel_name <- .getEncodedName(x)
     
     list(.selectInput.iSEE(x, field="dimred", label="Reduced dimension",
-        choices=reducedDimNames(se), selected=slot(x, "dimred")))
+            choices=reducedDimNames(se), selected=slot(x, "dimred")),
+        .sliderInput.iSEE(x, field="confidence.level", label="Confidence level",
+            min = 0, max = 1, step= 20, value=slot(x, "confidence.level")))
 })
 
 #' @importFrom methods callNextMethod
@@ -158,6 +165,8 @@ setMethod(".generateOutput", "RDAPlot",
     args[["colour_by"]] <- deparse(slot(x, "colour_by"))
     args[["vec.text"]] <- deparse(slot(x, "vec.text"))
     args[["add.vectors"]] <- deparse(slot(x, "add.vectors"))
+    args[["ellipse.alpha"]] <- deparse(slot(x, "ellipse.alpha"))
+    args[["confidence.level"]] <- deparse(slot(x, "confidence.level"))
     
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse=", ")
@@ -224,7 +233,7 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
     callNextMethod())
 })
 
-#' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE
+#' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE .sliderInput.iSEE
 #'   .conditionalOnCheckSolo
 #' @importFrom methods slot
 #' @importFrom SummarizedExperiment colData
@@ -251,6 +260,14 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_vec\\.text"), intro = "Here, we can choose
             whether or not to add a box around labels.")))})
+    .addSpecificTour(class(x)[1], "confidence.level", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_confidence\\.level"), intro = "Here, we can choose
+            the confidence level.")))})
+    .addSpecificTour(class(x)[1], "ellipse.alpha", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_ellipse\\.alpha"), intro = "Here, we can choose
+            the ellipse opacity.")))})
     
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_Visual"),
@@ -260,6 +277,8 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
         .selectInput.iSEE(x, field="add.ellipse", label="Ellipse style",
             choices = c("fill", "colour", "FALSE"),
             selected=slot(x, "add.ellipse")),
+        .sliderInput.iSEE(x, field="ellipse.alpha", label="Ellipse opacity",
+            min=0, max=1, step=10, value=slot(x, "ellipse.alpha")),
         .checkboxInput.iSEE(x, field="add.vectors", label="Add vectors",
             value=slot(x, "add.vectors")),
         .conditionalOnCheckSolo(paste0(panel_name, "_add.vectors"), TRUE,
