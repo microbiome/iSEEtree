@@ -12,14 +12,15 @@ test_that("AbundancePlot", {
   
   expect_s3_class(.defineOutput(panel), "shiny.tag.list")
   expect_match(.generateOutput(panel, tse)[["commands"]][["fun"]],
-      'p <- miaViz::plotAbundance(se, rank="Kingdom", add_legend=TRUE)',
+      'p <- miaViz::plotAbundance(se, rank="Kingdom", add_legend=TRUE,
+    use_relative=TRUE)',
       fixed = TRUE)
   
   expect_true(.hideInterface(panel, "RowSelectionSource"))
   expect_false(.multiSelectionResponsive(panel, "row"))
   expect_true(.multiSelectionResponsive(panel, "column"))
   
-  expect_contains(slotNames(panel), c("rank", "add_legend"))
+  expect_contains(slotNames(panel), c("rank", "add_legend", "use_relative"))
   
   expect_contains(.definePanelTour(panel)[[1]],
                   c("#AbundancePlotNA_SelectionBoxOpen"))

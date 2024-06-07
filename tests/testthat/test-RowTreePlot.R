@@ -12,7 +12,8 @@ test_that("RowTreePlot", {
   
   expect_s3_class(.defineOutput(panel), "shiny.tag.list")
   expect_match(.generateOutput(panel, tse)[["commands"]][["fun"]],
-      'p <- miaViz::plotRowTree(se, layout="rectangular", add_legend=TRUE)',
+      'p <- miaViz::plotRowTree(se, layout="rectangular", add_legend=TRUE,
+    order_tree=FALSE)',
       fixed = TRUE)
   
   expect_true(.hideInterface(panel, "ColumnSelectionSource"))
@@ -21,7 +22,7 @@ test_that("RowTreePlot", {
   
   expect_contains(slotNames(panel),
                   c("layout", "add_legend", "edge_colour", "edge_colour_by",
-                    "tip_colour", "tip_colour_by"))
+                    "tip_colour", "tip_colour_by", "order_tree"))
   
   expect_contains(.definePanelTour(panel)[[1]],
                   c("#RowTreePlotNA_DataBoxOpen", "#RowTreePlotNA_VisualBoxOpen",

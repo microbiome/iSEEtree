@@ -19,7 +19,8 @@ test_that("AbundanceDensityPlot", {
   
   expect_contains(slotNames(panel),
                   c("layout", "assay.type", "n", "dots_colour",
-                    "dots_colour_by", "add_legend"))
+                    "dots_colour_by", "add_legend", "flipped",
+                    "order_descending", "dots_shape", "dots_shape_by"))
   
   expect_contains(.definePanelTour(panel)[[1]],
                   c("#AbundanceDensityPlotNA_SelectionBoxOpen"))
