@@ -95,7 +95,7 @@ RowTreePlot <- function(...) {
 setMethod(".defineDataInterface", "RowTreePlot", function(x, se, select_info) {
   panel_name <- .getEncodedName(x)
   
-  list(.checkboxInput.iSEE(x, field="order_tree", label="Tree order",
+  list(.checkboxInput.iSEE(x, field="order_tree", label="Order tree",
                            value=slot(x, "order_tree")))
 })
 
@@ -266,9 +266,8 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
             and one of them can be selected.")))})
     .addSpecificTour(class(x)[1], "order_tree", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_order_tree"), intro = "Here, we can choose
-            whether or use alphabetic order of taxonomic
-            levels to order the tree.")))})
+            "_order_tree"), intro = "Here, we can order
+            the tree alphabetically.")))})
     
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_VisualBoxOpen"),

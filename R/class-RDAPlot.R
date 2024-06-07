@@ -113,10 +113,10 @@ setMethod(".defineDataInterface", "RDAPlot", function(x, se, select_info) {
     list(.selectInput.iSEE(x, field="dimred", label="Reduced dimension",
             choices=reducedDimNames(se), selected=slot(x, "dimred")),
         .sliderInput.iSEE(x, field="confidence.level", label="Confidence level",
-            min = 0, max = 1, step= 20, value=slot(x, "confidence.level")),
-        .checkboxInput.iSEE(x, field="add.significance", label="Variance in labels",
+            min = 0.90, max = 0.999, step= 0.001, value=slot(x, "confidence.level")),
+        .checkboxInput.iSEE(x, field="add.significance", label="Show variance in labels",
             value=slot(x, "add.significance")),
-        .checkboxInput.iSEE(x, field="add.expl.var", label="Variance in axes",
+        .checkboxInput.iSEE(x, field="add.expl.var", label="Show variance in axes",
             value=slot(x, "add.expl.var")))
 })
 
@@ -135,7 +135,8 @@ setMethod(".createObservers", "RDAPlot",
     panel_name <- .getEncodedName(x)
     
     .createProtectedParameterObservers(panel_name, c("dimred", "add.ellipse",
-        "colour_by", "vec.text", "add.vectors", "add.expl.var", "add.significance"),
+        "colour_by", "vec.text", "add.vectors", "add.expl.var", "add.significance",
+        "confidence.level", "ellipse.alpha"),
         input=input, pObjects=pObjects, rObjects=rObjects)
     
     invisible(NULL)
@@ -278,7 +279,7 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
             whether or not to add a box around labels.")))})
     .addSpecificTour(class(x)[1], "confidence.level", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_confidence\\.level"), intro = "Here, we can choose
+            "_confidence\\.level"), intro = "Here, we can adjust
             the confidence level.")))})
     .addSpecificTour(class(x)[1], "ellipse.alpha", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
@@ -287,7 +288,7 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
     .addSpecificTour(class(x)[1], "add.expl.var", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_add\\.expl\\.var"), intro = "Here, we can choose
-            whether or not to add variance in the labels.")))})
+            whether or not to to show the explained variance.")))})
     .addSpecificTour(class(x)[1], "add.significance", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_add\\.significance"), intro = "Here, we can choose
@@ -302,7 +303,7 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
             choices = c("fill", "colour", "FALSE"),
             selected=slot(x, "add.ellipse")),
         .sliderInput.iSEE(x, field="ellipse.alpha", label="Ellipse opacity",
-            min=0, max=1, step=10, value=slot(x, "ellipse.alpha")),
+            min=0.01, max=0.99, step=0.01, value=slot(x, "ellipse.alpha")),
         .checkboxInput.iSEE(x, field="add.vectors", label="Add vectors",
             value=slot(x, "add.vectors")),
         .conditionalOnCheckSolo(paste0(panel_name, "_add.vectors"), TRUE,

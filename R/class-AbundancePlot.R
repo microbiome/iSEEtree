@@ -77,7 +77,7 @@ AbundancePlot <- function(...) {
 setMethod(".defineDataInterface", "AbundancePlot", function(x, se, select_info) {
     panel_name <- .getEncodedName(x)
           
-    list(.checkboxInput.iSEE(x, field="use_relative", label="Relative Values",
+    list(.checkboxInput.iSEE(x, field="use_relative", label="Use relative values",
                             value=slot(x, "use_relative")))
 })
 
@@ -223,7 +223,7 @@ setMethod(".definePanelTour", "AbundancePlot", function(x) {
     .addSpecificTour(class(x)[1], "use_relative", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_use_relative"), intro = "Here, we can choose
-            whether or not to use relative values.")))})
+            whether to use relative or absolute values.")))})
     
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_Visual"),

@@ -103,10 +103,10 @@ setMethod(".defineDataInterface", "AbundanceDensityPlot",
         .numericInput.iSEE(x, field="n", label="Number of taxa",
             value=slot(x, "n"), min=1, max=nrow(se), step=1),
         
-        .checkboxInput.iSEE(x, field="flipped", label="Switch axis",
+        .checkboxInput.iSEE(x, field="flipped", label="Switch axes",
             value=slot(x, "flipped")),
         
-        .selectInput.iSEE(x, field="order_descending", label="Descending order",
+        .selectInput.iSEE(x, field="order_descending", label="Order decreasing",
             choices=c(TRUE, FALSE, NA),
             selected=slot(x, "order_descending")))
 })
@@ -331,7 +331,7 @@ setMethod(".definePanelTour", "AbundanceDensityPlot", function(x) {
             .conditionalOnRadio(
                 paste0(panel_name, "_layout"), "density",
                 iSEE:::.selectInputHidden(x, field="dots_shape_by",
-                    label="Shape by", choices=names(colData(se)),
+                    label="Shape dots by", choices=names(colData(se)),
                     selected=slot(x, "dots_shape_by"))))
     
 }
