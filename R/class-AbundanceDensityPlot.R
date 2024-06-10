@@ -107,9 +107,8 @@ setMethod(".defineDataInterface", "AbundanceDensityPlot",
         .checkboxInput.iSEE(x, field="flipped", label="Switch axes",
             value=slot(x, "flipped")),
         
-        .selectInput.iSEE(x, field="order_descending", label="Order decreasing",
-            choices=c(TRUE, FALSE, NA),
-            selected=slot(x, "order_descending")),
+        .checkboxInput.iSEE(x, field="order_descending", label="Order decreasing",
+            value=slot(x, "order_descending")),
         
         .radioButtons.iSEE(
             x, field="dots_shape", label="Dot shape:", inline=TRUE,
@@ -312,7 +311,7 @@ setMethod(".definePanelTour", "AbundanceDensityPlot", function(x) {
             whether or not to switch the axis.")))})
     .addSpecificTour(class(x)[1], "order_descending", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_order_descending + .selectize-control"), intro = "Here, we can choose
+            "_order_descending"), intro = "Here, we can choose
             whether or not to use descending order.
             If NA uses the order found in the <code>SummarizedExperiment</code>
             object.")))})
