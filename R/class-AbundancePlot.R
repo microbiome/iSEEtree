@@ -41,7 +41,9 @@ NULL
 
 #' @export
 setClass("AbundancePlot", contains="Panel",
-    slots=c(rank="character", use_relative="logical", add_legend="logical"))
+    slots=c(rank="character", use_relative="logical", add_legend="logical",
+            order_sample_by="character", order_sample="character", 
+            decreasing="logical"))
 
 #' @importFrom S4Vectors setValidity2
 setValidity2("AbundancePlot", function(x) {
@@ -60,8 +62,11 @@ setValidity2("AbundancePlot", function(x) {
 setMethod("initialize", "AbundancePlot", function(.Object, ...) {
     args <- list(...)
     args <- .emptyDefault(args, "rank", NA_character_)
+    args <- .emptyDefault(args, "order_sample_by", NA_character_)
     args <- .emptyDefault(args, "add_legend", TRUE)
     args <- .emptyDefault(args, "use_relative", TRUE)
+    args <- .emptyDefault(args, "decreasing", FALSE)
+    args <- .emptyDefault(args, "order_sample", "None")
     
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -78,7 +83,18 @@ setMethod(".defineDataInterface", "AbundancePlot", function(x, se, select_info) 
     panel_name <- .getEncodedName(x)
           
     list(.checkboxInput.iSEE(x, field="use_relative", label="Use relative values",
-                            value=slot(x, "use_relative")))
+                            value=slot(x, "use_relative")),
+        .radioButtons.iSEE(x, field="order_sample", label="Ordering sample:",
+                            inline=TRUE, choices=c("None", "Column data"),
+                            selected=slot(x, "order_sample")),
+        .conditionalOnRadio(
+            paste0(panel_name, "_order_sample"), "Column data",
+            list(
+                iSEE:::.selectInputHidden(x, field="order_sample_by",
+                    label="Order sample by", choices=names(colData(se)), 
+                    selected=slot(x, "order_sample_by")),
+                iSEE:::.checkboxInputHidden(x, field="decreasing",
+                    label="Order decreasingly", value=slot(x, "decreasing")))))
 })
 
 #' @importFrom methods callNextMethod
@@ -97,6 +113,9 @@ setMethod(".createObservers", "AbundancePlot",
     
     .createProtectedParameterObservers(panel_name, c("rank", "use_relative", "add_legend"),
         input=input, pObjects=pObjects, rObjects=rObjects)
+    
+    .createUnprotectedParameterObservers(panel_name, c("order_sample", "order_sample_by",
+        "decreasing"), input=input, pObjects=pObjects, rObjects=rObjects)
     
     invisible(NULL)
 })
@@ -137,6 +156,11 @@ setMethod(".generateOutput", "AbundancePlot",
     args[["rank"]] <- deparse(slot(x, "rank"))
     args[["add_legend"]] <- deparse(slot(x, "add_legend"))
     args[["use_relative"]] <- deparse(slot(x, "use_relative"))
+    
+    if (slot(x, "order_sample") == "Column data") {
+      args[["order_sample_by"]] <- deparse(slot(x, "order_sample_by"))
+      args[["decreasing"]] <- deparse(slot(x, "decreasing"))
+    }
     
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse=", ")
@@ -224,6 +248,10 @@ setMethod(".definePanelTour", "AbundancePlot", function(x) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_use_relative"), intro = "Here, we can choose
             whether to use relative or absolute values.")))})
+    .addSpecificTour(class(x)[1], "order_sample", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_order_sample"), intro = "Here, we can choose
+            how to order the abundance plot by.")))})
     
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_Visual"),
