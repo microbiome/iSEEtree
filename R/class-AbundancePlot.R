@@ -85,7 +85,7 @@ setMethod(".defineDataInterface", "AbundancePlot", function(x, se, select_info) 
     list(.checkboxInput.iSEE(x, field="use_relative", label="Use relative values",
                             value=slot(x, "use_relative")),
         .radioButtons.iSEE(x, field="order_sample", label="Ordering sample:",
-                            inline=TRUE, choices=c("None", "Column data"),
+                            inline=TRUE, choices=c("None", "Column data", "Row data"),
                             selected=slot(x, "order_sample")),
         .conditionalOnRadio(
             paste0(panel_name, "_order_sample"), "Column data",
@@ -94,7 +94,12 @@ setMethod(".defineDataInterface", "AbundancePlot", function(x, se, select_info) 
                     label="Order sample by", choices=names(colData(se)), 
                     selected=slot(x, "order_sample_by")),
                 iSEE:::.checkboxInputHidden(x, field="decreasing",
-                    label="Order decreasingly", value=slot(x, "decreasing")))))
+                    label="Order decreasingly", value=slot(x, "decreasing")))),
+        .conditionalOnRadio(
+            paste0(panel_name, "_order_sample"), "Row data",
+            iSEE:::.selectInputHidden(x, field="order_sample_by",
+                    label="Order sample by", choices=unique(rowData(se)$Phylum), 
+                    selected=slot(x, "order_sample_by"))))
 })
 
 #' @importFrom methods callNextMethod
@@ -158,8 +163,12 @@ setMethod(".generateOutput", "AbundancePlot",
     args[["use_relative"]] <- deparse(slot(x, "use_relative"))
     
     if (slot(x, "order_sample") == "Column data") {
-      args[["order_sample_by"]] <- deparse(slot(x, "order_sample_by"))
-      args[["decreasing"]] <- deparse(slot(x, "decreasing"))
+        args[["order_sample_by"]] <- deparse(slot(x, "order_sample_by"))
+        args[["decreasing"]] <- deparse(slot(x, "decreasing"))
+    }
+    
+    if (slot(x, "order_sample") == "Row data") {
+        args[["order_sample_by"]] <- deparse(slot(x, "order_sample_by"))
     }
     
     args <- sprintf("%s=%s", names(args), args)
