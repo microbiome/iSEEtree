@@ -117,9 +117,9 @@ setMethod(".defineDataInterface", "AbundanceDensityPlot",
         
         .conditionalOnRadio(
             paste0(panel_name, "_dots_shape"), "Column data",
-            iSEE:::.selectInputHidden(x, field="dots_shape_by",
-                label="Shape dots by", choices=names(colData(se)), 
-                selected=slot(x, "dots_shape_by"))))
+                .selectInput.iSEE(x, field="dots_shape_by",
+                    label="Shape dots by", choices=names(colData(se)), 
+                    selected=slot(x, "dots_shape_by"))))
 })
 
 #' @importFrom methods callNextMethod
