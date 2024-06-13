@@ -340,7 +340,7 @@ setMethod(".definePanelTour", "AbundanceDensityPlot", function(x) {
                 selected=slot(x, "dots_colour")),
             .conditionalOnRadio(
                 paste0(panel_name, "_dots_colour"), "Column data",
-                iSEE:::.selectInputHidden(x, field="dots_colour_by",
-                    label="Color dots by", choices=names(colData(se)), 
-                    selected=slot(x, "dots_colour_by"))))
+                    .selectInput.iSEE(x, field="dots_colour_by",
+                        label="Color dots by", choices=names(colData(se)), 
+                        selected=slot(x, "dots_colour_by"))))
 }

@@ -90,14 +90,14 @@ setMethod(".defineDataInterface", "AbundancePlot", function(x, se, select_info) 
         .conditionalOnRadio(
             paste0(panel_name, "_order_sample"), "Column data",
             list(
-                iSEE:::.selectInputHidden(x, field="order_sample_by",
+                .selectInput.iSEE(x, field="order_sample_by",
                     label="Order sample by", choices=names(colData(se)), 
                     selected=slot(x, "order_sample_by")),
-                iSEE:::.checkboxInputHidden(x, field="decreasing",
+                .checkboxInput.iSEE(x, field="decreasing",
                     label="Order decreasingly", value=slot(x, "decreasing")))),
         .conditionalOnRadio(
             paste0(panel_name, "_order_sample"), "Row data",
-            iSEE:::.selectInputHidden(x, field="order_sample_by",
+                .selectInput.iSEE(x, field="order_sample_by",
                     label="Order sample by", choices=unique(rowData(se)$Phylum), 
                     selected=slot(x, "order_sample_by"))))
 })
