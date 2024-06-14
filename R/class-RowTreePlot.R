@@ -273,7 +273,7 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
     collapseBox(paste0(panel_name, "_VisualBoxOpen"),
         title="Visual parameters", open=FALSE,
         # Tree layout
-        .selectInput.iSEE(x, field="layout", label="Layout",
+        .selectInput.iSEE(x, field="layout", label="Layout:",
             choices=c("circular", "rectangular", "slanted", "fan",
                 "inward_circular", "radial", "unrooted", "equal_angle",
                 "daylight", "dendrogram", "ape", "ellipse", "roundrect"),

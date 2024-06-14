@@ -82,24 +82,23 @@ AbundancePlot <- function(...) {
 setMethod(".defineDataInterface", "AbundancePlot", function(x, se, select_info) {
     panel_name <- .getEncodedName(x)
           
-    list(.checkboxInput.iSEE(x, field="use_relative", label="Use relative values",
-                            value=slot(x, "use_relative")),
-        .radioButtons.iSEE(x, field="order_sample", label="Ordering sample:",
-                            inline=TRUE, choices=c("None", "Column data", "Row data"),
-                            selected=slot(x, "order_sample")),
-        .conditionalOnRadio(
-            paste0(panel_name, "_order_sample"), "Column data",
-            list(
-                .selectInput.iSEE(x, field="order_sample_by",
-                    label="Order sample by", choices=names(colData(se)), 
-                    selected=slot(x, "order_sample_by")),
+    list(.checkboxInput.iSEE(x, field="use_relative",
+        label="Use relative values", value=slot(x, "use_relative")),
+        .radioButtons.iSEE(x, field="order_sample", label="Sample order:",
+            inline=TRUE, choices=c("None", "Column data", "Row data"),
+            selected=slot(x, "order_sample")),
+            .conditionalOnRadio(paste0(panel_name, "_order_sample"), "Column data",
+                list(.selectInput.iSEE(x, field="order_sample_by",
+                label="Order samples by", choices=names(colData(se)),
+                selected=slot(x, "order_sample_by")),
                 .checkboxInput.iSEE(x, field="decreasing",
-                    label="Order decreasingly", value=slot(x, "decreasing")))),
-        .conditionalOnRadio(
-            paste0(panel_name, "_order_sample"), "Row data",
-                .selectInput.iSEE(x, field="order_sample_by",
-                    label="Order sample by", choices=unique(rowData(se)$Phylum), 
-                    selected=slot(x, "order_sample_by"))))
+                label="Order decreasing", value=slot(x, "decreasing")))),
+            .conditionalOnRadio(paste0(panel_name, "_order_sample"), "Row data",
+                list(.selectInput.iSEE(x, field="order_sample_by",
+                label="Order sample by", selected=slot(x, "order_sample_by"),
+                choices=.list_taxa(se)),
+                .checkboxInput.iSEE(x, field="decreasing",
+                label="Order decreasing", value=slot(x, "decreasing")))))
 })
 
 #' @importFrom methods callNextMethod
@@ -116,11 +115,12 @@ setMethod(".createObservers", "AbundancePlot",
     callNextMethod()
     panel_name <- .getEncodedName(x)
     
-    .createProtectedParameterObservers(panel_name, c("rank", "use_relative", "add_legend"),
-        input=input, pObjects=pObjects, rObjects=rObjects)
+    .createProtectedParameterObservers(panel_name, c("rank", "use_relative",
+        "add_legend"), input=input, pObjects=pObjects, rObjects=rObjects)
     
-    .createUnprotectedParameterObservers(panel_name, c("order_sample", "order_sample_by",
-        "decreasing"), input=input, pObjects=pObjects, rObjects=rObjects)
+    .createUnprotectedParameterObservers(panel_name, c("decreasing",
+        "order_sample", "order_sample_by"), input=input, pObjects=pObjects,
+        rObjects=rObjects)
     
     invisible(NULL)
 })
@@ -162,13 +162,15 @@ setMethod(".generateOutput", "AbundancePlot",
     args[["add_legend"]] <- deparse(slot(x, "add_legend"))
     args[["use_relative"]] <- deparse(slot(x, "use_relative"))
     
-    if (slot(x, "order_sample") == "Column data") {
+    if( slot(x, "order_sample") == "Column data" ){
         args[["order_sample_by"]] <- deparse(slot(x, "order_sample_by"))
         args[["decreasing"]] <- deparse(slot(x, "decreasing"))
     }
-    
-    if (slot(x, "order_sample") == "Row data") {
+
+    if( slot(x, "order_sample") == "Row data" &&
+        slot(x, "order_sample_by") %in% .list_taxa(se)[[slot(x, "rank")]] ){
         args[["order_sample_by"]] <- deparse(slot(x, "order_sample_by"))
+        args[["decreasing"]] <- deparse(slot(x, "decreasing"))
     }
     
     args <- sprintf("%s=%s", names(args), args)
@@ -265,11 +267,22 @@ setMethod(".definePanelTour", "AbundancePlot", function(x) {
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_Visual"),
         title="Visual parameters", open=FALSE,
-        # Tree layout
+        # Rank
         .selectInput.iSEE(x, field="rank", label="Rank",
             choices=names(rowData(se)), selected=slot(x, "rank")),
         # Colour legend
         .checkboxInput.iSEE(x, field="add_legend", label="View legend",
             value=slot(x, "add_legend")))
     
+}
+
+#' @importFrom SummarizedExperiment rowData
+#' @importFrom mia taxonomyRanks
+.list_taxa <- function(se){
+  
+    tax_opts <- unique(stack(rowData(se)[ , taxonomyRanks(se)]))
+    tax_opts <- tax_opts[tax_opts$value != "", ]
+    tax_list <- lapply(split(tax_opts$value, tax_opts$name), sort)
+
+    return(tax_list)
 }
