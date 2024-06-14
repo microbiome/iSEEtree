@@ -45,6 +45,7 @@ setClass("AbundancePlot", contains="Panel",
             order_sample_by_row="character", order_sample="character", 
             decreasing="logical", order_sample_by_column="character"))
 
+#' @importFrom iSEE .singleStringError .validLogicalError
 #' @importFrom S4Vectors setValidity2
 setValidity2("AbundancePlot", function(x) {
     
@@ -78,7 +79,8 @@ AbundancePlot <- function(...) {
     new("AbundancePlot", ...)
 }
 
-#' @importFrom iSEE .getEncodedName .checkboxInput.iSEE
+#' @importFrom iSEE .getEncodedName .checkboxInput.iSEE .radioButtons.iSEE
+#'   .conditionalOnRadio .selectInput.iSEE
 #' @importFrom methods slot
 setMethod(".defineDataInterface", "AbundancePlot", function(x, se, select_info) {
     panel_name <- .getEncodedName(x)
@@ -109,7 +111,8 @@ setMethod(".defineInterface", "AbundancePlot", function(x, se, select_info) {
     list(out[1], .create_visual_box_for_abund_plot(x, se), out[-1])
 })
 
-#' @importMethodsFrom iSEE .createObservers
+#' @importFrom iSEE .getEncodedName .createProtectedParameterObservers 
+#' .createUnprotectedParameterObservers
 setMethod(".createObservers", "AbundancePlot",
     function(x, se, input, session, pObjects, rObjects) {
     
@@ -243,6 +246,7 @@ setMethod(".definePanelTour", "AbundancePlot", function(x) {
 #' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE
 # .addSpecificTour
 #' @importFrom methods slot
+#' @importFrom mia taxonomyRanks
 #' @importFrom SummarizedExperiment rowData
 .create_visual_box_for_abund_plot <- function(x, se) {
     

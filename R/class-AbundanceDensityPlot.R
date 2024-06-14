@@ -50,7 +50,7 @@ setClass("AbundanceDensityPlot", contains="Panel", slots=c(layout="character",
     dots_colour_by="character", add_legend="logical", flipped="logical",
     order_descending="logical", dots_shape="character", dots_shape_by="character"))
 
-#' @importFrom iSEE .singleStringError .validNumberError
+#' @importFrom iSEE .singleStringError .validNumberError .validLogicalError
 #' @importFrom S4Vectors setValidity2
 setValidity2("AbundanceDensityPlot", function(x) {
     msg <- character(0)
@@ -90,7 +90,8 @@ AbundanceDensityPlot <- function(...) {
     new("AbundanceDensityPlot", ...)
 }
 
-#' @importFrom iSEE .getEncodedName .selectInput.iSEE .numericInput.iSEE
+#' @importFrom iSEE .getEncodedName .selectInput.iSEE .numericInput.iSEE .checkboxInput.iSEE
+#'  .radioButtons.iSEE .conditionalOnRadio
 #' @importFrom methods slot
 #' @importFrom SummarizedExperiment assayNames
 setMethod(".defineDataInterface", "AbundanceDensityPlot",
@@ -274,7 +275,7 @@ setMethod(".definePanelTour", "AbundanceDensityPlot", function(x) {
 })
 
 #' @importFrom iSEE .getEncodedName collapseBox .selectInput.iSEE
-#'   .radioButtons.iSEE .conditionalOnRadio
+#'   .radioButtons.iSEE .conditionalOnRadio .checkboxInput.iSEE
 #' @importFrom methods slot
 #' @importFrom SummarizedExperiment colData
 .create_visual_box_for_abunddens_plot <- function(x, se) {

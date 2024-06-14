@@ -74,7 +74,7 @@ setClass("RDAPlot", contains="Panel", slots=c(dimred="character",
     label.size="numeric", vector_parameters="logical", visual_parameters="character",
     arrow_parameters="logical", ellipse_parameters="logical", label_parameters="logical"))
 
-#' @importFrom iSEE .singleStringError .validLogicalError
+#' @importFrom iSEE .singleStringError .validLogicalError .validNumberError
 #' @importFrom S4Vectors setValidity2
 setValidity2("RDAPlot", function(x) {
     msg <- character(0)
@@ -138,7 +138,7 @@ RDAPlot <- function(...) {
     new("RDAPlot", ...)
 }
 
-#' @importFrom iSEE .getEncodedName .selectInput.iSEE .numericInput.iSEE .sliderInput.iSEE
+#' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE .sliderInput.iSEE
 #' @importFrom SingleCellExperiment reducedDimNames
 #' @importFrom methods slot
 setMethod(".defineDataInterface", "RDAPlot", function(x, se, select_info) {
@@ -308,7 +308,8 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
 })
 
 #' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE .sliderInput.iSEE
-#'   .conditionalOnCheckSolo
+#'   .conditionalOnCheckSolo .checkboxGroupInput.iSEE .conditionalOnCheckGroup
+#'   .numericInput.iSEE
 #' @importFrom methods slot
 #' @importFrom SummarizedExperiment colData
 .create_visual_box_for_rda <- function(x, se) {
