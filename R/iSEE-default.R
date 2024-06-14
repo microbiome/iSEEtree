@@ -74,7 +74,7 @@ setMethod("iSEE", "TreeSummarizedExperiment",
     
     no_keep <- unlist(lapply(panel_list, function(x) is(x, panel_class)))
 
-    if( any(no_keep) && isEmpty(panel_fun(se)) ){
+    if( any(no_keep) && (is.null(panel_fun(se)) || isEmpty(panel_fun(se))) ){
         panel_list <- panel_list[!no_keep]
     }
     

@@ -285,9 +285,12 @@ setMethod(".definePanelTour", "AbundancePlot", function(x) {
 #' @importFrom mia taxonomyRanks
 .list_taxa <- function(se){
   
-    tax_opts <- unique(stack(rowData(se)[ , taxonomyRanks(se)]))
-    tax_opts <- tax_opts[tax_opts$value != "", ]
-    tax_list <- lapply(split(tax_opts$value, tax_opts$name), sort)
+    row_data <- as.data.frame(rowData(se)[ , taxonomyRanks(se)])
+    names(row_data) <- taxonomyRanks(se)
+
+    tax_opts <- unique(stack(row_data))
+    tax_opts <- tax_opts[tax_opts$values != "" & !is.na(tax_opts$ind), ]
+    tax_list <- lapply(split(tax_opts$values, tax_opts$ind), sort)
 
     return(tax_list)
 }
