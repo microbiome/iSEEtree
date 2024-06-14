@@ -12,12 +12,25 @@
 #' \itemize{
 #' \item \code{layout}, a string specifying tree layout
 #' \item \code{add_legend}, a logical indicating if color legend should appear.
-#' \item \code{colour_edge}, a string specifying color mapping for tree lines.
-#' \item \code{colour_edge_by}, a string specifying parameter to color lines by
-#'   when \code{colour_edge = "Row data"}.
-#' \item \code{colour_tip}, a string specifying color mapping for tree nodes.
-#' \item \code{colour_tip_by}, a string specifying parameter to color nodes by
-#'   when \code{colour_tip = "Row data"}.
+#' \item \code{edge_colour}, a string specifying color mapping for tree lines.
+#' \item \code{edge_colour_by}, a string specifying parameter to color lines by
+#'   when \code{edge_colour = "Row data"}.
+#' \item \code{edge_size_by}, a string specifying parameter to size lines by
+#'   when \code{edge_colour = "Row data"}.
+#' \item \code{tip_colour}, a string specifying color mapping for tree tips.
+#' \item \code{tip_colour_by}, a string specifying parameter to color tips by
+#'   when \code{tip_colour = "Row data"}.
+#' \item \code{tip_size_by}, a string specifying parameter to size tips by
+#'   when \code{tip_colour = "Row data"}.
+#' \item \code{tip_shape_by}, a string specifying parameter to shape tips by
+#'   when \code{tip_colour = "Row data"}.
+#' \item \code{node_colour}, a string specifying color mapping for tree nodes.
+#' \item \code{node_colour_by}, a string specifying parameter to color nodes by
+#'   when \code{node_colour = "Row data"}.
+#' \item \code{npde_size_by}, a string specifying parameter to size nodes by
+#'   when \code{node_colour = "Row data"}.
+#' \item \code{node_shape_by}, a string specifying parameter to shape nodes by
+#'   when \code{node_colour = "Row data"}.
 #' \item \code{order_tree}, a logical indicating if tree is ordered by
 #'   alphabetic order of taxonomic levels.
 #' }
@@ -51,7 +64,10 @@ NULL
 #' @export
 setClass("RowTreePlot", contains="Panel", slots=c(layout="character",
     add_legend="logical", edge_colour="character", edge_colour_by="character",
-    tip_colour="character", tip_colour_by="character", order_tree="logical"))
+    tip_colour="character", tip_colour_by="character", order_tree="logical",
+    tip_size_by="character", edge_size_by="character", tip_shape_by="character",
+    node_size_by="character", node_shape_by="character", node_colour_by="character",
+    node_colour="character"))
 
 #' @importFrom iSEE .singleStringError .validLogicalError
 #' @importFrom S4Vectors setValidity2
@@ -59,7 +75,8 @@ setValidity2("RowTreePlot", function(x) {
     msg <- character(0)
     
     msg <- .singleStringError(msg, x, fields=c("layout", "edge_colour",
-        "edge_colour_by", "tip_colour", "tip_colour_by"))
+        "edge_colour_by", "tip_colour", "tip_colour_by", "tip_size_by",
+        "edge_size_by", "tip_shape_by"))
     msg <- .validLogicalError(msg, x, fields=c("add_legend", "order_tree"))
     
     if (length(msg)) {
@@ -77,8 +94,16 @@ setMethod("initialize", "RowTreePlot", function(.Object, ...) {
     args <- .emptyDefault(args, "add_legend", TRUE)
     args <- .emptyDefault(args, "edge_colour", "None")
     args <- .emptyDefault(args, "edge_colour_by", NA_character_)
+    args <- .emptyDefault(args, "edge_size_by", NA_character_)
     args <- .emptyDefault(args, "tip_colour", "None")
     args <- .emptyDefault(args, "tip_colour_by", NA_character_)
+    args <- .emptyDefault(args, "tip_size_by", NA_character_)
+    args <- .emptyDefault(args, "tip_shape_by", NA_character_)
+    args <- .emptyDefault(args, "node_colour", "None")
+    args <- .emptyDefault(args, "node_colour_by", NA_character_)
+    args <- .emptyDefault(args, "node_size_by", NA_character_)
+    args <- .emptyDefault(args, "node_shape_by", NA_character_)
+    
     args <- .emptyDefault(args, "order_tree", FALSE)
 
     do.call(callNextMethod, c(list(.Object), args))
@@ -119,8 +144,10 @@ setMethod(".createObservers", "RowTreePlot",
         rObjects=rObjects)
     
     .createUnprotectedParameterObservers(panel_name, c("edge_colour",
-        "edge_colour_by", "tip_colour", "tip_colour_by"), input=input,
-        pObjects=pObjects, rObjects=rObjects)
+        "edge_colour_by", "tip_colour", "tip_colour_by", "tip_size_by",
+        "tip_shape_by", "node_size_by", "node_shape_by", "node_clour_by",
+        "edge_size_by", "node_size_by", "node_colour", "node_colour_by",
+        "node_shape_by"), input=input, pObjects=pObjects, rObjects=rObjects)
     
     invisible(NULL)
 })
@@ -162,13 +189,23 @@ setMethod(".generateOutput", "RowTreePlot",
     args[["layout"]] <- deparse(slot(x, "layout"))
     args[["add_legend"]] <- deparse(slot(x, "add_legend"))
     args[["order_tree"]] <- deparse(slot(x, "order_tree"))
+
     
     if( slot(x, "edge_colour") == "Row data" ){
         args[["edge_colour_by"]] <- deparse(slot(x, "edge_colour_by"))
+        args[["edge_size_by"]] <- deparse(slot(x, "edge_size_by"))
     }
     
     if( slot(x, "tip_colour") == "Row data" ){
         args[["tip_colour_by"]] <- deparse(slot(x, "tip_colour_by"))
+        args[["tip_size_by"]] <- deparse(slot(x, "tip_size_by"))
+        args[["tip_shape_by"]] <- deparse(slot(x, "tip_shape_by"))
+    }
+    
+    if( slot(x, "node_colour") == "Row data" ){
+      args[["node_colour_by"]] <- deparse(slot(x, "node_colour_by"))
+      args[["node_size_by"]] <- deparse(slot(x, "node_size_by"))
+      args[["node_shape_by"]] <- deparse(slot(x, "node_shape_by"))
     }
     
     args <- sprintf("%s=%s", names(args), args)
@@ -261,6 +298,12 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
     .addSpecificTour(class(x)[1], "tip_colour", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_tip_colour"), intro = "Here, we can choose
+            whether or not to colour the tips by a variable from the
+            <code>rowData</code>. When active, the available options are listed
+            and one of them can be selected.")))})
+    .addSpecificTour(class(x)[1], "node_colour", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_node_colour"), intro = "Here, we can choose
             whether or not to colour the nodes by a variable from the
             <code>rowData</code>. When active, the available options are listed
             and one of them can be selected.")))})
@@ -268,6 +311,38 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_order_tree"), intro = "Here, we can order
             the tree alphabetically.")))})
+    .addSpecificTour(class(x)[1], "tip_colour_by", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_tip_colour_by + .selectize-control"), intro = "Here, we can
+            choose how to colour the  tips by.")))})
+    .addSpecificTour(class(x)[1], "tip_size_by", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_tip_size_by + .selectize-control"), intro = "Here, we can 
+            choose how to size the tree tips by.")))})
+    .addSpecificTour(class(x)[1], "tip_shape_by", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_tip_shape_by + .selectize-control"), intro = "Here, we can 
+            choose how to shape the tree tips by.")))})
+    .addSpecificTour(class(x)[1], "edge_colour_by", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_edge_colour_by + .selectize-control"), intro = "Here, we can 
+            choose how to colour the tree edges by.")))})
+    .addSpecificTour(class(x)[1], "edge_size_by", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_edge_size_by + .selectize-control"), intro = "Here, we can 
+            choose how to size the tree edges by.")))})
+    .addSpecificTour(class(x)[1], "node_size_by", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_node_size_by + .selectize-control"), intro = "Here, we can 
+            choose how to size the tree nodes by.")))})
+    .addSpecificTour(class(x)[1], "node_shape_by", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_node_shape_by + .selectize-control"), intro = "Here, we can 
+            choose how to shape the tree nodes by.")))})
+    .addSpecificTour(class(x)[1], "node_colour_by", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+             "_node_colour_by + .selectize-control"), intro = "Here, we can 
+            choose how to colour the tree nodes by.")))})
     
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_VisualBoxOpen"),
@@ -285,14 +360,40 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
             inline=TRUE, choices=c("None", "Row data"),
             selected=slot(x, "edge_colour")),
         .conditionalOnRadio(paste0(panel_name, "_edge_colour"), "Row data",
-            iSEE:::.selectInputHidden(x, field="edge_colour_by",
-                label="Color lines by", choices=names(rowData(se)),
-                selected=slot(x, "edge_colour_by"))),
-        .radioButtons.iSEE(x, field="tip_colour", label="Node color:",
+            list(
+                .selectInput.iSEE(x, field="edge_colour_by",
+                    label="Color lines by", choices=names(rowData(se)),
+                    selected=slot(x, "edge_colour_by")),
+                .selectInput.iSEE(x, field="edge_size_by",
+                    label="Size lines by", choices=names(rowData(se)),
+                    selected=slot(x, "edge_size_by")))),
+        .radioButtons.iSEE(x, field="tip_colour", label="Tip color:",
             inline=TRUE, choices=c("None", "Row data"),
             selected=slot(x, "tip_colour")),
         .conditionalOnRadio(paste0(panel_name, "_tip_colour"), "Row data",
-            iSEE:::.selectInputHidden(x, field="tip_colour_by",
-                label="Color nodes by", choices=names(rowData(se)),
-                selected=slot(x, "tip_colour_by"))))
+            list(
+                .selectInput.iSEE(x, field="tip_colour_by",
+                    label="Color tips by", choices=names(rowData(se)),
+                    selected=slot(x, "tip_colour_by")),
+                .selectInput.iSEE(x, field="tip_size_by",
+                    label="Size tips by", choices=names(rowData(se)),
+                    selected=slot(x, "tip_size_by")),
+                .selectInput.iSEE(x, field="tip_shape_by",
+                    label="Shape tips by", choices=names(rowData(se)),
+                    selected=slot(x, "tip_shape_by")))),
+        .radioButtons.iSEE(x, field="node_colour", label="Node color:",
+            inline=TRUE, choices=c("None", "Row data"),
+            selected=slot(x, "node_colour")),
+        .conditionalOnRadio(paste0(panel_name, "_node_colour"), "Row data",
+            list(
+                .selectInput.iSEE(x, field="node_colour_by",
+                    label="Color nodes by", choices=names(rowData(se)),
+                    selected=slot(x, "node_colour_by")),
+                .selectInput.iSEE(x, field="node_size_by",
+                    label="Size nodes by", choices=names(rowData(se)),
+                    selected=slot(x, "node_size_by")),
+                .selectInput.iSEE(x, field="node_shape_by",
+                    label="Shape nodes by", choices=names(rowData(se)),
+                    selected=slot(x, "node_shape_by")))))
+        
 }
