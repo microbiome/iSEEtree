@@ -22,6 +22,7 @@ Imports:
     miaViz,
     S4Vectors,
     shiny,
+    mia,
     shinyWidgets,
     SingleCellExperiment,
     SummarizedExperiment,
@@ -29,7 +30,6 @@ Imports:
 Suggests:
     BiocStyle,
     knitr,
-    mia,
     RefManageR,
     remotes,
     rmarkdown,
