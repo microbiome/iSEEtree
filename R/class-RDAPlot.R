@@ -71,8 +71,7 @@ setClass("RDAPlot", contains="Panel", slots=c(dimred="character",
     add.significance="logical", add.expl.var="logical", ellipse.linewidth="numeric",
     ellipse.linetype="numeric", vec.size="numeric", vec.colour="character",
     vec.linetype="numeric", arrow.size="numeric", label.colour="character",
-    label.size="numeric", vector_parameters="logical", visual_parameters="character",
-    arrow_parameters="logical", ellipse_parameters="logical", label_parameters="logical"))
+    label.size="numeric", visual_parameters="character"))
 
 #' @importFrom iSEE .singleStringError .validLogicalError .validNumberError
 #' @importFrom S4Vectors setValidity2
@@ -82,9 +81,7 @@ setValidity2("RDAPlot", function(x) {
     msg <- .singleStringError(msg, x, fields=c("dimred", "colour_by", "vec.colour",
                                     "label.colour", "visual_parameters"))
     msg <- .validLogicalError(msg, x, fields=c("vec.text", "add.vectors",
-                                    "add.significance", "add.expl.var",
-                                    "vector_parameters", "ellipse_parameters",
-                                    "arrow_parameters", "label_parameters"))
+                                    "add.significance", "add.expl.var"))
     msg <- .validNumberError(msg, x, "ellipse.alpha", lower=0, upper=1)
     msg <- .validNumberError(msg, x, "confidence.level", lower=0, upper=1)
     msg <- .validNumberError(msg, x, "ellipse.linewidth", lower=0, upper=1)
@@ -113,11 +110,7 @@ setMethod("initialize", "RDAPlot", function(.Object, ...) {
     args <- .emptyDefault(args, "colour_by", NA_character_)
     args <- .emptyDefault(args, "add.vectors", TRUE)
     args <- .emptyDefault(args, "vec.text", TRUE)
-    args <- .emptyDefault(args, "vector_parameters", FALSE)
     args <- .emptyDefault(args, "visual_parameters", NA_character_)
-    args <- .emptyDefault(args, "arrow_parameters", FALSE)
-    args <- .emptyDefault(args, "ellipse_parameters", FALSE)
-    args <- .emptyDefault(args, "label_parameters", FALSE)
     args <- .emptyDefault(args, "add.expl.var", TRUE)
     args <- .emptyDefault(args, "add.significance", TRUE)
     args <- .emptyDefault(args, "ellipse.alpha", 0.2)
@@ -172,8 +165,7 @@ setMethod(".createObservers", "RDAPlot",
         "colour_by", "vec.text", "add.vectors", "add.expl.var", "add.significance",
         "confidence.level", "ellipse.alpha", "ellipse.linewidth", "ellipse.linetype",
         "vec.size", "vec.colour", "vec.linetype", "arrow.size", "label.colour",
-        "label.size", "vector_parameters", "arrow_parameters", "visual_parameters",
-        "ellipse_parameters", "label_parameters"),
+        "label.size", "visual_parameters"),
         input=input, pObjects=pObjects, rObjects=rObjects)
     
     invisible(NULL)
@@ -218,29 +210,22 @@ setMethod(".generateOutput", "RDAPlot",
     args[["add.expl.var"]] <- deparse(slot(x, "add.expl.var"))
     args[["add.significance"]] <- deparse(slot(x, "add.significance"))
     
-    if( slot(x, "vector_parameters") == TRUE ){
-        args[["vec.size"]] <- deparse(slot(x, "vec.size"))
-        args[["vec.colour"]] <- deparse(slot(x, "vec.colour"))
-        args[["vec.linetype"]] <- deparse(slot(x, "vec.linetype"))
-        args[["vec.text"]] <- deparse(slot(x, "vec.text"))
-        args[["add.vectors"]] <- deparse(slot(x, "add.vectors"))
-    }
+    args[["vec.size"]] <- deparse(slot(x, "vec.size"))
+    args[["vec.colour"]] <- deparse(slot(x, "vec.colour"))
+    args[["vec.linetype"]] <- deparse(slot(x, "vec.linetype"))
+    args[["vec.text"]] <- deparse(slot(x, "vec.text"))
+    args[["add.vectors"]] <- deparse(slot(x, "add.vectors"))
+    args[["arrow.size"]] <- deparse(slot(x, "arrow.size"))
+
+    args[["ellipse.linewidth"]] <- deparse(slot(x, "ellipse.linewidth"))
+    args[["ellipse.linetype"]] <- deparse(slot(x, "ellipse.linetype"))
+    args[["ellipse.alpha"]] <- deparse(slot(x, "ellipse.alpha"))
+    args[["add.ellipse"]] <- deparse(slot(x, "add.ellipse"))
     
-    if( slot(x, "arrow_parameters") == TRUE ){
-        args[["arrow.size"]] <- deparse(slot(x, "arrow.size"))
-    }
-    
-    if( slot(x, "ellipse_parameters") == TRUE ){
-        args[["ellipse.linewidth"]] <- deparse(slot(x, "ellipse.linewidth"))
-        args[["ellipse.linetype"]] <- deparse(slot(x, "ellipse.linetype"))
-        args[["ellipse.alpha"]] <- deparse(slot(x, "ellipse.alpha"))
-        args[["add.ellipse"]] <- deparse(slot(x, "add.ellipse"))
-    }
-    
-    if( slot(x, "label_parameters") == TRUE ){
-        args[["label.colour"]] <- deparse(slot(x, "label.colour"))
-        args[["label.size"]] <- deparse(slot(x, "label.size"))
-    }
+
+    args[["label.colour"]] <- deparse(slot(x, "label.colour"))
+    args[["label.size"]] <- deparse(slot(x, "label.size"))
+
     
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse=", ")
