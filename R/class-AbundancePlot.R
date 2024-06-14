@@ -267,7 +267,7 @@ setMethod(".definePanelTour", "AbundancePlot", function(x) {
         title="Visual parameters", open=FALSE,
         # Tree layout
         .selectInput.iSEE(x, field="rank", label="Rank",
-            choices=names(rowData(se)), selected=slot(x, "rank")),
+            choices=taxonomyRanks(se), selected=slot(x, "rank")),
         # Colour legend
         .checkboxInput.iSEE(x, field="add_legend", label="View legend",
             value=slot(x, "add_legend")))

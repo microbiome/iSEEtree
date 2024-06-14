@@ -295,7 +295,7 @@ setMethod(".definePanelTour", "AbundanceDensityPlot", function(x) {
             whether or not to show colors.")))})
     .addSpecificTour(class(x)[1], "dots_colour_by", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_dots_colour_by"), intro = "Here, we can choose
+            "_dots_colour_by + .selectize-control"), intro = "Here, we can choose
             the way you want to map the colors.")))})
     .addSpecificTour(class(x)[1], "assay.type", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
