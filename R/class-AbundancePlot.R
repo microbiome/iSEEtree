@@ -42,8 +42,8 @@ NULL
 #' @export
 setClass("AbundancePlot", contains="Panel",
     slots=c(rank="character", use_relative="logical", add_legend="logical",
-            order_sample_by="character", order_sample="character", 
-            decreasing="logical"))
+            order_sample_by_row="character", order_sample="character", 
+            decreasing="logical", order_sample_by_column="character"))
 
 #' @importFrom S4Vectors setValidity2
 setValidity2("AbundancePlot", function(x) {
@@ -62,7 +62,8 @@ setValidity2("AbundancePlot", function(x) {
 setMethod("initialize", "AbundancePlot", function(.Object, ...) {
     args <- list(...)
     args <- .emptyDefault(args, "rank", NA_character_)
-    args <- .emptyDefault(args, "order_sample_by", NA_character_)
+    args <- .emptyDefault(args, "order_sample_by_row", NA_character_)
+    args <- .emptyDefault(args, "order_sample_by_column", NA_character_)
     args <- .emptyDefault(args, "add_legend", TRUE)
     args <- .emptyDefault(args, "use_relative", TRUE)
     args <- .emptyDefault(args, "decreasing", FALSE)
@@ -88,14 +89,14 @@ setMethod(".defineDataInterface", "AbundancePlot", function(x, se, select_info) 
             inline=TRUE, choices=c("None", "Column data", "Row data"),
             selected=slot(x, "order_sample")),
             .conditionalOnRadio(paste0(panel_name, "_order_sample"), "Column data",
-                list(.selectInput.iSEE(x, field="order_sample_by",
+                list(.selectInput.iSEE(x, field="order_sample_by_column",
                 label="Order samples by", choices=names(colData(se)),
-                selected=slot(x, "order_sample_by")),
+                selected=slot(x, "order_sample_by_column")),
                 .checkboxInput.iSEE(x, field="decreasing",
                 label="Order decreasing", value=slot(x, "decreasing")))),
             .conditionalOnRadio(paste0(panel_name, "_order_sample"), "Row data",
-                list(.selectInput.iSEE(x, field="order_sample_by",
-                label="Order sample by", selected=slot(x, "order_sample_by"),
+                list(.selectInput.iSEE(x, field="order_sample_by_row",
+                label="Order sample by", selected=slot(x, "order_sample_by_row"),
                 choices=.list_taxa(se)),
                 .checkboxInput.iSEE(x, field="decreasing",
                 label="Order decreasing", value=slot(x, "decreasing")))))
@@ -119,8 +120,8 @@ setMethod(".createObservers", "AbundancePlot",
         "add_legend"), input=input, pObjects=pObjects, rObjects=rObjects)
     
     .createUnprotectedParameterObservers(panel_name, c("decreasing",
-        "order_sample", "order_sample_by"), input=input, pObjects=pObjects,
-        rObjects=rObjects)
+        "order_sample", "order_sample_by_row", "order_sample_by_column"),
+        input=input, pObjects=pObjects, rObjects=rObjects)
     
     invisible(NULL)
 })
@@ -163,13 +164,13 @@ setMethod(".generateOutput", "AbundancePlot",
     args[["use_relative"]] <- deparse(slot(x, "use_relative"))
     
     if( slot(x, "order_sample") == "Column data" ){
-        args[["order_sample_by"]] <- deparse(slot(x, "order_sample_by"))
+        args[["order_sample_by"]] <- deparse(slot(x, "order_sample_by_column"))
         args[["decreasing"]] <- deparse(slot(x, "decreasing"))
     }
 
     if( slot(x, "order_sample") == "Row data" &&
-        slot(x, "order_sample_by") %in% .list_taxa(se)[[slot(x, "rank")]] ){
-        args[["order_sample_by"]] <- deparse(slot(x, "order_sample_by"))
+        slot(x, "order_sample_by_row") %in% .list_taxa(se)[[slot(x, "rank")]] ){
+        args[["order_sample_by"]] <- deparse(slot(x, "order_sample_by_row"))
         args[["decreasing"]] <- deparse(slot(x, "decreasing"))
     }
     
