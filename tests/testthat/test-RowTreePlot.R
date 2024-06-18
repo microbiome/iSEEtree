@@ -21,9 +21,9 @@ test_that("RowTreePlot", {
   expect_true(.multiSelectionResponsive(panel, "row"))
   
   expect_contains(slotNames(panel),
-                  c("layout", "add_legend", "edge_colour", "edge_colour_by",
-                    "tip_colour", "tip_colour_by", "order_tree", "tip_size_by",
-                    "tip_shape_by", "edge_size_by", "node_colour", "node_size_by",
+                  c("layout", "add_legend", "edge_colour_by",
+                    "tip_colour_by", "order_tree", "tip_size_by",
+                    "tip_shape_by", "edge_size_by", "node_size_by",
                     "node_shape_by", "node_colour_by"))
   
   expect_contains(.definePanelTour(panel)[[1]],

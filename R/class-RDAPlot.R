@@ -21,7 +21,7 @@
 #' \item \code{vec.size}, a numeric specifying the size of vectors.
 #' \item \code{vec.colour}, a string specifying the colour of vectors.
 #' \item \code{vec.linetype}, a numeric specifying the style of vector lines.
-#' \item \code{arrow_size}, a numeric specifying the size of arrows.
+#' \item \code{arrow.size}, a numeric specifying the size of arrows.
 #' \item \code{label.colour}, a string specifying the colour of text and labels.
 #' \item \code{label.size}, a numeric specifying the size of text and labels. 
 #' \item \code{add.significance}, a logical indicating if variance and p-value
@@ -70,7 +70,7 @@ setClass("RDAPlot", contains="Panel", slots=c(dimred="character",
     add.vectors="logical", ellipse.alpha="numeric", confidence.level="numeric",
     add.significance="logical", add.expl.var="logical", ellipse.linewidth="numeric",
     ellipse.linetype="numeric", vec.size="numeric", vec.colour="character",
-    vec.linetype="numeric", arrow_size="numeric", label.colour="character",
+    vec.linetype="numeric", arrow.size="numeric", label.colour="character",
     label.size="numeric", visual_parameters="character"))
 
 #' @importFrom iSEE .singleStringError .validLogicalError .validNumberError
@@ -88,7 +88,7 @@ setValidity2("RDAPlot", function(x) {
     msg <- .validNumberError(msg, x, "ellipse.linetype", lower=1, upper=6)
     msg <- .validNumberError(msg, x, "vec.size", lower=0, upper=1)
     msg <- .validNumberError(msg, x, "vec.linetype", lower=1, upper=6)
-    msg <- .validNumberError(msg, x, "arrow_size", lower=0, upper=1)
+    msg <- .validNumberError(msg, x, "arrow.size", lower=0, upper=1)
     msg <- .validNumberError(msg, x, "label.size", lower=0, upper=10)
     
     
@@ -119,7 +119,7 @@ setMethod("initialize", "RDAPlot", function(.Object, ...) {
     args <- .emptyDefault(args, "ellipse.linetype", 1)
     args <- .emptyDefault(args, "vec.size", 0.5)
     args <- .emptyDefault(args, "vec.linetype", 1)
-    args <- .emptyDefault(args, "arrow_size", 0.25)
+    args <- .emptyDefault(args, "arrow.size", 0.25)
     args <- .emptyDefault(args, "label.size", 4)
     
     do.call(callNextMethod, c(list(.Object), args))
@@ -164,7 +164,7 @@ setMethod(".createObservers", "RDAPlot",
     .createProtectedParameterObservers(panel_name, c("dimred", "add.ellipse",
         "colour_by", "vec.text", "add.vectors", "add.expl.var", "add.significance",
         "confidence.level", "ellipse.alpha", "ellipse.linewidth", "ellipse.linetype",
-        "vec.size", "vec.colour", "vec.linetype", "arrow_size", "label.colour",
+        "vec.size", "vec.colour", "vec.linetype", "arrow.size", "label.colour",
         "label.size", "visual_parameters"),
         input=input, pObjects=pObjects, rObjects=rObjects)
     
@@ -209,32 +209,19 @@ setMethod(".generateOutput", "RDAPlot",
     args[["confidence.level"]] <- deparse(slot(x, "confidence.level"))
     args[["add.expl.var"]] <- deparse(slot(x, "add.expl.var"))
     args[["add.significance"]] <- deparse(slot(x, "add.significance"))
-    
-    if (slot(x, "visual_parameters") == "Vector") {
-        args[["vec.size"]] <- deparse(slot(x, "vec.size"))
-        args[["vec.colour"]] <- deparse(slot(x, "vec.colour"))
-        args[["vec.linetype"]] <- deparse(slot(x, "vec.linetype"))
-        args[["vec.text"]] <- deparse(slot(x, "vec.text"))
-        args[["add.vectors"]] <- deparse(slot(x, "add.vectors"))
-    }
-    
-    if (slot(x, "visual_parameters") == "Arrow") {
-        args[["arrow.size"]] <- deparse(slot(x, "arrow_size"))
-    }
-    
-    if (slot(x, "visual_parameters") == "Ellipse") {
-        args[["ellipse.linewidth"]] <- deparse(slot(x, "ellipse.linewidth"))
-        args[["ellipse.linetype"]] <- deparse(slot(x, "ellipse.linetype"))
-        args[["ellipse.alpha"]] <- deparse(slot(x, "ellipse.alpha"))
-        args[["add.ellipse"]] <- deparse(slot(x, "add.ellipse"))
-    }
-    
-    if (slot(x, "visual_parameters") == "Label") {
-        args[["label.colour"]] <- deparse(slot(x, "label.colour"))
-        args[["label.size"]] <- deparse(slot(x, "label.size"))
-    }
+    args[["vec.size"]] <- deparse(slot(x, "vec.size"))
+    args[["vec.colour"]] <- deparse(slot(x, "vec.colour"))
+    args[["vec.linetype"]] <- deparse(slot(x, "vec.linetype"))
+    args[["vec.text"]] <- deparse(slot(x, "vec.text"))
+    args[["add.vectors"]] <- deparse(slot(x, "add.vectors"))
+    args[["arrow.size"]] <- deparse(slot(x, "arrow.size"))
+    args[["ellipse.linewidth"]] <- deparse(slot(x, "ellipse.linewidth"))
+    args[["ellipse.linetype"]] <- deparse(slot(x, "ellipse.linetype"))
+    args[["ellipse.alpha"]] <- deparse(slot(x, "ellipse.alpha"))
+    args[["add.ellipse"]] <- deparse(slot(x, "add.ellipse"))
+    args[["label.colour"]] <- deparse(slot(x, "label.colour"))
+    args[["label.size"]] <- deparse(slot(x, "label.size"))
 
-    
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse=", ")
     fun_call <- sprintf("p <- miaViz::plotRDA(se, %s)", args)
@@ -364,9 +351,9 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_vec\\.linetype"), intro = "Here, we can adjust
             the vectors style")))})
-    .addSpecificTour(class(x)[1], "arrow_size", function(panel_name) {
+    .addSpecificTour(class(x)[1], "arrow.size", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_arrow_size"), intro = "Here, we can adjust
+            "_arrow\\.size"), intro = "Here, we can adjust
             the arrows size")))})
     .addSpecificTour(class(x)[1], "label.colour", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
@@ -393,8 +380,8 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
             choices=names(colData(se)), selected=slot(x, "colour_by")),
         .conditionalOnCheckGroup(
             paste0(panel_name, "_visual_parameters"), "Arrow",
-                .sliderInput.iSEE(x, field="arrow_size", label="Arrows size",
-                    min=0.01, max=0.99, step=0.01, value=slot(x, "arrow_size"))),
+                .sliderInput.iSEE(x, field="arrow.size", label="Arrows size",
+                    min=0.01, max=0.99, step=0.01, value=slot(x, "arrow.size"))),
         .conditionalOnCheckGroup(
             paste0(panel_name, "_visual_parameters"), "Label",
             list(
