@@ -1,5 +1,5 @@
 Package: iSEEtree
-Version: 0.99.0
+Version: 0.99.1
 Authors@R: 
     c(person(given = "Giulio", family = "Benedetti", role = c("aut", "cre"),
            email = "giulio.benedetti@utu.fi",
@@ -15,12 +15,13 @@ Description:
     TreeSummarizedExperiment objects. Not surprisingly, it also depends on the
     generic panels from iSEE.
 biocViews: Microbiome, Software, Visualization, DataImport
-License: Artistic-2.0
+License: Artistic-2.0 + file LICENSE
 Encoding: UTF-8
 Depends:
     R (>= 4.0),
     iSEE
 Imports:
+    grDevices,
     methods,
     miaViz,
     S4Vectors,
@@ -29,7 +30,8 @@ Imports:
     shinyWidgets,
     SingleCellExperiment,
     SummarizedExperiment,
-    TreeSummarizedExperiment
+    TreeSummarizedExperiment,
+    utils
 Suggests:
     BiocStyle,
     knitr,
@@ -38,7 +40,6 @@ Suggests:
     rmarkdown,
     scater,
     testthat (>= 3.0.0),
-    utils,
     vegan
 URL: https://github.com/microbiome/iSEEtree
 BugReports: https://github.com/microbiome/iSEEtree/issues

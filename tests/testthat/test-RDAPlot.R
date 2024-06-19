@@ -16,8 +16,9 @@ test_that("RDAPlot", {
   
   expect_s3_class(.defineOutput(panel), "shiny.tag.list")
   expect_match(.generateOutput(panel, tse)[["commands"]][["fun"]],
-  'p <- miaViz::plotRDA(se, dimred="RDA", colour_by="ClinicalStatus",
-    confidence.level=0.95, add.expl.var=TRUE, add.significance=TRUE)', fixed = TRUE)
+  'p <- miaViz::plotRDA(se, dimred="RDA", colour_by="ClinicalStatus",\n    ',
+  'confidence.level=0.95, add.expl.var=TRUE, add.significance=TRUE)',
+  fixed = TRUE)
   
   expect_true(.hideInterface(panel, "RowSelectionSource"))
   expect_false(.multiSelectionResponsive(panel, "row"))

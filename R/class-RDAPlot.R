@@ -110,7 +110,7 @@ setMethod("initialize", "RDAPlot", function(.Object, ...) {
     args <- .emptyDefault(args, "colour_by", NA_character_)
     args <- .emptyDefault(args, "add.vectors", TRUE)
     args <- .emptyDefault(args, "vec.text", TRUE)
-    args <- .emptyDefault(args, "visual_parameters", "None")
+    args <- .emptyDefault(args, "visual_parameters", NA_character_)
     args <- .emptyDefault(args, "add.expl.var", TRUE)
     args <- .emptyDefault(args, "add.significance", TRUE)
     args <- .emptyDefault(args, "ellipse.alpha", 0.2)
@@ -301,11 +301,12 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
     callNextMethod())
 })
 
+#' @importFrom SummarizedExperiment colData
+#' @importFrom grDevices rainbow
+#' @importFrom methods slot
 #' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE .sliderInput.iSEE
 #'   .conditionalOnCheckSolo .checkboxGroupInput.iSEE .conditionalOnCheckGroup
 #'   .numericInput.iSEE
-#' @importFrom methods slot
-#' @importFrom SummarizedExperiment colData
 .create_visual_box_for_rda <- function(x, se) {
     panel_name <- .getEncodedName(x)
     
@@ -381,7 +382,6 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_visual_parameters"), intro = "Here, we can choose
             the visual parameters to adjust")))})
-    
     
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_Visual"),
