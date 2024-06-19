@@ -209,18 +209,34 @@ setMethod(".generateOutput", "RDAPlot",
     args[["confidence.level"]] <- deparse(slot(x, "confidence.level"))
     args[["add.expl.var"]] <- deparse(slot(x, "add.expl.var"))
     args[["add.significance"]] <- deparse(slot(x, "add.significance"))
-    args[["vec.size"]] <- deparse(slot(x, "vec.size"))
-    args[["vec.colour"]] <- deparse(slot(x, "vec.colour"))
-    args[["vec.linetype"]] <- deparse(slot(x, "vec.linetype"))
-    args[["vec.text"]] <- deparse(slot(x, "vec.text"))
-    args[["add.vectors"]] <- deparse(slot(x, "add.vectors"))
-    args[["arrow.size"]] <- deparse(slot(x, "arrow.size"))
-    args[["ellipse.linewidth"]] <- deparse(slot(x, "ellipse.linewidth"))
-    args[["ellipse.linetype"]] <- deparse(slot(x, "ellipse.linetype"))
-    args[["ellipse.alpha"]] <- deparse(slot(x, "ellipse.alpha"))
-    args[["add.ellipse"]] <- deparse(slot(x, "add.ellipse"))
-    args[["label.colour"]] <- deparse(slot(x, "label.colour"))
-    args[["label.size"]] <- deparse(slot(x, "label.size"))
+    
+    ifelse ( slot(x, "visual_parameters") == "Vector",
+        args[["vec.size"]] <- deparse(slot(x, "vec.size")), 1)
+    ifelse ( slot(x, "visual_parameters") == "Vector",
+        args[["vec.colour"]] <- deparse(slot(x, "vec.colour")), 1)
+    ifelse ( slot(x, "visual_parameters") == "Vector",
+        args[["vec.linetype"]] <- deparse(slot(x, "vec.linetype")), 1)
+    ifelse ( slot(x, "visual_parameters") == "Vector",
+        args[["vec.text"]] <- deparse(slot(x, "vec.text")), 1)
+    ifelse ( slot(x, "visual_parameters") == "Vector",
+        args[["add.vectors"]] <- deparse(slot(x, "add.vectors")), 1)
+    
+    ifelse ( slot(x, "visual_parameters") == "Arrow", 
+        args[["arrow.size"]] <- deparse(slot(x, "arrow.size")), 1)
+    
+    ifelse ( slot(x, "visual_parameters") == "Ellipse",
+        args[["ellipse.linewidth"]] <- deparse(slot(x, "ellipse.linewidth")), 1)
+    ifelse ( slot(x, "visual_parameters") == "Ellipse",
+        args[["ellipse.linetype"]] <- deparse(slot(x, "ellipse.linetype")), 1)
+    ifelse ( slot(x, "visual_parameters") == "Ellipse",
+        args[["ellipse.alpha"]] <- deparse(slot(x, "ellipse.alpha")), 1)
+    ifelse ( slot(x, "visual_parameters") == "Ellipse",
+        args[["add.ellipse"]] <- deparse(slot(x, "add.ellipse")), 1)
+    
+    ifelse ( slot(x, "visual_parameters") == "Label",
+        args[["label.colour"]] <- deparse(slot(x, "label.colour")), 1)
+    ifelse ( slot(x, "visual_parameters") == "Label",
+        args[["label.size"]] <- deparse(slot(x, "label.size")), 1)
 
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse=", ")

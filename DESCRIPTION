@@ -1,9 +1,12 @@
 Package: iSEEtree
 Version: 0.99.0
 Authors@R: 
-    person(given = "Giulio", family = "Benedetti", role = c("aut", "cre"),
+    c(person(given = "Giulio", family = "Benedetti", role = c("aut", "cre"),
            email = "giulio.benedetti@utu.fi",
-           comment = c(ORCID = "0000-0002-8732-7692"))
+           comment = c(ORCID = "0000-0002-8732-7692")),
+      person(given = "Ely", family = "Seraidarian", role = c("ctb"),
+             email = "ely.seraidarian@utu.fi",
+             comment = c(ORCID = "0009-0008-8602-093X")))
 Title: Interactive visualisation for microbiome data
 Description:
     iSEEtree is an extension of iSEE for the TreeSummarizedExperiment.

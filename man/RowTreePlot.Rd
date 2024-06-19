@@ -26,21 +26,21 @@ The following slots control the thresholds used in the visualization:
 \item \code{layout}, a string specifying tree layout
 \item \code{add_legend}, a logical indicating if color legend should appear.
 \item \code{edge_colour_by}, a string specifying parameter to color lines by
-when \code{edge_parameters = "Row data"}.
+when \code{colour_parameters = "Edge"}.
 \item \code{edge_size_by}, a string specifying parameter to size lines by
-when \code{edge_parameters = "Row data"}.
+when \code{size_parameters = "Edge"}.
 \item \code{tip_colour_by}, a string specifying parameter to color tips by
-when \code{tip_parameters = "Row data"}.
+when \code{colour_parameters = "Tip"}.
 \item \code{tip_size_by}, a string specifying parameter to size tips by
-when \code{tip_parameters = "Row data"}.
+when \code{size_parameters = "Tip"}.
 \item \code{tip_shape_by}, a string specifying parameter to shape tips by
-when \code{tip_parameters = "Row data"}.
+when \code{shape_parameters = "Tip"}.
 \item \code{node_colour_by}, a string specifying parameter to color nodes by
-when \code{node_parameters = "Row data"}.
-\item \code{npde_size_by}, a string specifying parameter to size nodes by
-when \code{node_parameters = "Row data"}.
+when \code{colour_parameters = "Node"}.
+\item \code{node_size_by}, a string specifying parameter to size nodes by
+when \code{size_parameters = "Node"}.
 \item \code{node_shape_by}, a string specifying parameter to shape nodes by
-when \code{node_parameters = "Row data"}.
+when \code{shape_parameters = "Node"}.
 \item \code{order_tree}, a logical indicating if tree is ordered by
 alphabetic order of taxonomic levels.
 }

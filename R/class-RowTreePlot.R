@@ -13,21 +13,21 @@
 #' \item \code{layout}, a string specifying tree layout
 #' \item \code{add_legend}, a logical indicating if color legend should appear.
 #' \item \code{edge_colour_by}, a string specifying parameter to color lines by
-#'   when \code{edge_parameters = "Row data"}.
+#'   when \code{colour_parameters = "Edge"}.
 #' \item \code{edge_size_by}, a string specifying parameter to size lines by
-#'   when \code{edge_parameters = "Row data"}.
+#'   when \code{size_parameters = "Edge"}.
 #' \item \code{tip_colour_by}, a string specifying parameter to color tips by
-#'   when \code{tip_parameters = "Row data"}.
+#'   when \code{colour_parameters = "Tip"}.
 #' \item \code{tip_size_by}, a string specifying parameter to size tips by
-#'   when \code{tip_parameters = "Row data"}.
+#'   when \code{size_parameters = "Tip"}.
 #' \item \code{tip_shape_by}, a string specifying parameter to shape tips by
-#'   when \code{tip_parameters = "Row data"}.
+#'   when \code{shape_parameters = "Tip"}.
 #' \item \code{node_colour_by}, a string specifying parameter to color nodes by
-#'   when \code{node_parameters = "Row data"}.
-#' \item \code{npde_size_by}, a string specifying parameter to size nodes by
-#'   when \code{node_parameters = "Row data"}.
+#'   when \code{colour_parameters = "Node"}.
+#' \item \code{node_size_by}, a string specifying parameter to size nodes by
+#'   when \code{size_parameters = "Node"}.
 #' \item \code{node_shape_by}, a string specifying parameter to shape nodes by
-#'   when \code{node_parameters = "Row data"}.
+#'   when \code{shape_parameters = "Node"}.
 #' \item \code{order_tree}, a logical indicating if tree is ordered by
 #'   alphabetic order of taxonomic levels.
 #' }
@@ -64,8 +64,8 @@ setClass("RowTreePlot", contains="Panel", slots=c(layout="character",
     order_tree="logical", tip_size_by="character", edge_size_by="character",
     tip_shape_by="character", node_size_by="character", node_shape_by="character",
     node_colour_by="character", visual_parameters="character", 
-    tip_parameters="character", edge_parameters="character",
-    node_parameters="character"))
+    size_parameters="character", shape_parameters="character",
+    colour_parameters="character"))
 
 #' @importFrom iSEE .singleStringError .validLogicalError
 #' @importFrom S4Vectors setValidity2
@@ -99,9 +99,9 @@ setMethod("initialize", "RowTreePlot", function(.Object, ...) {
     args <- .emptyDefault(args, "node_size_by", NA_character_)
     args <- .emptyDefault(args, "node_shape_by", NA_character_)
     args <- .emptyDefault(args, "visual_parameters", "None")
-    args <- .emptyDefault(args, "tip_parameters", "None")
-    args <- .emptyDefault(args, "node_parameters", "None")
-    args <- .emptyDefault(args, "edge_parameters", "None")
+    args <- .emptyDefault(args, "colour_parameters", "None")
+    args <- .emptyDefault(args, "shape_parameters", "None")
+    args <- .emptyDefault(args, "size_parameters", "None")
     args <- .emptyDefault(args, "order_tree", FALSE)
 
     do.call(callNextMethod, c(list(.Object), args))
@@ -138,8 +138,8 @@ setMethod(".createObservers", "RowTreePlot",
     panel_name <- .getEncodedName(x)
 
     .createProtectedParameterObservers(panel_name, c("layout", "add_legend",
-        "RowSelectionSource", "order_tree", "visual_parameters", "tip_parameters",
-        "edge_parameters", "node_parameters"), input=input, pObjects=pObjects,
+        "RowSelectionSource", "order_tree", "visual_parameters", "size_parameters",
+        "shape_parameters", "colour_parameters"), input=input, pObjects=pObjects,
         rObjects=rObjects)
     
     .createUnprotectedParameterObservers(panel_name, c("edge_colour_by",
@@ -189,24 +189,31 @@ setMethod(".generateOutput", "RowTreePlot",
     args[["add_legend"]] <- deparse(slot(x, "add_legend"))
     args[["order_tree"]] <- deparse(slot(x, "order_tree"))
     
-    if ( slot(x, "tip_parameters") == "Row data") {
-        args[["tip_shape_by"]] <- deparse(slot(x, "tip_shape_by"))
-        args[["tip_size_by"]] <- deparse(slot(x, "tip_size_by"))
-        args[["tip_colour_by"]] <- deparse(slot(x, "tip_colour_by"))
-    }
+    ifelse (slot(x, "colour_parameters") == "Edge", 
+        args[["edge_colour_by"]] <- deparse(slot(x, "edge_colour_by")), 1)
     
-    if ( slot(x, "edge_parameters") == "Row data") {
-        args[["edge_colour_by"]] <- deparse(slot(x, "edge_colour_by"))
-        args[["edge_size_by"]] <- deparse(slot(x, "edge_size_by"))
-    }
+    ifelse ( slot(x, "colour_parameters") == "Node",
+        args[["node_colour_by"]] <- deparse(slot(x, "node_colour_by")), 1)
     
-    if ( slot(x, "node_parameters") == "Row data") {
-        args[["node_shape_by"]] <- deparse(slot(x, "node_shape_by"))
-        args[["node_size_by"]] <- deparse(slot(x, "node_size_by"))
-        args[["node_colour_by"]] <- deparse(slot(x, "node_colour_by"))
-    }
+    ifelse ( slot(x, "colour_parameters") == "Tip",
+        args[["tip_colour_by"]] <- deparse(slot(x, "tip_colour_by")), 1)
     
+    ifelse ( slot(x, "size_parameters") == "Edge",
+        args[["edge_size_by"]] <- deparse(slot(x, "edge_size_by")), 1)
     
+    ifelse ( slot(x, "size_parameters") == "Node",
+        args[["node_size_by"]] <- deparse(slot(x, "node_size_by")), 1)
+    
+    ifelse ( slot(x, "size_parameters") == "Tip",
+        args[["tip_size_by"]] <- deparse(slot(x, "tip_size_by")), 1)
+    
+    ifelse ( slot(x, "shape_parameters") == "Node",
+        args[["node_shape_by"]] <- deparse(slot(x, "node_shape_by")), 1)
+    
+    ifelse ( slot(x, "shape_parameters") == "Tip",
+        args[["tip_shape_by"]] <- deparse(slot(x, "tip_shape_by")), 1)
+
+  
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse=", ")
     fun_call <- sprintf("p <- miaViz::plotRowTree(se, %s)", args)
@@ -346,21 +353,24 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_visual_parameters"), intro = "Here, we can 
             choose to show the different visual parameters.")))})
-    .addSpecificTour(class(x)[1], "tip_parameters", function(panel_name) {
+    .addSpecificTour(class(x)[1], "colour_parameters", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_tip_parameters"), intro = "Here, we can make 
-            the tip parameters depend on the value of a
-            categorical column data field.")))})
-    .addSpecificTour(class(x)[1], "edge_parameters", function(panel_name) {
+            "_colour_parameters"), intro = "Here, we can make 
+            the colour depend on the value of a
+            categorical column data field for each plot components
+            (line, tip, node).")))})
+    .addSpecificTour(class(x)[1], "shape_parameters", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_edge_parameters"), intro = "Here, we can make 
-            the edge parameters depend on the value of a
-            categorical column data field.")))})
-    .addSpecificTour(class(x)[1], "node_parameters", function(panel_name) {
+            "_shape_parameters"), intro = "Here, we can make 
+            the shape depend on the value of a
+            categorical column data field for each plot components
+            (line, tip, node).")))})
+    .addSpecificTour(class(x)[1], "size_parameters", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_node_parameters"), intro = "Here, we can make 
-            the node parameters depend on the value of a
-            categorical column data field.")))})
+            "_size_parameters"), intro = "Here, we can make 
+            the size depend on the value of a
+            categorical column data field for each plot components
+            (line, tip, node).")))})
     
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_VisualBoxOpen"),
@@ -368,68 +378,75 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
         # Tree layout
         .checkboxGroupInput.iSEE(x, field="visual_parameters", label="Visual parameters:",
             inline=TRUE, selected=slot(x, "visual_parameters"),
-            choices=c("Tip", "Edge", "Node")),
+            choices=c("Colour", "Size", "Shape")),
+        
+        .conditionalOnCheckGroup(
+            paste0(panel_name, "_visual_parameters"), "Colour",
+            list(
+                .checkboxGroupInput.iSEE(x, field="colour_parameters", label="Colour by:",
+                    inline=TRUE, selected=slot(x, "colour_parameters"),
+                    choices=c("Edge", "Node", "Tip")),
+                .conditionalOnCheckGroup(
+                    paste0(panel_name, "_colour_parameters"), "Edge",
+                        .selectInput.iSEE(x, field="edge_colour_by",
+                            label="Color lines by", choices=names(rowData(se)),
+                            selected=slot(x, "edge_colour_by"))),
+                .conditionalOnCheckGroup(
+                    paste0(panel_name, "_colour_parameters"), "Node",
+                        .selectInput.iSEE(x, field="node_colour_by",
+                            label="Color nodes by", choices=names(rowData(se)),
+                            selected=slot(x, "node_colour_by"))),
+                .conditionalOnCheckGroup(
+                    paste0(panel_name, "_colour_parameters"), "Tip",
+                        .selectInput.iSEE(x, field="tip_colour_by",
+                            label="Color tips by", choices=names(rowData(se)),
+                            selected=slot(x, "tip_colour_by"))))),
+        
+        .conditionalOnCheckGroup(
+            paste0(panel_name, "_visual_parameters"), "Size",
+            list(
+                .checkboxGroupInput.iSEE(x, field="size_parameters", label="Size by:",
+                    inline=TRUE, selected=slot(x, "size_parameters"),
+                    choices=c("Edge", "Node", "Tip")),
+                .conditionalOnCheckGroup(
+                    paste0(panel_name, "_size_parameters"), "Edge",
+                        .selectInput.iSEE(x, field="edge_size_by",
+                            label="Size lines by", choices=names(rowData(se)),
+                            selected=slot(x, "edge_size_by"))),
+                .conditionalOnCheckGroup(
+                    paste0(panel_name, "_size_parameters"), "Node",
+                        .selectInput.iSEE(x, field="node_size_by",
+                            label="Size nodes by", choices=names(rowData(se)),
+                            selected=slot(x, "node_size_by"))),
+                .conditionalOnCheckGroup(
+                    paste0(panel_name, "_size_parameters"), "Tip",
+                        .selectInput.iSEE(x, field="tip_size_by",
+                                label="Size tips by", choices=names(rowData(se)),
+                                selected=slot(x, "tip_size_by"))))),
+        
+        .conditionalOnCheckGroup(
+            paste0(panel_name, "_visual_parameters"), "Shape",
+            list(
+                .checkboxGroupInput.iSEE(x, field="shape_parameters", label="Shape by:",
+                    inline=TRUE, selected=slot(x, "shape_parameters"),
+                    choices=c("Node", "Tip")),
+                .conditionalOnCheckGroup(
+                    paste0(panel_name, "_shape_parameters"), "Node",
+                        .selectInput.iSEE(x, field="node_shape_by",
+                            label="Shape nodes by", choices=names(rowData(se)),
+                            selected=slot(x, "node_shape_by"))),
+                .conditionalOnCheckGroup(
+                    paste0(panel_name, "_shape_parameters"), "Tip",
+                        .selectInput.iSEE(x, field="tip_shape_by",
+                            label="Shape tips by", choices=names(rowData(se)),
+                            selected=slot(x, "tip_shape_by"))))),
+    
         .selectInput.iSEE(x, field="layout", label="Layout:",
             choices=c("circular", "rectangular", "slanted", "fan",
                 "inward_circular", "radial", "unrooted", "equal_angle",
                 "daylight", "dendrogram", "ape", "ellipse", "roundrect"),
-            selected=slot(x, "layout")),
+                selected=slot(x, "layout")),
         # Colour legend
         .checkboxInput.iSEE(x, field="add_legend", label="View legend",
-            value=slot(x, "add_legend")),
-        
-        .conditionalOnCheckGroup(
-            paste0(panel_name, "_visual_parameters"), "Tip",
-            list(
-                .radioButtons.iSEE(x, field="tip_parameters", label="Tip parameters:",
-                    inline=TRUE, choices=c("None", "Row data"),
-                    selected=slot(x, "tip_parameters")),
-                .conditionalOnRadio(
-                paste0(panel_name, "_tip_parameters"), "Row data",
-                    list(
-                        .selectInput.iSEE(x, field="tip_colour_by",
-                            label="Color tips by", choices=names(rowData(se)),
-                            selected=slot(x, "tip_colour_by")),
-                        .selectInput.iSEE(x, field="tip_size_by",
-                            label="Size tips by", choices=names(rowData(se)),
-                            selected=slot(x, "tip_size_by")),
-                        .selectInput.iSEE(x, field="tip_shape_by",
-                            label="Shape tips by", choices=names(rowData(se)),
-                            selected=slot(x, "tip_shape_by")))))),
-
-
-        .conditionalOnCheckGroup(
-            paste0(panel_name, "_visual_parameters"), "Edge",
-            list(                
-              .radioButtons.iSEE(x, field="edge_parameters", label="Edge parameters:",
-                  inline=TRUE, choices=c("None", "Row data"),
-                  selected=slot(x, "edge_parameters")),
-              .conditionalOnRadio(
-                  paste0(panel_name, "_edge_parameters"), "Row data",
-                  list(
-                      .selectInput.iSEE(x, field="edge_colour_by",
-                          label="Color lines by", choices=names(rowData(se)),
-                          selected=slot(x, "edge_colour_by")),
-                      .selectInput.iSEE(x, field="edge_size_by",
-                          label="Size lines by", choices=names(rowData(se)),
-                          selected=slot(x, "edge_size_by")))))),
-
-        .conditionalOnCheckGroup(
-          paste0(panel_name, "_visual_parameters"), "Node",
-            list(
-              .radioButtons.iSEE(x, field="node_parameters", label="Node parameters:",
-                  inline=TRUE, choices=c("None", "Row data"),
-                  selected=slot(x, "node_parameters")),
-              .conditionalOnRadio(
-                paste0(panel_name, "_node_parameters"), "Row data",
-                list(
-                    .selectInput.iSEE(x, field="node_colour_by",
-                        label="Colour nodes by", choices=names(rowData(se)),
-                        selected=slot(x, "node_colour_by")),
-                    .selectInput.iSEE(x, field="node_size_by",
-                        label="Size nodes by", choices=names(rowData(se)),
-                        selected=slot(x, "node_size_by")),
-                    .selectInput.iSEE(x, field="node_shape_by",
-                        label="Shape nodes by", choices=names(rowData(se)),
-                        selected=slot(x, "node_shape_by")))))))
+            value=slot(x, "add_legend")))
 }
