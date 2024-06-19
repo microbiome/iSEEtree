@@ -283,6 +283,7 @@ setMethod(".definePanelTour", "AbundancePlot", function(x) {
 
 #' @importFrom SummarizedExperiment rowData
 #' @importFrom mia taxonomyRanks
+#' @importFrom utils stack
 .list_taxa <- function(se){
   
     row_data <- as.data.frame(rowData(se)[ , taxonomyRanks(se)])

@@ -138,15 +138,14 @@ setMethod(".createObservers", "RowTreePlot",
     panel_name <- .getEncodedName(x)
 
     .createProtectedParameterObservers(panel_name, c("layout", "add_legend",
-        "RowSelectionSource", "order_tree", "visual_parameters", "size_parameters",
+        "RowSelectionSource", "order_tree", "size_parameters", "visual_parameters",
         "shape_parameters", "colour_parameters"), input=input, pObjects=pObjects,
         rObjects=rObjects)
     
     .createUnprotectedParameterObservers(panel_name, c("edge_colour_by",
         "tip_colour_by", "tip_size_by", "tip_shape_by", "node_size_by",
-        "node_shape_by", "node_clour_by", "edge_size_by", "node_size_by",
-        "node_colour_by", "node_shape_by"), input=input, pObjects=pObjects,
-        rObjects=rObjects)
+        "node_shape_by", "node_colour_by", "edge_size_by"), input=input,
+        pObjects=pObjects, rObjects=rObjects)
     
     invisible(NULL)
 })
@@ -189,30 +188,22 @@ setMethod(".generateOutput", "RowTreePlot",
     args[["add_legend"]] <- deparse(slot(x, "add_legend"))
     args[["order_tree"]] <- deparse(slot(x, "order_tree"))
     
-    ifelse (slot(x, "colour_parameters") == "Edge", 
-        args[["edge_colour_by"]] <- deparse(slot(x, "edge_colour_by")), 1)
+    if( "Colour" %in% slot(x, "visual_parameters") ){
+        args <- .assign_viz_param(args, x, "Edge", "colour")
+        args <- .assign_viz_param(args, x, "Node", "colour")
+        args <- .assign_viz_param(args, x, "Tip", "colour")
+    }
     
-    ifelse ( slot(x, "colour_parameters") == "Node",
-        args[["node_colour_by"]] <- deparse(slot(x, "node_colour_by")), 1)
+    if( "Shape" %in% slot(x, "visual_parameters") ){
+        args <- .assign_viz_param(args, x, "Node", "shape")
+        args <- .assign_viz_param(args, x, "Tip", "shape")
+    }
     
-    ifelse ( slot(x, "colour_parameters") == "Tip",
-        args[["tip_colour_by"]] <- deparse(slot(x, "tip_colour_by")), 1)
-    
-    ifelse ( slot(x, "size_parameters") == "Edge",
-        args[["edge_size_by"]] <- deparse(slot(x, "edge_size_by")), 1)
-    
-    ifelse ( slot(x, "size_parameters") == "Node",
-        args[["node_size_by"]] <- deparse(slot(x, "node_size_by")), 1)
-    
-    ifelse ( slot(x, "size_parameters") == "Tip",
-        args[["tip_size_by"]] <- deparse(slot(x, "tip_size_by")), 1)
-    
-    ifelse ( slot(x, "shape_parameters") == "Node",
-        args[["node_shape_by"]] <- deparse(slot(x, "node_shape_by")), 1)
-    
-    ifelse ( slot(x, "shape_parameters") == "Tip",
-        args[["tip_shape_by"]] <- deparse(slot(x, "tip_shape_by")), 1)
-
+    if( "Size" %in% slot(x, "visual_parameters") ){
+        args <- .assign_viz_param(args, x, "Edge", "size")
+        args <- .assign_viz_param(args, x, "Node", "size")
+        args <- .assign_viz_param(args, x, "Tip", "size")
+    }
   
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse=", ")
@@ -376,16 +367,16 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
     collapseBox(paste0(panel_name, "_VisualBoxOpen"),
         title="Visual parameters", open=FALSE,
         # Tree layout
-        .checkboxGroupInput.iSEE(x, field="visual_parameters", label="Visual parameters:",
+        .checkboxGroupInput.iSEE(x, field="visual_parameters", label=NULL,
             inline=TRUE, selected=slot(x, "visual_parameters"),
             choices=c("Colour", "Size", "Shape")),
         
         .conditionalOnCheckGroup(
             paste0(panel_name, "_visual_parameters"), "Colour",
             list(
-                .checkboxGroupInput.iSEE(x, field="colour_parameters", label="Colour by:",
+                .checkboxGroupInput.iSEE(x, field="colour_parameters",
                     inline=TRUE, selected=slot(x, "colour_parameters"),
-                    choices=c("Edge", "Node", "Tip")),
+                    choices=c("Edge", "Node", "Tip"), label="Colour by:"),
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_colour_parameters"), "Edge",
                         .selectInput.iSEE(x, field="edge_colour_by",
@@ -405,9 +396,9 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
         .conditionalOnCheckGroup(
             paste0(panel_name, "_visual_parameters"), "Size",
             list(
-                .checkboxGroupInput.iSEE(x, field="size_parameters", label="Size by:",
+                .checkboxGroupInput.iSEE(x, field="size_parameters",
                     inline=TRUE, selected=slot(x, "size_parameters"),
-                    choices=c("Edge", "Node", "Tip")),
+                    choices=c("Edge", "Node", "Tip"), label="Size by:"),
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_size_parameters"), "Edge",
                         .selectInput.iSEE(x, field="edge_size_by",
@@ -421,15 +412,15 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_size_parameters"), "Tip",
                         .selectInput.iSEE(x, field="tip_size_by",
-                                label="Size tips by", choices=names(rowData(se)),
-                                selected=slot(x, "tip_size_by"))))),
+                            label="Size tips by", choices=names(rowData(se)),
+                            selected=slot(x, "tip_size_by"))))),
         
         .conditionalOnCheckGroup(
             paste0(panel_name, "_visual_parameters"), "Shape",
             list(
-                .checkboxGroupInput.iSEE(x, field="shape_parameters", label="Shape by:",
+                .checkboxGroupInput.iSEE(x, field="shape_parameters",
                     inline=TRUE, selected=slot(x, "shape_parameters"),
-                    choices=c("Node", "Tip")),
+                    choices=c("Node", "Tip"), label="Shape by:"),
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_shape_parameters"), "Node",
                         .selectInput.iSEE(x, field="node_shape_by",
@@ -449,4 +440,16 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
         # Colour legend
         .checkboxInput.iSEE(x, field="add_legend", label="View legend",
             value=slot(x, "add_legend")))
+}
+
+#' @importFrom methods slot
+.assign_viz_param <- function(args, x, element, aesthetic) {
+  
+    param_name <- paste(tolower(element), aesthetic, "by", sep = "_")
+  
+    if( element %in% slot(x, paste(aesthetic, "parameters", sep = "_")) ){
+        args[[param_name]] <- deparse(slot(x, param_name))
+    }
+  
+    return(args)
 }

@@ -40,8 +40,8 @@ Suggests:
     testthat (>= 3.0.0),
     utils,
     vegan
-URL: https://github.com/RiboRings/iSEEtree
-BugReports: https://github.com/RiboRings/iSEEtree/issues
+URL: https://github.com/microbiome/iSEEtree
+BugReports: https://github.com/microbiome/iSEEtree/issues
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 VignetteBuilder: knitr
