@@ -16,8 +16,8 @@ library(iSEEtree)
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/RiboRings/iSEEtree}
-  \item Report bugs at \url{https://github.com/RiboRings/iSEEtree/issues}
+  \item \url{https://github.com/microbiome/iSEEtree}
+  \item Report bugs at \url{https://github.com/microbiome/iSEEtree/issues}
 }
 
 }

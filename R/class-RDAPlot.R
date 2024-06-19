@@ -161,12 +161,15 @@ setMethod(".createObservers", "RDAPlot",
     callNextMethod()
     panel_name <- .getEncodedName(x)
     
-    .createProtectedParameterObservers(panel_name, c("dimred", "add.ellipse",
-        "colour_by", "vec.text", "add.vectors", "add.expl.var", "add.significance",
-        "confidence.level", "ellipse.alpha", "ellipse.linewidth", "ellipse.linetype",
-        "vec.size", "vec.colour", "vec.linetype", "arrow.size", "label.colour",
-        "label.size", "visual_parameters"),
-        input=input, pObjects=pObjects, rObjects=rObjects)
+    .createProtectedParameterObservers(panel_name, c("dimred",
+        "confidence.level"), input=input, pObjects=pObjects, rObjects=rObjects)
+    
+    .createProtectedParameterObservers(panel_name, c("add.ellipse", "colour_by",
+        "vec.text", "add.vectors", "add.expl.var", "add.significance",
+        "ellipse.alpha", "ellipse.linewidth", "ellipse.linetype", "vec.size",
+        "vec.colour", "vec.linetype", "arrow.size", "label.colour",
+        "label.size", "visual_parameters"), input=input, pObjects=pObjects,
+        rObjects=rObjects)
     
     invisible(NULL)
 })
@@ -210,33 +213,29 @@ setMethod(".generateOutput", "RDAPlot",
     args[["add.expl.var"]] <- deparse(slot(x, "add.expl.var"))
     args[["add.significance"]] <- deparse(slot(x, "add.significance"))
     
-    ifelse ( slot(x, "visual_parameters") == "Vector",
-        args[["vec.size"]] <- deparse(slot(x, "vec.size")), 1)
-    ifelse ( slot(x, "visual_parameters") == "Vector",
-        args[["vec.colour"]] <- deparse(slot(x, "vec.colour")), 1)
-    ifelse ( slot(x, "visual_parameters") == "Vector",
-        args[["vec.linetype"]] <- deparse(slot(x, "vec.linetype")), 1)
-    ifelse ( slot(x, "visual_parameters") == "Vector",
-        args[["vec.text"]] <- deparse(slot(x, "vec.text")), 1)
-    ifelse ( slot(x, "visual_parameters") == "Vector",
-        args[["add.vectors"]] <- deparse(slot(x, "add.vectors")), 1)
+    if( "Vector" %in% slot(x, "visual_parameters") ){
+        args[["vec.size"]] <- deparse(slot(x, "vec.size"))
+        args[["vec.colour"]] <- deparse(slot(x, "vec.colour"))
+        args[["vec.linetype"]] <- deparse(slot(x, "vec.linetype"))
+        args[["vec.text"]] <- deparse(slot(x, "vec.text"))
+        args[["add.vectors"]] <- deparse(slot(x, "add.vectors"))
+    }
     
-    ifelse ( slot(x, "visual_parameters") == "Arrow", 
-        args[["arrow.size"]] <- deparse(slot(x, "arrow.size")), 1)
+    if( "Arrow" %in% slot(x, "visual_parameters") ){
+        args[["arrow.size"]] <- deparse(slot(x, "arrow.size"))
+    }
     
-    ifelse ( slot(x, "visual_parameters") == "Ellipse",
-        args[["ellipse.linewidth"]] <- deparse(slot(x, "ellipse.linewidth")), 1)
-    ifelse ( slot(x, "visual_parameters") == "Ellipse",
-        args[["ellipse.linetype"]] <- deparse(slot(x, "ellipse.linetype")), 1)
-    ifelse ( slot(x, "visual_parameters") == "Ellipse",
-        args[["ellipse.alpha"]] <- deparse(slot(x, "ellipse.alpha")), 1)
-    ifelse ( slot(x, "visual_parameters") == "Ellipse",
-        args[["add.ellipse"]] <- deparse(slot(x, "add.ellipse")), 1)
-    
-    ifelse ( slot(x, "visual_parameters") == "Label",
-        args[["label.colour"]] <- deparse(slot(x, "label.colour")), 1)
-    ifelse ( slot(x, "visual_parameters") == "Label",
-        args[["label.size"]] <- deparse(slot(x, "label.size")), 1)
+    if( "Ellipse" %in% slot(x, "visual_parameters") ){
+        args[["ellipse.linewidth"]] <- deparse(slot(x, "ellipse.linewidth"))
+        args[["ellipse.linetype"]] <- deparse(slot(x, "ellipse.linetype"))
+        args[["ellipse.alpha"]] <- deparse(slot(x, "ellipse.alpha"))
+        args[["add.ellipse"]] <- deparse(slot(x, "add.ellipse"))
+    }
+  
+    if( "Label" %in% slot(x, "visual_parameters") ){
+        args[["label.colour"]] <- deparse(slot(x, "label.colour"))
+        args[["label.size"]] <- deparse(slot(x, "label.size"))
+    }
 
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse=", ")
@@ -274,7 +273,6 @@ setMethod(".hideInterface", "RDAPlot", function(x, field) {
     } else {
         callNextMethod()
     }
-
 })
 
 setMethod(".multiSelectionResponsive", "RDAPlot", function(x, dims = character(0)) {
@@ -389,7 +387,7 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
     collapseBox(paste0(panel_name, "_Visual"),
         title="Visual parameters", open=FALSE,
         
-        .checkboxGroupInput.iSEE(x, field="visual_parameters", label="Visual parameters:",
+        .checkboxGroupInput.iSEE(x, field="visual_parameters", label=NULL,
             inline=TRUE, selected=slot(x, "visual_parameters"),
             choices=c("Vector", "Arrow", "Ellipse", "Label")),
         .selectInput.iSEE(x, field="colour_by", label="Color by",
@@ -402,8 +400,7 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
             paste0(panel_name, "_visual_parameters"), "Label",
             list(
                 .selectInput.iSEE(x, field="label.colour", label="Labels colour",
-                    choices=c("black","purple","pink","blue","green","red",
-                    "yellow","orange"), selected=slot(x, "label.colour")),
+                    choices=rainbow(7), selected=slot(x, "label.colour")),
                 .sliderInput.iSEE(x, field="label.size", label="Labels size",
                     min=2.5, max=5.5, step=0.1, value=slot(x, "label.size")))),
         .conditionalOnCheckGroup(
@@ -426,8 +423,7 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
                 .sliderInput.iSEE(x, field="vec.size", label="Vectors thickness",
                     min=0.01, max=0.99, step=0.01, value=slot(x, "vec.size")),
                 .selectInput.iSEE(x, field="vec.colour", label="Vectors colour",
-                    choices=c("black","purple","pink","blue","green","red",
-                    "yellow","orange"), selected=slot(x, "vec.colour")),
+                    choices=rainbow(7), selected=slot(x, "vec.colour")),
                 .numericInput.iSEE(x, field="vec.linetype", label="Vectors style",
                     value=slot(x, "vec.linetype"), min=1, max=6, step=1))),
         .conditionalOnCheckSolo(paste0(panel_name, "_add.vectors"), TRUE,
