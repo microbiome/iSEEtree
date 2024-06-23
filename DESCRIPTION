@@ -1,9 +1,12 @@
 Package: iSEEtree
-Version: 0.99.0
+Version: 0.99.2
 Authors@R: 
-    person(given = "Giulio", family = "Benedetti", role = c("aut", "cre"),
+    c(person(given = "Giulio", family = "Benedetti", role = c("aut", "cre"),
            email = "giulio.benedetti@utu.fi",
-           comment = c(ORCID = "0000-0002-8732-7692"))
+           comment = c(ORCID = "0000-0002-8732-7692")),
+      person(given = "Ely", family = "Seraidarian", role = c("ctb"),
+             email = "ely.seraidarian@utu.fi",
+             comment = c(ORCID = "0009-0008-8602-093X")))
 Title: Interactive visualisation for microbiome data
 Description:
     iSEEtree is an extension of iSEE for the TreeSummarizedExperiment.
@@ -12,33 +15,34 @@ Description:
     TreeSummarizedExperiment objects. Not surprisingly, it also depends on the
     generic panels from iSEE.
 biocViews: Microbiome, Software, Visualization, DataImport
-License: Artistic-2.0
+License: Artistic-2.0 + file LICENSE
 Encoding: UTF-8
 Depends:
-    R (>= 4.0),
+    R (>= 4.4.0),
     iSEE
 Imports:
+    grDevices,
     methods,
     miaViz,
     S4Vectors,
     shiny,
+    mia,
     shinyWidgets,
     SingleCellExperiment,
     SummarizedExperiment,
-    TreeSummarizedExperiment
+    TreeSummarizedExperiment,
+    utils
 Suggests:
     BiocStyle,
     knitr,
-    mia,
     RefManageR,
     remotes,
     rmarkdown,
     scater,
     testthat (>= 3.0.0),
-    utils,
     vegan
-URL: https://github.com/RiboRings/iSEEtree
-BugReports: https://github.com/RiboRings/iSEEtree/issues
+URL: https://github.com/microbiome/iSEEtree
+BugReports: https://github.com/microbiome/iSEEtree/issues
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 VignetteBuilder: knitr

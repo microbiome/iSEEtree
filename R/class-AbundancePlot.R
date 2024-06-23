@@ -9,6 +9,7 @@
 #' The following slots control the thresholds used in the visualization:
 #' \itemize{
 #' \item \code{rank}, a string specifying the taxonomic rank to visualize.
+#' \item \code{use_relative}, a logical indicating if the relative values should be calculated. 
 #' \item \code{add_legend}, a logical indicating if the color legend should appear.
 #' }
 #'
@@ -40,14 +41,17 @@ NULL
 
 #' @export
 setClass("AbundancePlot", contains="Panel",
-    slots=c(rank="character", add_legend="logical"))
+    slots=c(rank="character", use_relative="logical", add_legend="logical",
+            order_sample_by_row="character", order_sample="character", 
+            decreasing="logical", order_sample_by_column="character"))
 
+#' @importFrom iSEE .singleStringError .validLogicalError
 #' @importFrom S4Vectors setValidity2
 setValidity2("AbundancePlot", function(x) {
     
     msg <- character(0)
     msg <- .singleStringError(msg, x, fields="rank")
-    msg <- .validLogicalError(msg, x, fields="add_legend")
+    msg <- .validLogicalError(msg, x, fields=c("add_legend", "use_relative"))
     
     if( length(msg) ){
         return(msg)
@@ -59,7 +63,12 @@ setValidity2("AbundancePlot", function(x) {
 setMethod("initialize", "AbundancePlot", function(.Object, ...) {
     args <- list(...)
     args <- .emptyDefault(args, "rank", NA_character_)
+    args <- .emptyDefault(args, "order_sample_by_row", NA_character_)
+    args <- .emptyDefault(args, "order_sample_by_column", NA_character_)
     args <- .emptyDefault(args, "add_legend", TRUE)
+    args <- .emptyDefault(args, "use_relative", TRUE)
+    args <- .emptyDefault(args, "decreasing", FALSE)
+    args <- .emptyDefault(args, "order_sample", "None")
     
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -70,21 +79,51 @@ AbundancePlot <- function(...) {
     new("AbundancePlot", ...)
 }
 
+#' @importFrom iSEE .getEncodedName .checkboxInput.iSEE .radioButtons.iSEE
+#'   .conditionalOnRadio .selectInput.iSEE
+#' @importFrom methods slot
+setMethod(".defineDataInterface", "AbundancePlot", function(x, se, select_info) {
+    panel_name <- .getEncodedName(x)
+          
+    list(.checkboxInput.iSEE(x, field="use_relative",
+        label="Use relative values", value=slot(x, "use_relative")),
+        .radioButtons.iSEE(x, field="order_sample", label="Sample order:",
+            inline=TRUE, choices=c("None", "Column data", "Row data"),
+            selected=slot(x, "order_sample")),
+            .conditionalOnRadio(paste0(panel_name, "_order_sample"), "Column data",
+                list(.selectInput.iSEE(x, field="order_sample_by_column",
+                label="Order samples by", choices=names(colData(se)),
+                selected=slot(x, "order_sample_by_column")),
+                .checkboxInput.iSEE(x, field="decreasing",
+                label="Order decreasing", value=slot(x, "decreasing")))),
+            .conditionalOnRadio(paste0(panel_name, "_order_sample"), "Row data",
+                list(.selectInput.iSEE(x, field="order_sample_by_row",
+                label="Order sample by", selected=slot(x, "order_sample_by_row"),
+                choices=.list_taxa(se)),
+                .checkboxInput.iSEE(x, field="decreasing",
+                label="Order decreasing", value=slot(x, "decreasing")))))
+})
+
 #' @importFrom methods callNextMethod
 setMethod(".defineInterface", "AbundancePlot", function(x, se, select_info) {
-    
+     
     out <- callNextMethod()
     list(out[1], .create_visual_box_for_abund_plot(x, se), out[-1])
 })
 
-#' @importMethodsFrom iSEE .createObservers
+#' @importFrom iSEE .getEncodedName .createProtectedParameterObservers 
+#' .createUnprotectedParameterObservers
 setMethod(".createObservers", "AbundancePlot",
     function(x, se, input, session, pObjects, rObjects) {
     
     callNextMethod()
     panel_name <- .getEncodedName(x)
     
-    .createProtectedParameterObservers(panel_name, c("rank", "add_legend"),
+    .createProtectedParameterObservers(panel_name, c("rank", "use_relative",
+        "add_legend"), input=input, pObjects=pObjects, rObjects=rObjects)
+    
+    .createUnprotectedParameterObservers(panel_name, c("decreasing",
+        "order_sample", "order_sample_by_row", "order_sample_by_column"),
         input=input, pObjects=pObjects, rObjects=rObjects)
     
     invisible(NULL)
@@ -125,6 +164,18 @@ setMethod(".generateOutput", "AbundancePlot",
     
     args[["rank"]] <- deparse(slot(x, "rank"))
     args[["add_legend"]] <- deparse(slot(x, "add_legend"))
+    args[["use_relative"]] <- deparse(slot(x, "use_relative"))
+    
+    if( slot(x, "order_sample") == "Column data" ){
+        args[["order_sample_by"]] <- deparse(slot(x, "order_sample_by_column"))
+        args[["decreasing"]] <- deparse(slot(x, "decreasing"))
+    }
+
+    if( slot(x, "order_sample") == "Row data" &&
+        slot(x, "order_sample_by_row") %in% .list_taxa(se)[[slot(x, "rank")]] ){
+        args[["order_sample_by"]] <- deparse(slot(x, "order_sample_by_row"))
+        args[["decreasing"]] <- deparse(slot(x, "decreasing"))
+    }
     
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse=", ")
@@ -195,6 +246,7 @@ setMethod(".definePanelTour", "AbundancePlot", function(x) {
 #' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE
 # .addSpecificTour
 #' @importFrom methods slot
+#' @importFrom mia taxonomyRanks
 #' @importFrom SummarizedExperiment rowData
 .create_visual_box_for_abund_plot <- function(x, se) {
     
@@ -208,15 +260,38 @@ setMethod(".definePanelTour", "AbundancePlot", function(x) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_add_legend"), intro = "Here, we can choose
             whether or not to show a legend.")))})
+    .addSpecificTour(class(x)[1], "use_relative", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_use_relative"), intro = "Here, we can choose
+            whether to use relative or absolute values.")))})
+    .addSpecificTour(class(x)[1], "order_sample", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_order_sample"), intro = "Here, we can choose
+            how to order the abundance plot by.")))})
     
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_Visual"),
         title="Visual parameters", open=FALSE,
-        # Tree layout
+        # Rank
         .selectInput.iSEE(x, field="rank", label="Rank",
-            choices=names(rowData(se)), selected=slot(x, "rank")),
+            choices=taxonomyRanks(se), selected=slot(x, "rank")),
         # Colour legend
         .checkboxInput.iSEE(x, field="add_legend", label="View legend",
             value=slot(x, "add_legend")))
     
+}
+
+#' @importFrom SummarizedExperiment rowData
+#' @importFrom mia taxonomyRanks
+#' @importFrom utils stack
+.list_taxa <- function(se){
+  
+    row_data <- as.data.frame(rowData(se)[ , taxonomyRanks(se)])
+    names(row_data) <- taxonomyRanks(se)
+
+    tax_opts <- unique(stack(row_data))
+    tax_opts <- tax_opts[tax_opts$values != "" & !is.na(tax_opts$ind), ]
+    tax_list <- lapply(split(tax_opts$values, tax_opts$ind), sort)
+
+    return(tax_list)
 }

@@ -25,6 +25,20 @@ The following slots control the thresholds used in the visualization:
 \item \code{colour_by}, a string specifying the parameter to color by.
 \item \code{add.vectors}, a logical indicating if vectors should appear in the plot.
 \item \code{vec.text}, a logical indicating if text should be encased in a box.
+\item \code{confidence.level}, a numeric between 0 and 1 to adjust confidence level.
+\item \code{ellipse.alpha}, a numeric between 0 and 1 t o adjust ellipse opacity.
+\item \code{ellipse.linewidth}, a numeric specifying the size of ellipses.
+\item \code{ellipse.linetype}, a numeric specifying the style of ellipses.
+\item \code{vec.size}, a numeric specifying the size of vectors.
+\item \code{vec.colour}, a string specifying the colour of vectors.
+\item \code{vec.linetype}, a numeric specifying the style of vector lines.
+\item \code{arrow.size}, a numeric specifying the size of arrows.
+\item \code{label.colour}, a string specifying the colour of text and labels.
+\item \code{label.size}, a numeric specifying the size of text and labels.
+\item \code{add.significance}, a logical indicating if variance and p-value
+should appear in the labels.
+\item \code{add.expl.var}, a logical indicating if variance shoud appear
+on the coordinate axes.
 }
 
 In addition, this class inherits all slots from its parent \linkS4class{Panel} class.

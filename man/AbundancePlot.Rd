@@ -22,6 +22,7 @@ to generate the plot.
 The following slots control the thresholds used in the visualization:
 \itemize{
 \item \code{rank}, a string specifying the taxonomic rank to visualize.
+\item \code{use_relative}, a logical indicating if the relative values should be calculated.
 \item \code{add_legend}, a logical indicating if the color legend should appear.
 }
 

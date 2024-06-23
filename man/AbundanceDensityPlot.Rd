@@ -24,6 +24,8 @@ The following slots control the thresholds used in the visualization:
 \item \code{layout}, a string specifying abundance layout (jitter, density or points).
 \item \code{assay.type}, a string specifying the assay to visualize.
 \item \code{n}, a number indicating the number of top taxa to visualize.
+\item \code{flipped}, a logical specifying if the axis should be switched.
+\item \code{order_descending}, a string specifying the descending order.
 }
 
 In addition, this class inherits all slots from its parent \linkS4class{Panel} class.

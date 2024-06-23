@@ -25,12 +25,24 @@ The following slots control the thresholds used in the visualization:
 \itemize{
 \item \code{layout}, a string specifying tree layout
 \item \code{add_legend}, a logical indicating if color legend should appear.
-\item \code{colour_edge}, a string specifying color mapping for tree lines.
-\item \code{colour_edge_by}, a string specifying parameter to color lines by
-when \code{colour_edge = "Row data"}.
-\item \code{colour_tip}, a string specifying color mapping for tree nodes.
-\item \code{colour_tip_by}, a string specifying parameter to color nodes by
-when \code{colour_tip = "Row data"}.
+\item \code{edge_colour_by}, a string specifying parameter to color lines by
+when \code{colour_parameters = "Edge"}.
+\item \code{edge_size_by}, a string specifying parameter to size lines by
+when \code{size_parameters = "Edge"}.
+\item \code{tip_colour_by}, a string specifying parameter to color tips by
+when \code{colour_parameters = "Tip"}.
+\item \code{tip_size_by}, a string specifying parameter to size tips by
+when \code{size_parameters = "Tip"}.
+\item \code{tip_shape_by}, a string specifying parameter to shape tips by
+when \code{shape_parameters = "Tip"}.
+\item \code{node_colour_by}, a string specifying parameter to color nodes by
+when \code{colour_parameters = "Node"}.
+\item \code{node_size_by}, a string specifying parameter to size nodes by
+when \code{size_parameters = "Node"}.
+\item \code{node_shape_by}, a string specifying parameter to shape nodes by
+when \code{shape_parameters = "Node"}.
+\item \code{order_tree}, a logical indicating if tree is ordered by
+alphabetic order of taxonomic levels.
 }
 
 In addition, this class inherits all slots from its parent \linkS4class{Panel} class.

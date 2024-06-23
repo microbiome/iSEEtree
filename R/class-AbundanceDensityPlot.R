@@ -11,6 +11,8 @@
 #' \item \code{layout}, a string specifying abundance layout (jitter, density or points). 
 #' \item \code{assay.type}, a string specifying the assay to visualize.
 #' \item \code{n}, a number indicating the number of top taxa to visualize.
+#' \item \code{flipped}, a logical specifying if the axis should be switched.
+#' \item \code{order_descending}, a string specifying the descending order.
 #' }
 #'
 #' In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
@@ -45,15 +47,17 @@ NULL
 #' @export
 setClass("AbundanceDensityPlot", contains="Panel", slots=c(layout="character",
     assay.type="character", n="numeric", dots_colour="character",
-    dots_colour_by="character", add_legend="logical"))
+    dots_colour_by="character", add_legend="logical", flipped="logical",
+    order_descending="logical", dots_shape="character", dots_shape_by="character"))
 
-#' @importFrom iSEE .singleStringError .validNumberError
+#' @importFrom iSEE .singleStringError .validNumberError .validLogicalError
 #' @importFrom S4Vectors setValidity2
 setValidity2("AbundanceDensityPlot", function(x) {
     msg <- character(0)
     
     msg <- .singleStringError(msg, x, fields=c("layout", "assay.type"))
     msg <- .validNumberError(msg, x, "n", lower=1, upper=Inf)
+    msg <- .validLogicalError(msg, x, fields=c("add_legend", "flipped", "order_descending"))
     
     if( length(msg) ){
         return(msg)
@@ -70,8 +74,12 @@ setMethod("initialize", "AbundanceDensityPlot", function(.Object, ...) {
     args <- .emptyDefault(args, "assay.type", "counts")
     args <- .emptyDefault(args, "n", 5)
     args <- .emptyDefault(args, "add_legend", TRUE)
+    args <- .emptyDefault(args, "flipped", FALSE)
     args <- .emptyDefault(args, "dots_colour", "None")
+    args <- .emptyDefault(args, "dots_shape", "None")
     args <- .emptyDefault(args, "dots_colour_by", NA_character_)
+    args <- .emptyDefault(args, "dots_shape_by", NA_character_)
+    args <- .emptyDefault(args, "order_descending", TRUE)
     
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -82,7 +90,8 @@ AbundanceDensityPlot <- function(...) {
     new("AbundanceDensityPlot", ...)
 }
 
-#' @importFrom iSEE .getEncodedName .selectInput.iSEE .numericInput.iSEE
+#' @importFrom iSEE .getEncodedName .selectInput.iSEE .numericInput.iSEE .checkboxInput.iSEE
+#'  .radioButtons.iSEE .conditionalOnRadio
 #' @importFrom methods slot
 #' @importFrom SummarizedExperiment assayNames
 setMethod(".defineDataInterface", "AbundanceDensityPlot",
@@ -94,7 +103,24 @@ setMethod(".defineDataInterface", "AbundanceDensityPlot",
             choices=assayNames(se), selected=slot(x, "assay.type")),
         # Number of taxa
         .numericInput.iSEE(x, field="n", label="Number of taxa",
-            value=slot(x, "n"), min=1, max=nrow(se), step=1))
+            value=slot(x, "n"), min=1, max=nrow(se), step=1),
+        
+        .checkboxInput.iSEE(x, field="flipped", label="Switch axes",
+            value=slot(x, "flipped")),
+        
+        .checkboxInput.iSEE(x, field="order_descending", label="Order decreasing",
+            value=slot(x, "order_descending")),
+        
+        .radioButtons.iSEE(
+            x, field="dots_shape", label="Dot shape:", inline=TRUE,
+            choices=c("None", "Column data"),
+            selected=slot(x, "dots_shape")),
+        
+        .conditionalOnRadio(
+            paste0(panel_name, "_dots_shape"), "Column data",
+                .selectInput.iSEE(x, field="dots_shape_by",
+                    label="Shape dots by", choices=names(colData(se)), 
+                    selected=slot(x, "dots_shape_by"))))
 })
 
 #' @importFrom methods callNextMethod
@@ -114,11 +140,11 @@ setMethod(".createObservers", "AbundanceDensityPlot",
     panel_name <- .getEncodedName(x)
     
     .createProtectedParameterObservers(panel_name,
-        c("layout", "assay.type", "n", "add_legend"),
+        c("layout", "assay.type", "n", "add_legend", "flipped", "order_descending"),
         input=input, pObjects=pObjects, rObjects=rObjects)
     
     .createUnprotectedParameterObservers(panel_name,
-        c("dots_colour", "dots_colour_by"),
+        c("dots_colour", "dots_colour_by", "dots_shape", "dots_shape_by"),
         input=input, pObjects=pObjects, rObjects=rObjects)
     
     invisible(NULL)
@@ -164,6 +190,8 @@ setMethod(".generateOutput", "AbundanceDensityPlot",
     args[["layout"]] <- deparse(slot(x, "layout"))
     args[["add_legend"]] <- deparse(slot(x, "add_legend"))
     args[["assay.type"]] <- deparse(slot(x, "assay.type"))
+    args[["flipped"]] <- deparse(slot(x , "flipped"))
+    args[["order_descending"]] <- deparse(slot(x, "order_descending"))
     
     if( is.na(slot(x, "n")) || slot(x, "n") <= 0 ){
         args[["n"]] <- 5
@@ -175,6 +203,10 @@ setMethod(".generateOutput", "AbundanceDensityPlot",
     
     if( slot(x, "dots_colour") == "Column data" ){
         args[["colour_by"]] <- deparse(slot(x, "dots_colour_by"))
+    }
+    
+    if (slot(x, "dots_shape") == "Column data") {
+        args[["shape_by"]] <- deparse(slot(x, "dots_shape_by"))
     }
     
     args <- sprintf("%s=%s", names(args), args)
@@ -243,7 +275,7 @@ setMethod(".definePanelTour", "AbundanceDensityPlot", function(x) {
 })
 
 #' @importFrom iSEE .getEncodedName collapseBox .selectInput.iSEE
-#'   .radioButtons.iSEE .conditionalOnRadio
+#'   .radioButtons.iSEE .conditionalOnRadio .checkboxInput.iSEE
 #' @importFrom methods slot
 #' @importFrom SummarizedExperiment colData
 .create_visual_box_for_abunddens_plot <- function(x, se) {
@@ -264,7 +296,7 @@ setMethod(".definePanelTour", "AbundanceDensityPlot", function(x) {
             whether or not to show colors.")))})
     .addSpecificTour(class(x)[1], "dots_colour_by", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_dots_colour_by"), intro = "Here, we can choose
+            "_dots_colour_by + .selectize-control"), intro = "Here, we can choose
             the way you want to map the colors.")))})
     .addSpecificTour(class(x)[1], "assay.type", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
@@ -274,6 +306,24 @@ setMethod(".definePanelTour", "AbundanceDensityPlot", function(x) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_n"), intro = "Here, we can choose
             the number of taxa to be selected.")))})
+    .addSpecificTour(class(x)[1], "flipped", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_flipped"), intro = "Here, we can choose
+            whether or not to switch the axis.")))})
+    .addSpecificTour(class(x)[1], "order_descending", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_order_descending"), intro = "Here, we can choose
+            whether or not to use descending order.
+            If NA uses the order found in the <code>SummarizedExperiment</code>
+            object.")))})
+    .addSpecificTour(class(x)[1], "dots_shape", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_dots_shape"), intro = "Here, we can choose
+            whether or not to change points shape.")))})
+    .addSpecificTour(class(x)[1], "dots_shape_by", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_dots_shape_by"), intro = "Here, we can choose
+            to group by the different point shape groups.")))})
     
     # Define what parameters the user can adjust
     collapseBox(
@@ -291,8 +341,7 @@ setMethod(".definePanelTour", "AbundanceDensityPlot", function(x) {
                 selected=slot(x, "dots_colour")),
             .conditionalOnRadio(
                 paste0(panel_name, "_dots_colour"), "Column data",
-                iSEE:::.selectInputHidden(x, field="dots_colour_by",
-                    label="Color dots by", choices=names(colData(se)), 
-                    selected=slot(x, "dots_colour_by"))))
-    
+                    .selectInput.iSEE(x, field="dots_colour_by",
+                        label="Color dots by", choices=names(colData(se)), 
+                        selected=slot(x, "dots_colour_by"))))
 }
