@@ -22,7 +22,7 @@ to generate the plot."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEtree</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.2</span>
       </span>
     </div>
 
@@ -34,7 +34,7 @@ to generate the plot."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/RiboRings/iSEEtree/" class="external-link">
+  <a href="https://github.com/microbiome/iSEEtree/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -49,7 +49,7 @@ to generate the plot."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>RDA plot</h1>
-    <small class="dont-index">Source: <a href="https://github.com/RiboRings/iSEEtree/blob/HEAD/R/class-RDAPlot.R" class="external-link"><code>R/class-RDAPlot.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/microbiome/iSEEtree/blob/HEAD/R/class-RDAPlot.R" class="external-link"><code>R/class-RDAPlot.R</code></a></small>
     <div class="hidden name"><code>RDAPlot.Rd</code></div>
     </div>
 
@@ -78,6 +78,20 @@ where any slot and its value can be passed to <code>...</code> as a named argume
 <li><p><code>colour_by</code>, a string specifying the parameter to color by.</p></li>
 <li><p><code>add.vectors</code>, a logical indicating if vectors should appear in the plot.</p></li>
 <li><p><code>vec.text</code>, a logical indicating if text should be encased in a box.</p></li>
+<li><p><code>confidence.level</code>, a numeric between 0 and 1 to adjust confidence level.</p></li>
+<li><p><code>ellipse.alpha</code>, a numeric between 0 and 1 t o adjust ellipse opacity.</p></li>
+<li><p><code>ellipse.linewidth</code>, a numeric specifying the size of ellipses.</p></li>
+<li><p><code>ellipse.linetype</code>, a numeric specifying the style of ellipses.</p></li>
+<li><p><code>vec.size</code>, a numeric specifying the size of vectors.</p></li>
+<li><p><code>vec.colour</code>, a string specifying the colour of vectors.</p></li>
+<li><p><code>vec.linetype</code>, a numeric specifying the style of vector lines.</p></li>
+<li><p><code>arrow.size</code>, a numeric specifying the size of arrows.</p></li>
+<li><p><code>label.colour</code>, a string specifying the colour of text and labels.</p></li>
+<li><p><code>label.size</code>, a numeric specifying the size of text and labels.</p></li>
+<li><p><code>add.significance</code>, a logical indicating if variance and p-value
+should appear in the labels.</p></li>
+<li><p><code>add.expl.var</code>, a logical indicating if variance shoud appear
+on the coordinate axes.</p></li>
 </ul><p>In addition, this class inherits all slots from its parent <a href="https://rdrr.io/pkg/iSEE/man/Panel-class.html" class="external-link">Panel</a> class.</p>
     </div>
     <div id="author">

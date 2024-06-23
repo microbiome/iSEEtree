@@ -20,7 +20,7 @@ to generate the plot."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEtree</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.2</span>
       </span>
     </div>
 
@@ -32,7 +32,7 @@ to generate the plot."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/RiboRings/iSEEtree/" class="external-link">
+  <a href="https://github.com/microbiome/iSEEtree/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -47,7 +47,7 @@ to generate the plot."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Abundance density plot</h1>
-    <small class="dont-index">Source: <a href="https://github.com/RiboRings/iSEEtree/blob/HEAD/R/class-AbundanceDensityPlot.R" class="external-link"><code>R/class-AbundanceDensityPlot.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/microbiome/iSEEtree/blob/HEAD/R/class-AbundanceDensityPlot.R" class="external-link"><code>R/class-AbundanceDensityPlot.R</code></a></small>
     <div class="hidden name"><code>AbundanceDensityPlot.Rd</code></div>
     </div>
 
@@ -74,6 +74,8 @@ AbundanceDensityPlot class, where any slot and its value can be passed to
 <p>The following slots control the thresholds used in the visualization:</p><ul><li><p><code>layout</code>, a string specifying abundance layout (jitter, density or points).</p></li>
 <li><p><code>assay.type</code>, a string specifying the assay to visualize.</p></li>
 <li><p><code>n</code>, a number indicating the number of top taxa to visualize.</p></li>
+<li><p><code>flipped</code>, a logical specifying if the axis should be switched.</p></li>
+<li><p><code>order_descending</code>, a string specifying the descending order.</p></li>
 </ul><p>In addition, this class inherits all slots from its parent <a href="https://rdrr.io/pkg/iSEE/man/Panel-class.html" class="external-link">Panel</a> class.</p>
     </div>
     <div id="author">

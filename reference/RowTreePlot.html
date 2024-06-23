@@ -22,7 +22,7 @@ to generate the plot."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEtree</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.2</span>
       </span>
     </div>
 
@@ -34,7 +34,7 @@ to generate the plot."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/RiboRings/iSEEtree/" class="external-link">
+  <a href="https://github.com/microbiome/iSEEtree/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -49,7 +49,7 @@ to generate the plot."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Row tree plot</h1>
-    <small class="dont-index">Source: <a href="https://github.com/RiboRings/iSEEtree/blob/HEAD/R/class-RowTreePlot.R" class="external-link"><code>R/class-RowTreePlot.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/microbiome/iSEEtree/blob/HEAD/R/class-RowTreePlot.R" class="external-link"><code>R/class-RowTreePlot.R</code></a></small>
     <div class="hidden name"><code>RowTreePlot.Rd</code></div>
     </div>
 
@@ -77,12 +77,24 @@ argument.</p>
 
 <p>The following slots control the thresholds used in the visualization:</p><ul><li><p><code>layout</code>, a string specifying tree layout</p></li>
 <li><p><code>add_legend</code>, a logical indicating if color legend should appear.</p></li>
-<li><p><code>colour_edge</code>, a string specifying color mapping for tree lines.</p></li>
-<li><p><code>colour_edge_by</code>, a string specifying parameter to color lines by
-when <code>colour_edge = "Row data"</code>.</p></li>
-<li><p><code>colour_tip</code>, a string specifying color mapping for tree nodes.</p></li>
-<li><p><code>colour_tip_by</code>, a string specifying parameter to color nodes by
-when <code>colour_tip = "Row data"</code>.</p></li>
+<li><p><code>edge_colour_by</code>, a string specifying parameter to color lines by
+when <code>colour_parameters = "Edge"</code>.</p></li>
+<li><p><code>edge_size_by</code>, a string specifying parameter to size lines by
+when <code>size_parameters = "Edge"</code>.</p></li>
+<li><p><code>tip_colour_by</code>, a string specifying parameter to color tips by
+when <code>colour_parameters = "Tip"</code>.</p></li>
+<li><p><code>tip_size_by</code>, a string specifying parameter to size tips by
+when <code>size_parameters = "Tip"</code>.</p></li>
+<li><p><code>tip_shape_by</code>, a string specifying parameter to shape tips by
+when <code>shape_parameters = "Tip"</code>.</p></li>
+<li><p><code>node_colour_by</code>, a string specifying parameter to color nodes by
+when <code>colour_parameters = "Node"</code>.</p></li>
+<li><p><code>node_size_by</code>, a string specifying parameter to size nodes by
+when <code>size_parameters = "Node"</code>.</p></li>
+<li><p><code>node_shape_by</code>, a string specifying parameter to shape nodes by
+when <code>shape_parameters = "Node"</code>.</p></li>
+<li><p><code>order_tree</code>, a logical indicating if tree is ordered by
+alphabetic order of taxonomic levels.</p></li>
 </ul><p>In addition, this class inherits all slots from its parent <a href="https://rdrr.io/pkg/iSEE/man/Panel-class.html" class="external-link">Panel</a> class.</p>
     </div>
     <div id="author">
