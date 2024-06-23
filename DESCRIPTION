@@ -1,5 +1,5 @@
 Package: iSEEtree
-Version: 0.99.1
+Version: 0.99.2
 Authors@R: 
     c(person(given = "Giulio", family = "Benedetti", role = c("aut", "cre"),
            email = "giulio.benedetti@utu.fi",
@@ -18,7 +18,7 @@ biocViews: Microbiome, Software, Visualization, DataImport
 License: Artistic-2.0 + file LICENSE
 Encoding: UTF-8
 Depends:
-    R (>= 4.0),
+    R (>= 4.4.0),
     iSEE
 Imports:
     grDevices,
