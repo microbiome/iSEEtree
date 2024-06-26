@@ -154,6 +154,39 @@ setMethod(".defineInterface", "RDAPlot", function(x, se, select_info) {
     list(out[1], .create_visual_box_for_rda(x, se), out[-1])
 })
 
+#' @export
+#' @importFrom methods callNextMethod
+#' @importFrom SummarizedExperiment colData
+setMethod(".cacheCommonInfo", "RDAPlot", function(x, se) {
+  if (!is.null(.getCachedCommonInfo(se, "RDAPlot"))) {
+    return(se)
+  }
+  
+  se <- callNextMethod()
+  
+  df <- colData(se)
+  displayable <- .findAtomicFields(df)
+  
+  .setCachedCommonInfo(se, "RDAPlot",
+      valid.colData.names=displayable)
+})
+
+#' @export
+#' @importFrom methods callNextMethod
+setMethod(".refineParameters", "RDAPlot", function(x, se) {
+  x <- callNextMethod()
+  if (is.null(x)) {
+    return(NULL)
+  }
+  
+  rdap_cached <- .getCachedCommonInfo(se, "RDAPlot")
+  
+  available <- rdap_cached$valid.colData.names
+  x <- .replaceMissingWithFirst(x, "colour_by", available)
+  
+  x
+})
+
 #' @importFrom iSEE .getEncodedName .createProtectedParameterObservers
 setMethod(".createObservers", "RDAPlot",
     function(x, se, input, session, pObjects, rObjects) {

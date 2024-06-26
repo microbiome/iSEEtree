@@ -82,6 +82,7 @@ AbundancePlot <- function(...) {
 #' @importFrom iSEE .getEncodedName .checkboxInput.iSEE .radioButtons.iSEE
 #'   .conditionalOnRadio .selectInput.iSEE
 #' @importFrom methods slot
+#' @importFrom SummarizedExperiment colData
 setMethod(".defineDataInterface", "AbundancePlot", function(x, se, select_info) {
     panel_name <- .getEncodedName(x)
           
@@ -113,19 +114,27 @@ setMethod(".defineInterface", "AbundancePlot", function(x, se, select_info) {
 
 #' @export
 #' @importFrom methods callNextMethod
-#' @importFrom SummarizedExperiment rowData
-setMethod(".cacheCommonInfo", "AbundancePlot", function(x, se) {
-  if (!is.null(.getCachedCommonInfo(se, "AbundancePlot"))) {
-    return(se)
-  }
-  
-  se <- callNextMethod()
-  
-  df <- rowData(se)
-  displayable <- .findAtomicFields(df)
-  
-  .setCachedCommonInfo(se, "AbundancePlot",
-      valid.rowData.names=displayable)
+#' @importFrom SummarizedExperiment rowData colData
+setMethod(".cacheCommonInfo", "AbundancePlot", 
+    function(x, se) {
+      
+    if (!is.null(.getCachedCommonInfo(se, "AbundancePlot"))) {
+        return(se)
+    }
+
+    se <- callNextMethod()
+    
+    df <- rowData(se)
+    displayable <- .findAtomicFields(df)
+    
+    .setCachedCommonInfo(se, "AbundancePlot",
+        valid.rowData.names=displayable)
+    
+    df <- colData(se)
+    displayable <- .findAtomicFields(df)
+    
+    .setCachedCommonInfo(se, "AbundancePlot",
+        valid.colData.names=displayable)
 })
 
 #' @export
@@ -136,9 +145,12 @@ setMethod(".refineParameters", "AbundancePlot", function(x, se) {
     return(NULL)
   }
   
-  ap_cached <- .getCachedCommonInfo(se, "RowDotPlot")
+  ap_cached <- .getCachedCommonInfo(se, "AbundancePlot")
   
   available <- ap_cached$valid.rowData.names
+  x <- .replaceMissingWithFirst(x, "order_sample_by_row", available)
+  available <- ap_cached$valid.colData.names
+  x <- .replaceMissingWithFirst(x, "order_sample_by_column", available)
   
   x
 })

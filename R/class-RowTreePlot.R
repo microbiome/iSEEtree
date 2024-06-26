@@ -129,6 +129,49 @@ setMethod(".defineInterface", "RowTreePlot", function(x, se, select_info) {
     list(out[1], .create_visual_box_for_rowtree(x, se), out[-1])
 })
 
+#' @export
+#' @importFrom methods callNextMethod
+#' @importFrom SummarizedExperiment rowData
+setMethod(".cacheCommonInfo", "RowTreePlot", 
+    function(x, se) {
+            
+    if (!is.null(.getCachedCommonInfo(se, "RowTreePlot"))) {
+        return(se)
+    }
+            
+    se <- callNextMethod()
+            
+    df <- rowData(se)
+    displayable <- .findAtomicFields(df)
+            
+    .setCachedCommonInfo(se, "RowTreePlot",
+        valid.rowData.names=displayable)
+    
+})
+
+#' @export
+#' @importFrom methods callNextMethod
+setMethod(".refineParameters", "RowTreePlot", function(x, se) {
+  x <- callNextMethod()
+  if (is.null(x)) {
+    return(NULL)
+  }
+  
+  rtp_cached <- .getCachedCommonInfo(se, "RowTreePlot")
+  
+  available <- rtp_cached$valid.rowData.names
+  x <- .replaceMissingWithFirst(x, "tip_colour_by", available)
+  x <- .replaceMissingWithFirst(x, "tip_shape_by", available)
+  x <- .replaceMissingWithFirst(x, "tip_size_by", available)
+  x <- .replaceMissingWithFirst(x, "node_colour_by", available)
+  x <- .replaceMissingWithFirst(x, "node_size_by", available)
+  x <- .replaceMissingWithFirst(x, "node_shape_by", available)
+  x <- .replaceMissingWithFirst(x, "edge_size_by", available)
+  x <- .replaceMissingWithFirst(x, "edge_colour_by", available)
+  
+  x
+})
+
 #' @importFrom iSEE .getEncodedName .createProtectedParameterObservers
 #'   .createUnprotectedParameterObservers
 setMethod(".createObservers", "RowTreePlot",
@@ -289,7 +332,7 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
 
 #' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE
 #'   .radioButtons.iSEE .conditionalOnRadio .addSpecificTour
-#' @importFrom SummarizedExperiment rowData assayNames
+#' @importFrom SummarizedExperiment rowData
 #' @importFrom TreeSummarizedExperiment rowTreeNames
 .create_visual_box_for_rowtree <- function(x, se) {
     panel_name <- .getEncodedName(x)
