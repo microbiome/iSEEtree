@@ -7,3 +7,10 @@ Changes in version 0.1.4
 
 Changes in version 0.99.0
 * Submitted to Bioconductor
+
+Changes in version 0.99.2
+* Extended data params for all panels
+* Extended viz params for RDAPlot and RowTreePlot
+
+Changes in version 0.99.3
+* Added .exportOutput method
