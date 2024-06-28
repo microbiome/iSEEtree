@@ -205,15 +205,18 @@ setMethod(".renderOutput", "AbundancePlot",
     callNextMethod()
 })
 
-#' @export
 #' @importFrom grDevices pdf dev.off
 setMethod(".exportOutput", "AbundancePlot",
     function(x, se, all_memory, all_contents) {
             
-    contents <- .generateOutput(x, se, all_memory=all_memory, all_contents=all_contents)
+    contents <- .generateOutput(x, se, all_memory=all_memory,
+        all_contents=all_contents)
+    
     newpath <- paste0(.getEncodedName(x), ".pdf")
             
-    pdf(newpath, width=slot(x, "PanelHeight")/75, height=slot(x, "PanelWidth")*2)
+    pdf(newpath, width=slot(x, "PanelHeight") / 75,
+        height=slot(x, "PanelWidth") * 2)
+    
     print(contents$plot)
     dev.off()
             
