@@ -232,6 +232,21 @@ setMethod(".renderOutput", "RowTreePlot",
     callNextMethod()
 })
 
+#' @export
+#' @importFrom grDevices pdf dev.off
+setMethod(".exportOutput", "RowTreePlot",
+    function(x, se, all_memory, all_contents) {
+      
+    contents <- .generateOutput(x, se, all_memory=all_memory, all_contents=all_contents)
+    newpath <- paste0(.getEncodedName(x), ".pdf")
+      
+    pdf(newpath, width=slot(x, "PanelHeight")/75, height=slot(x, "PanelWidth")*2)
+    print(contents$plot)
+    dev.off()
+    
+    newpath
+})
+
 #' @importFrom methods callNextMethod
 setMethod(".hideInterface", "RowTreePlot", function(x, field) {
     
@@ -274,7 +289,7 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
 
 #' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE
 #'   .radioButtons.iSEE .conditionalOnRadio .addSpecificTour
-#' @importFrom SummarizedExperiment rowData assayNames
+#' @importFrom SummarizedExperiment rowData
 #' @importFrom TreeSummarizedExperiment rowTreeNames
 .create_visual_box_for_rowtree <- function(x, se) {
     panel_name <- .getEncodedName(x)

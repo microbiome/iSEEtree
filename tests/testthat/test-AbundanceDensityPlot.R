@@ -28,4 +28,16 @@ test_that("AbundanceDensityPlot", {
   expect_s3_class(.create_visual_box_for_abunddens_plot(panel, tse),
                   "shiny.tag.list")
   
+  output <- new.env()
+  pObjects <- new.env()
+  rObjects <- new.env()
+
+  expect_null(.renderOutput(panel, tse, output = output, pObjects = pObjects, rObjects = rObjects))
+  expect_s3_class(output$AbundanceDensityPlotNA, "shiny.render.function")
+  expect_s3_class(output$AbundanceDensityPlotNA_INTERNAL_PanelMultiSelectInfo, "shiny.render.function")
+  expect_s3_class(output$AbundanceDensityPlotNA_INTERNAL_PanelSelectLinkInfo, "shiny.render.function")
+
+  
 })
+
+

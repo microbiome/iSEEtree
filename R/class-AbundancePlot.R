@@ -82,6 +82,7 @@ AbundancePlot <- function(...) {
 #' @importFrom iSEE .getEncodedName .checkboxInput.iSEE .radioButtons.iSEE
 #'   .conditionalOnRadio .selectInput.iSEE
 #' @importFrom methods slot
+#' @importFrom SummarizedExperiment colData
 setMethod(".defineDataInterface", "AbundancePlot", function(x, se, select_info) {
     panel_name <- .getEncodedName(x)
           
@@ -92,7 +93,7 @@ setMethod(".defineDataInterface", "AbundancePlot", function(x, se, select_info) 
             selected=slot(x, "order_sample")),
             .conditionalOnRadio(paste0(panel_name, "_order_sample"), "Column data",
                 list(.selectInput.iSEE(x, field="order_sample_by_column",
-                label="Order samples by", choices=names(colData(se)),
+                label="Order sample by", choices=names(colData(se)),
                 selected=slot(x, "order_sample_by_column")),
                 .checkboxInput.iSEE(x, field="decreasing",
                 label="Order decreasing", value=slot(x, "decreasing")))),
@@ -204,6 +205,21 @@ setMethod(".renderOutput", "AbundancePlot",
     callNextMethod()
 })
 
+#' @export
+#' @importFrom grDevices pdf dev.off
+setMethod(".exportOutput", "AbundancePlot",
+    function(x, se, all_memory, all_contents) {
+            
+    contents <- .generateOutput(x, se, all_memory=all_memory, all_contents=all_contents)
+    newpath <- paste0(.getEncodedName(x), ".pdf")
+            
+    pdf(newpath, width=slot(x, "PanelHeight")/75, height=slot(x, "PanelWidth")*2)
+    print(contents$plot)
+    dev.off()
+            
+    newpath
+})
+
 #' @importFrom methods callNextMethod
 setMethod(".hideInterface", "AbundancePlot", function(x, field) {
     if( field %in% c("SelectionHistory", "RowSelectionRestrict",
@@ -268,6 +284,19 @@ setMethod(".definePanelTour", "AbundancePlot", function(x) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_order_sample"), intro = "Here, we can choose
             how to order the abundance plot by.")))})
+    .addSpecificTour(class(x)[1], "decreasing", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_decreasing"), intro = "Here, we can choose
+            whether or not to plot by decreasing order.")))})
+    .addSpecificTour(class(x)[1], "order_sample_by_row", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_order_sample_by_row + .selectize-control"), intro = "Here, we can
+            choose a variable from the <code>rowData</code> to order the plot by.
+            It has to be part of the rank selected in the Visual Parameters.")))})
+    .addSpecificTour(class(x)[1], "order_sample_by_column", function(panel_name) {
+      data.frame(rbind(c(element = paste0("#", panel_name,
+            "_order_sample_by_column + .selectize-control"), intro = "Here, we can
+            choose a variable from the <code>colData</code> to order the plot by.")))})
     
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_Visual"),
