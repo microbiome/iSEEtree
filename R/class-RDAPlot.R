@@ -272,7 +272,7 @@ setMethod(".exportOutput", "RDAPlot",
     contents <- .generateOutput(x, se, all_memory=all_memory, all_contents=all_contents)
     newpath <- paste0(.getEncodedName(x), ".pdf")
             
-    pdf(newpath, width=slot(x, .organizationHeight)/75, height=slot(x, .organizationWidth)*2)
+    pdf(newpath, width=slot(x, "PanelHeight")/75, height=slot(x, "PanelWidth")*2)
     print(contents$plot)
     dev.off()
             
