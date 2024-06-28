@@ -112,49 +112,6 @@ setMethod(".defineInterface", "AbundancePlot", function(x, se, select_info) {
     list(out[1], .create_visual_box_for_abund_plot(x, se), out[-1])
 })
 
-#' @export
-#' @importFrom methods callNextMethod
-#' @importFrom SummarizedExperiment rowData colData
-setMethod(".cacheCommonInfo", "AbundancePlot", 
-    function(x, se) {
-      
-    if (!is.null(.getCachedCommonInfo(se, "AbundancePlot"))) {
-        return(se)
-    }
-
-    se <- callNextMethod()
-    
-    df <- rowData(se)
-    displayable <- .findAtomicFields(df)
-    
-    .setCachedCommonInfo(se, "AbundancePlot",
-        valid.rowData.names=displayable)
-    
-    df <- colData(se)
-    displayable <- .findAtomicFields(df)
-    
-    .setCachedCommonInfo(se, "AbundancePlot",
-        valid.colData.names=displayable)
-})
-
-#' @export
-#' @importFrom methods callNextMethod
-setMethod(".refineParameters", "AbundancePlot", function(x, se) {
-  x <- callNextMethod()
-  if (is.null(x)) {
-    return(NULL)
-  }
-  
-  ap_cached <- .getCachedCommonInfo(se, "AbundancePlot")
-  
-  available <- ap_cached$valid.rowData.names
-  x <- .replaceMissingWithFirst(x, "order_sample_by_row", available)
-  available <- ap_cached$valid.colData.names
-  x <- .replaceMissingWithFirst(x, "order_sample_by_column", available)
-  
-  x
-})
-
 #' @importFrom iSEE .getEncodedName .createProtectedParameterObservers 
 #' .createUnprotectedParameterObservers
 setMethod(".createObservers", "AbundancePlot",

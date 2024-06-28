@@ -34,5 +34,14 @@ test_that("RDAPlot", {
       c("#RDAPlotNA_SelectionBoxOpen"))
   
   expect_s3_class(.create_visual_box_for_rda(panel, tse), "shiny.tag.list")
+  
+  output <- new.env()
+  pObjects <- new.env()
+  rObjects <- new.env()
+  
+  expect_null(.renderOutput(panel, tse, output = output, pObjects = pObjects, rObjects = rObjects))
+  expect_s3_class(output$RDAPlotNA, "shiny.render.function")
+  expect_s3_class(output$RDAPlotNA_INTERNAL_PanelMultiSelectInfo, "shiny.render.function")
+  expect_s3_class(output$RDAPlotNA_INTERNAL_PanelSelectLinkInfo, "shiny.render.function")
 
 })

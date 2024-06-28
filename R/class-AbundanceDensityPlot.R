@@ -131,48 +131,6 @@ setMethod(".defineInterface", "AbundanceDensityPlot",
     list(out[1], .create_visual_box_for_abunddens_plot(x, se), out[-1])
 })
 
-#' @export
-#' @importFrom methods callNextMethod
-#' @importFrom SummarizedExperiment assayNames colData
-setMethod(".cacheCommonInfo", "AbundanceDensityPlot", 
-    function(x, se) {
-            
-    if (!is.null(.getCachedCommonInfo(se, "AbundanceDensityPlot"))) {
-        return(se)
-    }
-            
-    se <- callNextMethod()
-            
-    df <- colData(se)
-    displayable <- .findAtomicFields(df)
-            
-    .setCachedCommonInfo(se, "AbundanceDensityPlot",
-        valid.colData.names=displayable)
-    
-    .setCachedCommonInfo(se, "AbundanceDensityPlot",
-        valid.assay.names=assayNames(se))
-    
-})
-
-#' @export
-#' @importFrom methods callNextMethod
-setMethod(".refineParameters", "AbundanceDensityPlot", function(x, se) {
-  x <- callNextMethod()
-  if (is.null(x)) {
-    return(NULL)
-  }
-  
-  adp_cached <- .getCachedCommonInfo(se, "AbundanceDensityPlot")
-  
-  available <- adp_cached$valid.assay.names
-  x <- .replaceMissingWithFirst(x, "assay.type", available)
-  available <- adp_cached$valid.colData.names
-  x <- .replaceMissingWithFirst(x, "dots_colour_by", available)
-  x <- .replaceMissingWithFirst(x, "dots_shape_by", available)
-  
-  x
-})
-
 #' @importFrom iSEE .getEncodedName .createProtectedParameterObservers
 #'   .createUnprotectedParameterObservers
 setMethod(".createObservers", "AbundanceDensityPlot",
