@@ -11,13 +11,27 @@ objects which facilitate the interactive visualisation of microbiome data in
 [_iSEE_](https://isee.github.io/).
 
 ## Installation instructions
-The development version of iSEEtree can be installed from GitHub as follow:
+The release version of iSEEtree can be installed from Bioconductor as follows:
 
 ```
-remotes::install_github("microbiome/iSEEtree")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("iSEEtree")
 ```
 
-In the future, this package may be submitted to Bioconductor.
+Contributors or users interested in the latest functionality can install the
+devel version of iSEEtree as follows:
+
+```
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+# The following initializes usage of Bioc devel
+BiocManager::install(version='devel')
+
+BiocManager::install("mia")
+```
 
 ## Example
 The basic functionality of iSEEtree can be explored as follows:
@@ -70,8 +84,7 @@ This package was developed using
 ## Code of Conduct
 Please note that the iSEEtree project is released with a
 [Contributor Code of Conduct](https://bioconductor.org/about/code-of-conduct/).
-By contributing to this project, you agree to abide by its terms. If you come
-across a bug or see potential for improvement, feel free to open an issue and we
-will plan the next move. is missing or could be improved. If you are interested
-in contributing, you can check [our issues](https://github.com/microbiome/iSEEtree/issues)
-and try to find a solution. Either way, contributions are very much appreciated.
+By contributing to this project, you agree to abide by its terms. Contributions
+are welcome in the form of feedback, issues and pull requests. You can find the
+contributor guidelines of the miaverse
+[here](https://github.com/microbiome/mia/blob/devel/CONTRIBUTING.md).

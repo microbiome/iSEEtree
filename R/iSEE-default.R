@@ -3,6 +3,12 @@
 #' Panel configuration tuned to the specific properties of
 #' \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}.
 #' 
+#' @usage
+#' See \code{\link[iSEE:iSEE]}.
+#' 
+#' @inheritDotParams iSEE::iSEE
+#' @inherit iSEE::iSEE details sections
+#' 
 #' @return
 #' The iSEE method for the TreeSE container returns a default set of panels
 #' typically relevant for microbiome data. This configuration can be modified
@@ -38,10 +44,8 @@
 #' }
 #' 
 #' @docType methods
-#' @aliases iSEE
-#'   iSEE,TreeSummarizedExperiment-method
-#'
-#' @name iSEE-default
+#' @aliases iSEE,TreeSummarizedExperiment-method
+#' @name iSEE
 NULL
 
 #' @export
