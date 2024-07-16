@@ -15,7 +15,7 @@ Description:
     TreeSummarizedExperiment objects. Not surprisingly, it also depends on the
     generic panels from iSEE.
 biocViews: Microbiome, Software, Visualization, DataImport
-License: Artistic-2.0 + file LICENSE
+License: Artistic-2.0
 Encoding: UTF-8
 Depends:
     R (>= 4.4.0),
