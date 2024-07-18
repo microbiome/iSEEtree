@@ -3,11 +3,13 @@
 #' Panel configuration tuned to the specific properties of
 #' \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}.
 #' 
+#' @inherit iSEE::iSEE params details sections
+#' 
 #' @return
 #' The iSEE method for the TreeSE container returns a default set of panels
 #' typically relevant for microbiome data. This configuration can be modified
-#' by defining a different set of initial panels. By default, the visualised
-#' panels include the following:
+#' by defining a different set of initial panels. By default, the interface
+#' includes the following panels:
 #' \itemize{
 #' \item \code{RowDataTable()}
 #' \item \code{ColumnDataTable()}
@@ -38,12 +40,11 @@
 #' }
 #' 
 #' @docType methods
-#' @aliases iSEE
-#'   iSEE,TreeSummarizedExperiment-method
-#'
-#' @name iSEE-default
+#' @aliases iSEE,TreeSummarizedExperiment-method
+#' @name iSEE
 NULL
 
+#' @rdname iSEE
 #' @export
 setGeneric("iSEE", iSEE::iSEE)
 

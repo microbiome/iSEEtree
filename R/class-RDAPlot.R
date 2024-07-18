@@ -50,9 +50,14 @@
 #'               distance = "bray",
 #'               na.action = na.exclude)
 #'
-#' # Launch iSEE with custom initial panels
+#' # Store panel into object
+#' panel <- RDAPlot()
+#' # View some adjustable parameters
+#' head(slotNames(panel))
+#'
+#' # Launch iSEE with custom initial panel
 #' if (interactive()) {
-#'   iSEE(tse, initial = c(RDAPlot()))
+#'   iSEE(tse, initial = c(panel))
 #' }
 #' 
 #' #' @docType methods
