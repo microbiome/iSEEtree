@@ -74,9 +74,19 @@
 <div class="section level2">
 <h2 id="installation-instructions">Installation instructions<a class="anchor" aria-label="anchor" href="#installation-instructions"></a>
 </h2>
-<p>The development version of iSEEtree can be installed from GitHub as follow:</p>
-<pre><code><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"microbiome/iSEEtree"</span><span class="op">)</span></span></code></pre>
-<p>In the future, this package may be submitted to Bioconductor.</p>
+<p>The release version of iSEEtree can be installed from Bioconductor as follows:</p>
+<pre><code><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"iSEEtree"</span><span class="op">)</span></span></code></pre>
+<p>Contributors or users interested in the latest functionality can install the devel version of iSEEtree as follows:</p>
+<pre><code><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># The following initializes usage of Bioc devel</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span>version<span class="op">=</span><span class="st">'devel'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"mia"</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
@@ -98,7 +108,7 @@
 <span></span>
 <span><span class="co"># Launch iSEE</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="reference/iSEE-default.html">iSEE</a></span><span class="op">(</span><span class="va">tse</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="reference/iSEE.html">iSEE</a></span><span class="op">(</span><span class="va">tse</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
 <p>Please note that iSEEtree was only made possible thanks to many other R and bioinformatics software authors, which are cited either in the vignettes and/or the paper(s) describing this package. In particular, iSEEtree implements the <a href="https://microbiome.github.io/miaViz/" class="external-link"><em>miaViz</em></a> package for microbiome data visualisation to create panels that are specific for TreeSummarizedExperiment objects. Not surprisingly, it also depends on the generic panels from iSEE.</p>
 </div>
@@ -118,7 +128,7 @@
 <div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
 </h2>
-<p>Please note that the iSEEtree project is released with a <a href="https://bioconductor.org/about/code-of-conduct/" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms. If you come across a bug or see potential for improvement, feel free to open an issue and we will plan the next move. is missing or could be improved. If you are interested in contributing, you can check <a href="https://github.com/microbiome/iSEEtree/issues" class="external-link">our issues</a> and try to find a solution. Either way, contributions are very much appreciated.</p>
+<p>Please note that the iSEEtree project is released with a <a href="https://bioconductor.org/about/code-of-conduct/" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms. Contributions are welcome in the form of feedback, issues and pull requests. You can find the contributor guidelines of the miaverse <a href="https://github.com/microbiome/mia/blob/devel/CONTRIBUTING.md" class="external-link">here</a>.</p>
 </div>
 </div>
   </div>

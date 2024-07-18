@@ -86,9 +86,16 @@ as a named argument.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"Tengeler2020"</span>, package <span class="op">=</span> <span class="st">"mia"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">tse</span> <span class="op">&lt;-</span> <span class="va">Tengeler2020</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Launch iSEE</span></span></span>
+<span class="r-in"><span><span class="co"># Store panel into object</span></span></span>
+<span class="r-in"><span><span class="va">panel</span> <span class="op">&lt;-</span> <span class="fu">AbundancePlot</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># View some adjustable parameters</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">slotNames</span><span class="op">(</span><span class="va">panel</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rank"                "use_relative"        "add_legend"         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4] "order_sample_by_row" "order_sample"        "decreasing"         </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Launch iSEE with custom initial panel</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="iSEE-default.html">iSEE</a></span><span class="op">(</span><span class="va">tse</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="iSEE.html">iSEE</a></span><span class="op">(</span><span class="va">tse</span>, initial <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">panel</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
