@@ -33,8 +33,8 @@
 #' head(slotNames(panel))
 #' 
 #' # Launch iSEE with custom initial panel
-#' if (interactive(), initial = c(panel)) {
-#'   iSEE(tse)
+#' if (interactive()) {
+#'   iSEE(tse, initial = c(panel))
 #' }
 #' 
 #' @docType methods
