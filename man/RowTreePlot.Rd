@@ -54,9 +54,14 @@ library(mia)
 data("Tengeler2020", package = "mia")
 tse <- Tengeler2020
 
-# Launch iSEE
+# Store panel into object
+panel <- RowTreePlot()
+# View some adjustable parameters
+head(slotNames(panel))
+
+# Launch iSEE with custom initial panel
 if (interactive()) {
-  iSEE(tse)
+  iSEE(tse, initial = c(panel))
 }
 
 }

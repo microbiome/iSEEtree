@@ -35,8 +35,13 @@ library(mia)
 data("Tengeler2020", package = "mia")
 tse <- Tengeler2020
 
-# Launch iSEE
-if (interactive()) {
+# Store panel into object
+panel <- AbundancePlot()
+# View some adjustable parameters
+head(slotNames(panel))
+
+# Launch iSEE with custom initial panel
+if (interactive(), initial = c(panel)) {
   iSEE(tse)
 }
 

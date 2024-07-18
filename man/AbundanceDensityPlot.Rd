@@ -40,9 +40,14 @@ tse <- Tengeler2020
 # Add relabundance assay
 tse <- transformAssay(tse, method = "relabundance")
 
-# Launch iSEE
+# Store panel into object
+panel <- AbundanceDensityPlot()
+# View some adjustable parameters
+head(slotNames(panel))
+
+# Launch iSEE with custom initial panel
 if (interactive()) {
-  iSEE(tse)
+  iSEE(tse, initial = c(panel))
 }
 
 }

@@ -3,24 +3,7 @@
 #' Panel configuration tuned to the specific properties of
 #' \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}.
 #' 
-#' @usage
-#' iSEE(
-#' tse,
-#' initial = NULL,
-#' extra = NULL,
-#' colormap = ExperimentColorMap(),
-#' landingPage = createLandingPage(),
-#' tour = NULL,
-#' appTitle = NULL,
-#' runLocal = TRUE,
-#' voice = FALSE,
-#' bugs = FALSE,
-#' saveState = NULL,
-#' ...
-#' )
-#' 
-#' @inheritDotParams iSEE::iSEE
-#' @inherit iSEE::iSEE details sections
+#' @inherit iSEE::iSEE params details sections
 #' 
 #' @return
 #' The iSEE method for the TreeSE container returns a default set of panels
@@ -61,6 +44,7 @@
 #' @name iSEE
 NULL
 
+#' @rdname iSEE
 #' @export
 setGeneric("iSEE", iSEE::iSEE)
 
