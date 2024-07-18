@@ -4,7 +4,20 @@
 #' \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}.
 #' 
 #' @usage
-#' See \code{\link[iSEE:iSEE]}.
+#' iSEE(
+#' tse,
+#' initial = NULL,
+#' extra = NULL,
+#' colormap = ExperimentColorMap(),
+#' landingPage = createLandingPage(),
+#' tour = NULL,
+#' appTitle = NULL,
+#' runLocal = TRUE,
+#' voice = FALSE,
+#' bugs = FALSE,
+#' saveState = NULL,
+#' ...
+#' )
 #' 
 #' @inheritDotParams iSEE::iSEE
 #' @inherit iSEE::iSEE details sections
@@ -12,8 +25,8 @@
 #' @return
 #' The iSEE method for the TreeSE container returns a default set of panels
 #' typically relevant for microbiome data. This configuration can be modified
-#' by defining a different set of initial panels. By default, the visualised
-#' panels include the following:
+#' by defining a different set of initial panels. By default, the interface
+#' includes the following panels:
 #' \itemize{
 #' \item \code{RowDataTable()}
 #' \item \code{ColumnDataTable()}
