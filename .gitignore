@@ -10,3 +10,4 @@ inst/doc
 vignettes/*.html
 vignettes/*.R
 iSEEtree.BiocCheck/
+tests/testthat/*.pdf
