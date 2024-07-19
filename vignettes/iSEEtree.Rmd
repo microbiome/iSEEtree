@@ -30,9 +30,6 @@ knitr::opts_chunk$set(
 ```
 
 ```{r vignetteSetup, echo=FALSE, message=FALSE, warning=FALSE}
-## Track time spent on making the vignette
-startTime <- Sys.time()
-
 ## Bib setup
 library(RefManageR)
 
@@ -51,15 +48,16 @@ bib <- c(
 
 ## Install iSEEtree
 R is an open-source statistical environment which can be easily modified to
-enhance its functionality via packages. iSEEtree is an R package currently
-available on GitHub. In the future, it may be submitted to the
-[Bioconductor](https://bioconductor.org/) repository for packages. R can be
-installed on any operating system from [CRAN](https://cran.r-project.org/)
-after which you can install iSEEtree by using the following commands in your R
-session:
+enhance its functionality via packages. iSEEtree is an R package available on
+[Bioconductor](https://bioconductor.org/). R can be installed on any operating
+system from [CRAN](https://cran.r-project.org/) after which you can install
+iSEEtree by using the following commands in your R session:
 
 ```{r install, eval=FALSE}
-remotes::install_github("RiboRings/iSEEtree")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("iSEEtree")
 ```
 
 ## Required knowledge
@@ -147,26 +145,11 @@ Code for creating the vignette.
 ```{r createVignette, eval=FALSE}
 ## Create the vignette
 library(rmarkdown)
-system.time(render("iSEEtree.Rmd", "BiocStyle::html_document"))
+render("iSEEtree.Rmd", "BiocStyle::html_document")
 
 ## Extract the R code
 library(knitr)
 knit("iSEEtree.Rmd", tangle = TRUE)
-```
-
-Date the vignette was generated.
-
-```{r reproduce1, echo=FALSE}
-## Date the vignette was generated
-Sys.time()
-```
-
-Wallclock time spent generating the vignette.
-
-```{r reproduce2, echo=FALSE}
-## Processing time in seconds
-totalTime <- diff(c(startTime, Sys.time()))
-round(totalTime, digits = 3)
 ```
 
 R session information.

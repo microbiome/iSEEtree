@@ -1,5 +1,11 @@
 test_that("AbundanceDensityPlot", {
   
+  output <- new.env()
+  pObjects <- new.env()
+  rObjects <- new.env()
+  select_info <- list(single = list(feature = "---", sample = "---"),
+                      multi = list(row = "---", column = "---"))
+  
   data("Tengeler2020", package = "mia")
   tse <- Tengeler2020
   panel <- AbundanceDensityPlot()
@@ -7,6 +13,9 @@ test_that("AbundanceDensityPlot", {
   expect_identical(.getEncodedName(panel), "AbundanceDensityPlotNA")
   expect_identical(.fullName(panel), "Abundance density plot")
   expect_identical(.panelColor(panel), "#8B5A2B")
+  
+  expect_s3_class(.defineInterface(panel, tse, select_info)[[1]][[1]], "shiny.tag.list")
+  expect_length(.defineDataInterface(panel, tse, select_info), 6)
   
   expect_s3_class(.defineOutput(panel), "shiny.tag.list")
   expect_match(.generateOutput(panel, tse)[["commands"]][["fun"]],
@@ -27,16 +36,13 @@ test_that("AbundanceDensityPlot", {
   
   expect_s3_class(.create_visual_box_for_abunddens_plot(panel, tse),
                   "shiny.tag.list")
-  
-  output <- new.env()
-  pObjects <- new.env()
-  rObjects <- new.env()
 
   expect_null(.renderOutput(panel, tse, output = output, pObjects = pObjects, rObjects = rObjects))
   expect_s3_class(output$AbundanceDensityPlotNA, "shiny.render.function")
   expect_s3_class(output$AbundanceDensityPlotNA_INTERNAL_PanelMultiSelectInfo, "shiny.render.function")
   expect_s3_class(output$AbundanceDensityPlotNA_INTERNAL_PanelSelectLinkInfo, "shiny.render.function")
 
+  expect_identical(.exportOutput(panel, tse), "AbundanceDensityPlotNA.pdf")
   
 })
 

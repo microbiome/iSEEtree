@@ -1,5 +1,11 @@
 test_that("RDAPlot", {
   
+  output <- new.env()
+  pObjects <- new.env()
+  rObjects <- new.env()
+  select_info <- list(single = list(feature = "---", sample = "---"),
+                      multi = list(row = "---", column = "---"))
+  
   data("enterotype", package = "mia")
   tse <- enterotype
   panel <- RDAPlot()
@@ -13,6 +19,9 @@ test_that("RDAPlot", {
   expect_identical(.getEncodedName(panel), "RDAPlotNA")
   expect_identical(.fullName(panel), "RDA plot")
   expect_identical(.panelColor(panel), "#CD5B45")
+  
+  expect_s3_class(.defineInterface(panel, tse, select_info)[[1]][[1]], "shiny.tag.list")
+  expect_length(.defineDataInterface(panel, tse, select_info), 4)
   
   expect_s3_class(.defineOutput(panel), "shiny.tag.list")
   expect_match(.generateOutput(panel, tse)[["commands"]][["fun"]],
@@ -35,13 +44,9 @@ test_that("RDAPlot", {
   
   expect_s3_class(.create_visual_box_for_rda(panel, tse), "shiny.tag.list")
   
-  output <- new.env()
-  pObjects <- new.env()
-  rObjects <- new.env()
-  
   expect_null(.renderOutput(panel, tse, output = output, pObjects = pObjects, rObjects = rObjects))
   expect_s3_class(output$RDAPlotNA, "shiny.render.function")
   expect_s3_class(output$RDAPlotNA_INTERNAL_PanelMultiSelectInfo, "shiny.render.function")
   expect_s3_class(output$RDAPlotNA_INTERNAL_PanelSelectLinkInfo, "shiny.render.function")
-
+  
 })

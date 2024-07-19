@@ -1,5 +1,11 @@
 test_that("RowTreePlot", {
   
+  output <- new.env()
+  pObjects <- new.env()
+  rObjects <- new.env()
+  select_info <- list(single = list(feature = "---", sample = "---"),
+                      multi = list(row = "---", column = "---"))
+  
   data("Tengeler2020", package = "mia")
   tse <- Tengeler2020
   panel <- RowTreePlot()
@@ -9,6 +15,9 @@ test_that("RowTreePlot", {
   expect_identical(.getEncodedName(panel), "RowTreePlotNA")
   expect_identical(.fullName(panel), "Row tree plot")
   expect_identical(.panelColor(panel), "#4EEE94")
+  
+  expect_s3_class(.defineInterface(panel, tse, select_info)[[1]][[1]], "shiny.tag.list")
+  expect_length(.defineDataInterface(panel, tse, select_info), 1)
   
   expect_s3_class(.defineOutput(panel), "shiny.tag.list")
   expect_match(.generateOutput(panel, tse)[["commands"]][["fun"]],
@@ -32,13 +41,11 @@ test_that("RowTreePlot", {
   
   expect_s3_class(.create_visual_box_for_rowtree(panel, tse), "shiny.tag.list")
   
-  output <- new.env()
-  pObjects <- new.env()
-  rObjects <- new.env()
-  
   expect_null(.renderOutput(panel, tse, output = output, pObjects = pObjects, rObjects = rObjects))
   expect_s3_class(output$RowTreePlotNA, "shiny.render.function")
   expect_s3_class(output$RowTreePlotNA_INTERNAL_PanelMultiSelectInfo, "shiny.render.function")
   expect_s3_class(output$RowTreePlotNA_INTERNAL_PanelSelectLinkInfo, "shiny.render.function")
+  
+  expect_identical(.exportOutput(panel, tse), "RowTreePlotNA.pdf")
   
 })

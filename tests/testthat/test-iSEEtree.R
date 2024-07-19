@@ -7,8 +7,11 @@ test_that("iSEEtree", {
               AbundancePlot(), AbundanceDensityPlot(),
               ReducedDimensionPlot(), ComplexHeatmapPlot())
 
-  expect_length(.check_panel(tse, panels, "ReducedDimensionPlot", reducedDims), 6)
+  expect_warning(
+    panels <- .check_panel(tse, panels, "ReducedDimensionPlot", reducedDims),
+    "no valid reducedDims fields for ReducedDimensionPlot"
+  )
   
-  expect_no_error(iSEE(tse))
+  expect_no_error(iSEE(tse, initial = panels))
   
 })
