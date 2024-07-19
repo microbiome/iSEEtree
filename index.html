@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">iSEEtree</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.4</span>
       </span>
     </div>
 
@@ -70,7 +70,12 @@
 <div class="page-header"><h1 id="iseetree">iSEEtree<a class="anchor" aria-label="anchor" href="#iseetree"></a>
 </h1></div>
 <p><a href="https://github.com/microbiome/iSEEtree/issues" class="external-link"><img src="https://img.shields.io/github/issues/microbiome/iSEEtree" alt="issues"></a> <a href="https://github.com/microbiome/iSEEtree/pulls" class="external-link"><img src="https://img.shields.io/github/issues-pr/microbiome/iSEEtree" alt="pulls"></a> <a href="https://github.com/microbiome/iSEEtree/actions" class="external-link"><img src="https://github.com/microbiome/iSEEtree/workflows/rworkflows/badge.svg" alt="R-CMD-check"></a> <a href="https://app.codecov.io/gh/microbiome/iSEEtree?branch=devel" class="external-link"><img src="https://codecov.io/gh/microbiome/iSEEtree/branch/devel/graph/badge.svg" alt="codecov"></a> <a href="https://www.codefactor.io/repository/github/microbiome/iseetree" class="external-link"><img src="https://www.codefactor.io/repository/github/microbiome/iseetree/badge" alt="codefactor"></a></p>
-<p>The goal of iSEEtree is to provide panels related to TreeSummarizedExperiment objects which facilitate the interactive visualisation of microbiome data in <a href="https://isee.github.io/" class="external-link"><em>iSEE</em></a>.</p>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>iSEEtree is a Bioconductor package for the interactive visualisation of microbiome data stored in a TreeSummarizedExperiment (TreeSE) container. On the one side, it leverages and extends the graphics of the iSEE package, which is designed for the generic SummarizedExperiment class. On the other side, it employs the statistical and visual tools for microbiome data science provided by the mia family of packages. Thus, iSEE and mia represent the two building blocks of iSEEtree. Detailed introductory material on these two frameworks is available in the <a href="https://isee.github.io/" class="external-link">iSEE-verse website</a> and the <a href="https://microbiome.github.io/OMA/docs/devel/" class="external-link">OMA Bioconductor book</a>, respectively.</p>
+<p>iSEEtree is meant for new and experienced users alike, who desire to create and interact with several graphics for microbiome data, without an in-depth knowledge of the underlying mia functionality. Current microbiome-specific panels include phylogenetic trees, ordination plots and compositional plots, which can be further explored below in this article. Other more generic panels are also reused from the iSEE package and can be experimented in <a href="https://isee.github.io/iSEE/articles/basic.html" class="external-link">this article</a>.</p>
+</div>
 <div class="section level2">
 <h2 id="installation-instructions">Installation instructions<a class="anchor" aria-label="anchor" href="#installation-instructions"></a>
 </h2>
@@ -86,7 +91,7 @@
 <span><span class="co"># The following initializes usage of Bioc devel</span></span>
 <span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span>version<span class="op">=</span><span class="st">'devel'</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"mia"</span><span class="op">)</span></span></code></pre>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"iSEEtree"</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
@@ -110,12 +115,43 @@
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="reference/iSEE.html">iSEE</a></span><span class="op">(</span><span class="va">tse</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
-<p>Please note that iSEEtree was only made possible thanks to many other R and bioinformatics software authors, which are cited either in the vignettes and/or the paper(s) describing this package. In particular, iSEEtree implements the <a href="https://microbiome.github.io/miaViz/" class="external-link"><em>miaViz</em></a> package for microbiome data visualisation to create panels that are specific for TreeSummarizedExperiment objects. Not surprisingly, it also depends on the generic panels from iSEE.</p>
 </div>
 <div class="section level2">
-<h2 id="development-tools">Development tools<a class="anchor" aria-label="anchor" href="#development-tools"></a>
+<h2 id="panels">Panels<a class="anchor" aria-label="anchor" href="#panels"></a>
 </h2>
+<p>iSEEtree derives its microbiome-related visualisation methods from the <a href="https://microbiome.github.io/miaViz/" class="external-link">miaViz</a> package, which is code-based and requires basic knowledge of R programming and microbiome data structures. The following panels represent an easy-to-use interactive version of the miaViz plotting functions:</p>
 <ul>
+<li>
+<a href="https://microbiome.github.io/iSEEtree/reference/AbundanceDensityPlot.html" class="external-link">AbundanceDensityPlot</a>: a density plot of the top features, where every line is a feature and the x axis shows its abundance for different samples. Its interpretation is explained in the OMA chapter on <a href="https://microbiome.github.io/OMA/docs/devel/pages/12_quality_control.html" class="external-link">Exploration</a>.</li>
+<li>
+<a href="https://microbiome.github.io/iSEEtree/reference/AbundancePlot.html" class="external-link">AbundancePlot</a>: a compositional barplot of the samples, where every bar is a sample composed by different features in different colours. Its interpretation is explained in the OMA chapter on <a href="https://microbiome.github.io/OMA/docs/devel/pages/21_microbiome_community.html" class="external-link">Community Composition</a>.</li>
+<li>
+<a href="https://microbiome.github.io/iSEEtree/reference/RDAPlot.html" class="external-link">RDAPlot</a>: an supervised ordination plot of the samples, where every dot is a sample on a reduced dimensional space and every arrow reflects the contribution of a sample variable. Its interpretation is explained in the OMA chapter on <a href="https://microbiome.github.io/OMA/docs/devel/pages/20_beta_diversity.html" class="external-link">Community Similarity</a>.</li>
+<li>
+<a href="https://microbiome.github.io/iSEEtree/reference/RowTreePlot.html" class="external-link">RowTreePlot</a>: a phylogenetic tree of the features, where every tip is a feature and two neighbouring tips are more closely related than two far apart from each other.</li>
+</ul>
+<p>By default, the iSEEtree layout also includes the following panels inherited by iSEE:</p>
+<ul>
+<li><a href="https://isee.github.io/iSEE/articles/basic.html#row-data-tables" class="external-link">RowDataTable</a></li>
+<li><a href="https://isee.github.io/iSEE/articles/basic.html#column-data-tables" class="external-link">ColumnDataTable</a></li>
+<li><a href="https://isee.github.io/iSEE/articles/basic.html#reduced-dimension-plots" class="external-link">ReducedDimensionPlot</a></li>
+<li><a href="https://isee.github.io/iSEE/articles/basic.html#heat-maps" class="external-link">ComplexHeatmapPlot</a></li>
+</ul>
+<p>The <a href="https://isee.github.io/iSEE/articles/basic.html#coldataplot" class="external-link">ColumnDataPlot</a> could also prove useful for the visualisation of column variables such as alpha diversity indices. Its interpretation is explained in the OMA chapter on <a href="https://microbiome.github.io/OMA/docs/devel/pages/14_alpha_diversity.html" class="external-link">Community Diversity</a>.</p>
+</div>
+<div class="section level2">
+<h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
+</h2>
+<p>Please note that the iSEEtree project is released with a <a href="https://bioconductor.org/about/code-of-conduct/" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms. Contributions are welcome in the form of feedback, issues and pull requests. You can find the contributor guidelines of the miaverse <a href="https://github.com/microbiome/mia/blob/devel/CONTRIBUTING.md" class="external-link">here</a>.</p>
+</div>
+<div class="section level2">
+<h2 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
+</h2>
+<p>Please note that iSEEtree was only made possible thanks to many other R and bioinformatics software authors, which are cited either in the vignettes and/or the paper(s) describing this package. In particular, iSEEtree implements the <a href="https://microbiome.github.io/miaViz/" class="external-link"><em>miaViz</em></a> package for microbiome data visualisation to create panels that are specific for TreeSummarizedExperiment objects. Not surprisingly, it also depends on the generic panels from iSEE.</p>
+<p>This package was developed using the following resources:</p>
+<ul>
+<li>
+<a href="https://cran.r-project.org/web/packages/usethis/" class="external-link"><em>usethis</em></a> to generate an initial template.</li>
 <li>Continuous code testing is performed on <a href="https://github.com/features/actions" class="external-link">GitHub actions</a> and include R CMD check, <a href="https://bioconductor.org/packages/3.16/bioc/html/BiocCheck.html" class="external-link"><em>BiocCheck</em></a> and testthat.</li>
 <li>Code coverage assessment is possible thanks to <a href="https://app.codecov.io/gh/" class="external-link">codecov</a>.</li>
 <li>The documentation website is automatically updated thanks to <a href="https://cran.r-project.org/web/packages/pkgdown/" class="external-link"><em>pkgdown</em></a>.</li>
@@ -123,12 +159,6 @@
 <li>All the actions above are made reproducible by <a href="https://neurogenomics.github.io/rworkflows/" class="external-link"><em>rworkflows</em></a>
 </li>
 </ul>
-<p>This package was developed using <a href="https://cran.r-project.org/web/packages/usethis/" class="external-link"><em>usethis</em></a>.</p>
-</div>
-<div class="section level2">
-<h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
-</h2>
-<p>Please note that the iSEEtree project is released with a <a href="https://bioconductor.org/about/code-of-conduct/" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms. Contributions are welcome in the form of feedback, issues and pull requests. You can find the contributor guidelines of the miaverse <a href="https://github.com/microbiome/mia/blob/devel/CONTRIBUTING.md" class="external-link">here</a>.</p>
 </div>
 </div>
   </div>

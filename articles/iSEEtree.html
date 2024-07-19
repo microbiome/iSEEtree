@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">iSEEtree</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.4</span>
       </span>
     </div>
 
@@ -75,9 +75,9 @@ Benedetti</h4>
 Turku<br><a class="author_email" href="mailto:#"></a><a href="mailto:giulio.benedetti@utu.fi" class="email">giulio.benedetti@utu.fi</a>
       </address>
                   
-            <h4 data-toc-skip class="date">18 July 2024</h4>
+            <h4 data-toc-skip class="date">19 July 2024</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/microbiome/iSEEtree/blob/devel/vignettes/iSEEtree.Rmd" class="external-link"><code>vignettes/iSEEtree.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/microbiome/iSEEtree/blob/bioreview/vignettes/iSEEtree.Rmd" class="external-link"><code>vignettes/iSEEtree.Rmd</code></a></small>
       <div class="hidden name"><code>iSEEtree.Rmd</code></div>
 
     </div>
@@ -92,13 +92,15 @@ Turku<br><a class="author_email" href="mailto:#"></a><a href="mailto:giulio.bene
 </h3>
 <p>R is an open-source statistical environment which can be easily
 modified to enhance its functionality via packages. iSEEtree is an R
-package currently available on GitHub. In the future, it may be
-submitted to the <a href="https://bioconductor.org/" class="external-link">Bioconductor</a>
-repository for packages. R can be installed on any operating system from
-<a href="https://cran.r-project.org/" class="external-link">CRAN</a> after which you can
-install iSEEtree by using the following commands in your R session:</p>
+package available on <a href="https://bioconductor.org/" class="external-link">Bioconductor</a>. R can be installed on
+any operating system from <a href="https://cran.r-project.org/" class="external-link">CRAN</a>
+after which you can install iSEEtree by using the following commands in
+your R session:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"RiboRings/iSEEtree"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"iSEEtree"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="required-knowledge">Required knowledge<a class="anchor" aria-label="anchor" href="#required-knowledge"></a>
@@ -146,7 +148,7 @@ Thank you!</p>
 <span><span class="co">#&gt; To cite package 'iSEEtree' in publications use:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Benedetti G (????). _iSEEtree: Interactive visualisation for</span></span>
-<span><span class="co">#&gt;   microbiome data_. R package version 0.99.3,</span></span>
+<span><span class="co">#&gt;   microbiome data_. R package version 0.99.4,</span></span>
 <span><span class="co">#&gt;   &lt;https://github.com/microbiome/iSEEtree&gt;.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
@@ -154,7 +156,7 @@ Thank you!</p>
 <span><span class="co">#&gt;   @Manual{,</span></span>
 <span><span class="co">#&gt;     title = {iSEEtree: Interactive visualisation for microbiome data},</span></span>
 <span><span class="co">#&gt;     author = {Giulio Benedetti},</span></span>
-<span><span class="co">#&gt;     note = {R package version 0.99.3},</span></span>
+<span><span class="co">#&gt;     note = {R package version 0.99.4},</span></span>
 <span><span class="co">#&gt;     url = {https://github.com/microbiome/iSEEtree},</span></span>
 <span><span class="co">#&gt;   }</span></span></code></pre></div>
 </div>
@@ -211,15 +213,11 @@ Cheng, Chang, and Iannone, 2024)</li>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Create the vignette</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/rmarkdown" class="external-link">rmarkdown</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/render.html" class="external-link">render</a></span><span class="op">(</span><span class="st">"iSEEtree.Rmd"</span>, <span class="st">"BiocStyle::html_document"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/render.html" class="external-link">render</a></span><span class="op">(</span><span class="st">"iSEEtree.Rmd"</span>, <span class="st">"BiocStyle::html_document"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Extract the R code</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/" class="external-link">knitr</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/knit.html" class="external-link">knit</a></span><span class="op">(</span><span class="st">"iSEEtree.Rmd"</span>, tangle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>Date the vignette was generated.</p>
-<pre><code><span><span class="co">#&gt; [1] "2024-07-18 20:03:17 UTC"</span></span></code></pre>
-<p>Wallclock time spent generating the vignette.</p>
-<pre><code><span><span class="co">#&gt; Time difference of 13.364 secs</span></span></code></pre>
 <p>R session information.</p>
 <pre><code><span><span class="co">#&gt; R version 4.4.1 (2024-06-14)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>
@@ -241,12 +239,12 @@ Cheng, Chang, and Iannone, 2024)</li>
 <span><span class="co">#&gt; [1] stats4    stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt;  [1] scater_1.33.2                   ggplot2_3.5.1                   scuttle_1.15.1                 </span></span>
+<span><span class="co">#&gt;  [1] scater_1.33.3                   ggplot2_3.5.1                   scuttle_1.15.2                 </span></span>
 <span><span class="co">#&gt;  [4] mia_1.13.27                     MultiAssayExperiment_1.31.4     TreeSummarizedExperiment_2.13.0</span></span>
-<span><span class="co">#&gt;  [7] Biostrings_2.73.1               XVector_0.45.0                  iSEEtree_0.99.3                </span></span>
+<span><span class="co">#&gt;  [7] Biostrings_2.73.1               XVector_0.45.0                  iSEEtree_0.99.4                </span></span>
 <span><span class="co">#&gt; [10] iSEE_2.17.1                     SingleCellExperiment_1.27.2     SummarizedExperiment_1.35.1    </span></span>
 <span><span class="co">#&gt; [13] Biobase_2.65.0                  GenomicRanges_1.57.1            GenomeInfoDb_1.41.1            </span></span>
-<span><span class="co">#&gt; [16] IRanges_2.39.1                  S4Vectors_0.43.1                BiocGenerics_0.51.0            </span></span>
+<span><span class="co">#&gt; [16] IRanges_2.39.2                  S4Vectors_0.43.2                BiocGenerics_0.51.0            </span></span>
 <span><span class="co">#&gt; [19] MatrixGenerics_1.17.0           matrixStats_1.3.0               RefManageR_1.4.0               </span></span>
 <span><span class="co">#&gt; [22] BiocStyle_2.33.1               </span></span>
 <span><span class="co">#&gt; </span></span>
@@ -256,20 +254,20 @@ Cheng, Chang, and Iannone, 2024)</li>
 <span><span class="co">#&gt;   [9] doParallel_1.0.17           miaViz_1.13.2               lattice_0.22-6              MASS_7.3-61                </span></span>
 <span><span class="co">#&gt;  [13] backports_1.5.0             magrittr_2.0.3              Hmisc_5.1-3                 sass_0.4.9                 </span></span>
 <span><span class="co">#&gt;  [17] rmarkdown_2.27              jquerylib_0.1.4             yaml_2.3.9                  httpuv_1.6.15              </span></span>
-<span><span class="co">#&gt;  [21] DBI_1.2.3                   minqa_1.2.7                 RColorBrewer_1.1-3          lubridate_1.9.3            </span></span>
+<span><span class="co">#&gt;  [21] minqa_1.2.7                 DBI_1.2.3                   RColorBrewer_1.1-3          lubridate_1.9.3            </span></span>
 <span><span class="co">#&gt;  [25] abind_1.4-5                 zlibbioc_1.51.1             purrr_1.0.2                 ggraph_2.2.1               </span></span>
 <span><span class="co">#&gt;  [29] yulab.utils_0.1.4           nnet_7.3-19                 tweenr_2.0.3                sandwich_3.1-0             </span></span>
 <span><span class="co">#&gt;  [33] circlize_0.4.16             GenomeInfoDbData_1.2.12     ggrepel_0.9.5               irlba_2.3.5.1              </span></span>
 <span><span class="co">#&gt;  [37] tidytree_0.4.6              vegan_2.6-6.1               rbiom_1.0.3                 permute_0.9-7              </span></span>
-<span><span class="co">#&gt;  [41] pkgdown_2.1.0               DelayedMatrixStats_1.27.1   codetools_0.2-20            DelayedArray_0.31.7        </span></span>
+<span><span class="co">#&gt;  [41] pkgdown_2.1.0               DelayedMatrixStats_1.27.2   codetools_0.2-20            DelayedArray_0.31.9        </span></span>
 <span><span class="co">#&gt;  [45] ggforce_0.4.2               DT_0.33                     xml2_1.3.6                  tidyselect_1.2.1           </span></span>
 <span><span class="co">#&gt;  [49] shape_1.4.6.1               aplot_0.2.3                 farver_2.1.2                UCSC.utils_1.1.0           </span></span>
 <span><span class="co">#&gt;  [53] lme4_1.1-35.5               ScaledMatrix_1.13.0         viridis_0.6.5               shinyWidgets_0.8.6         </span></span>
 <span><span class="co">#&gt;  [57] base64enc_0.1-3             jsonlite_1.8.8              GetoptLong_1.0.5            BiocNeighbors_1.23.0       </span></span>
 <span><span class="co">#&gt;  [61] tidygraph_1.3.1             decontam_1.25.0             Formula_1.2-5               iterators_1.0.14           </span></span>
 <span><span class="co">#&gt;  [65] systemfonts_1.1.0           foreach_1.5.2               ggnewscale_0.4.10           tools_4.4.1                </span></span>
-<span><span class="co">#&gt;  [69] treeio_1.29.0               ragg_1.3.2                  Rcpp_1.0.12                 glue_1.7.0                 </span></span>
-<span><span class="co">#&gt;  [73] gridExtra_2.3               SparseArray_1.5.20          xfun_0.45                   mgcv_1.9-1                 </span></span>
+<span><span class="co">#&gt;  [69] treeio_1.29.0               ragg_1.3.2                  Rcpp_1.0.13                 glue_1.7.0                 </span></span>
+<span><span class="co">#&gt;  [73] gridExtra_2.3               SparseArray_1.5.22          xfun_0.46                   mgcv_1.9-1                 </span></span>
 <span><span class="co">#&gt;  [77] dplyr_1.1.4                 withr_3.0.0                 shinydashboard_0.7.2        BiocManager_1.30.23        </span></span>
 <span><span class="co">#&gt;  [81] fastmap_1.2.0               boot_1.3-30                 bluster_1.15.0              fansi_1.0.6                </span></span>
 <span><span class="co">#&gt;  [85] shinyjs_2.1.0               digest_0.6.36               rsvd_1.0.5                  gridGraphics_0.5-1         </span></span>
@@ -284,7 +282,7 @@ Cheng, Chang, and Iannone, 2024)</li>
 <span><span class="co">#&gt; [121] nlme_3.1-165                shinyAce_0.4.2              zoo_1.8-12                  cachem_1.1.0               </span></span>
 <span><span class="co">#&gt; [125] GlobalOptions_0.1.2         stringr_1.5.1               parallel_4.4.1              miniUI_0.1.1.1             </span></span>
 <span><span class="co">#&gt; [129] vipor_0.4.7                 foreign_0.8-87              desc_1.4.3                  pillar_1.9.0               </span></span>
-<span><span class="co">#&gt; [133] grid_4.4.1                  vctrs_0.6.5                 slam_0.1-50                 promises_1.3.0             </span></span>
+<span><span class="co">#&gt; [133] grid_4.4.1                  vctrs_0.6.5                 slam_0.1-51                 promises_1.3.0             </span></span>
 <span><span class="co">#&gt; [137] BiocSingular_1.21.2         beachmat_2.21.4             xtable_1.8-4                cluster_2.1.6              </span></span>
 <span><span class="co">#&gt; [141] beeswarm_0.4.0              htmlTable_2.4.2             evaluate_0.24.0             mvtnorm_1.2-5              </span></span>
 <span><span class="co">#&gt; [145] cli_3.6.3                   compiler_4.4.1              rlang_1.1.4                 crayon_1.5.3               </span></span>
