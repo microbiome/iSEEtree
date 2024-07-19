@@ -1,5 +1,5 @@
 Package: iSEEtree
-Version: 0.99.3
+Version: 0.99.4
 Authors@R: 
     c(person(given = "Giulio", family = "Benedetti", role = c("aut", "cre"),
            email = "giulio.benedetti@utu.fi",
