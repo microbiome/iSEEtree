@@ -4,7 +4,6 @@
 \name{AbundancePlot}
 \alias{AbundancePlot}
 \alias{AbundancePlot-class}
-\alias{initialize,AbundancePlot-method}
 \title{Abundance plot}
 \value{
 The \code{AbundancePlot(...)} constructor creates an instance of an

@@ -20,12 +20,11 @@ in the [iSEE-verse website](https://isee.github.io/) and the
 respectively.
 
 iSEEtree is meant for new and experienced users alike, who desire to create and
-interact with several graphics for microbiome data, without an in-depth
-knowledge of the underlying mia functionality. Current microbiome-specific
-panels include phylogenetic trees, ordination plots and compositional plots,
-which can be further explored below in this article. Other more generic panels
-are also reused from the iSEE package and can be experimented in
-[this article](https://isee.github.io/iSEE/articles/basic.html).
+interact with several graphics for microbiome data, without the need for an
+in-depth knowledge of the underlying mia functionality. Current
+microbiome-specific panels include phylogenetic trees, ordination plots and compositional plots, which can be further explored below in this article. Other
+more generic panels are also reused from the iSEE package and can be
+experimented in [this article](https://isee.github.io/iSEE/articles/basic.html).
 
 ## Installation instructions
 The release version of iSEEtree can be installed from Bioconductor as follows:

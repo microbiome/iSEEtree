@@ -4,7 +4,6 @@
 \name{RowTreePlot}
 \alias{RowTreePlot}
 \alias{RowTreePlot-class}
-\alias{initialize,RowTreePlot-method}
 \title{Row tree plot}
 \value{
 The \code{RowTreePlot(...)} constructor creates an instance of a RowTreePlot

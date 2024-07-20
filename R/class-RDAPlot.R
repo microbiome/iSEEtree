@@ -60,15 +60,13 @@
 #'   iSEE(tse, initial = c(panel))
 #' }
 #' 
-#' #' @docType methods
-#' @aliases RDAPlot-class
-#'   initialize,RDAPlot-method
-#'
+#' @docType methods
 #' @name RDAPlot
 NULL
 
 setClassUnion("charlog", c("character", "logical"))
 
+#' @rdname RDAPlot
 #' @export
 setClass("RDAPlot", contains="Panel", slots=c(dimred="character",
     add.ellipse="charlog", colour_by="character", vec.text="logical",

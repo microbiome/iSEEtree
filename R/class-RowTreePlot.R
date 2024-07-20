@@ -57,12 +57,10 @@
 #' }
 #' 
 #' @docType methods
-#' @aliases RowTreePlot-class
-#'   initialize,RowTreePlot-method
-#'
 #' @name RowTreePlot
 NULL
 
+#' @rdname RowTreePlot
 #' @export
 setClass("RowTreePlot", contains="Panel", slots=c(layout="character",
     add_legend="logical", edge_colour_by="character", tip_colour_by="character",

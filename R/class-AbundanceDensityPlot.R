@@ -43,12 +43,10 @@
 #' }
 #' 
 #' @docType methods
-#' @aliases AbundanceDensityPlot-class
-#'   initialize,AbundanceDensityPlot-method
-#'
 #' @name AbundanceDensityPlot
 NULL
 
+#' @rdname AbundanceDensityPlot
 #' @export
 setClass("AbundanceDensityPlot", contains="Panel", slots=c(layout="character",
     assay.type="character", n="numeric", dots_colour="character",

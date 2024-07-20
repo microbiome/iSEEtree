@@ -4,7 +4,6 @@
 \name{AbundanceDensityPlot}
 \alias{AbundanceDensityPlot}
 \alias{AbundanceDensityPlot-class}
-\alias{initialize,AbundanceDensityPlot-method}
 \title{Abundance density plot}
 \value{
 The \code{AbundanceDensityPlot(...)} constructor creates an instance of an

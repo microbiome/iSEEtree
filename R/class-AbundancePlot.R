@@ -38,12 +38,10 @@
 #' }
 #' 
 #' @docType methods
-#' @aliases AbundancePlot-class
-#'   initialize,AbundancePlot-method
-#'
 #' @name AbundancePlot
 NULL
 
+#' @rdname AbundancePlot
 #' @export
 setClass("AbundancePlot", contains="Panel",
     slots=c(rank="character", use_relative="logical", add_legend="logical",
