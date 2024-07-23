@@ -13,7 +13,7 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
 <meta property="og:title" content="Interactive visualisation for microbiome data">
-<meta property="og:description" content="iSEEtree is an extension of iSEE for the TreeSummarizedExperiment. It leverages the funcionality from the miaViz package for microbiome data visualisation to create panels that are specific for TreeSummarizedExperiment objects. Not surprisingly, it also depends on the generic panels from iSEE.">
+<meta property="og:description" content="iSEEtree is an extension of iSEE for the TreeSummarizedExperiment. It leverages the functionality from the miaViz package for microbiome data visualisation to create panels that are specific for TreeSummarizedExperiment objects. Not surprisingly, it also depends on the generic panels from iSEE.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">iSEEtree</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.5</span>
       </span>
     </div>
 
@@ -70,12 +70,7 @@
 <div class="page-header"><h1 id="iseetree">iSEEtree<a class="anchor" aria-label="anchor" href="#iseetree"></a>
 </h1></div>
 <p><a href="https://github.com/microbiome/iSEEtree/issues" class="external-link"><img src="https://img.shields.io/github/issues/microbiome/iSEEtree" alt="issues"></a> <a href="https://github.com/microbiome/iSEEtree/pulls" class="external-link"><img src="https://img.shields.io/github/issues-pr/microbiome/iSEEtree" alt="pulls"></a> <a href="https://github.com/microbiome/iSEEtree/actions" class="external-link"><img src="https://github.com/microbiome/iSEEtree/workflows/rworkflows/badge.svg" alt="R-CMD-check"></a> <a href="https://app.codecov.io/gh/microbiome/iSEEtree?branch=devel" class="external-link"><img src="https://codecov.io/gh/microbiome/iSEEtree/branch/devel/graph/badge.svg" alt="codecov"></a> <a href="https://www.codefactor.io/repository/github/microbiome/iseetree" class="external-link"><img src="https://www.codefactor.io/repository/github/microbiome/iseetree/badge" alt="codefactor"></a></p>
-<div class="section level2">
-<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-</h2>
-<p>iSEEtree is a Bioconductor package for the interactive visualisation of microbiome data stored in a TreeSummarizedExperiment (TreeSE) container. On the one side, it leverages and extends the graphics of the iSEE package, which is designed for the generic SummarizedExperiment class. On the other side, it employs the statistical and visual tools for microbiome data science provided by the mia family of packages. Thus, iSEE and mia represent the two building blocks of iSEEtree. Detailed introductory material on these two frameworks is available in the <a href="https://isee.github.io/" class="external-link">iSEE-verse website</a> and the <a href="https://microbiome.github.io/OMA/docs/devel/" class="external-link">OMA Bioconductor book</a>, respectively.</p>
-<p>iSEEtree is meant for new and experienced users alike, who desire to create and interact with several graphics for microbiome data, without the need for an in-depth knowledge of the underlying mia functionality. Current microbiome-specific panels include phylogenetic trees, ordination plots and compositional plots, which can be further explored below in this article. Other more generic panels are also reused from the iSEE package and can be experimented in <a href="https://isee.github.io/iSEE/articles/basic.html" class="external-link">this article</a>.</p>
-</div>
+<p>The goal of iSEEtree is to provide panels related to TreeSummarizedExperiment objects which facilitate the interactive visualisation of microbiome data in <a href="https://isee.github.io/" class="external-link"><em>iSEE</em></a>.</p>
 <div class="section level2">
 <h2 id="installation-instructions">Installation instructions<a class="anchor" aria-label="anchor" href="#installation-instructions"></a>
 </h2>
@@ -115,29 +110,6 @@
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="reference/iSEE.html">iSEE</a></span><span class="op">(</span><span class="va">tse</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre>
-</div>
-<div class="section level2">
-<h2 id="panels">Panels<a class="anchor" aria-label="anchor" href="#panels"></a>
-</h2>
-<p>iSEEtree derives its microbiome-related visualisation methods from the <a href="https://microbiome.github.io/miaViz/" class="external-link">miaViz</a> package, which is code-based and requires basic knowledge of R programming and microbiome data structures. The following panels represent an easy-to-use interactive version of the miaViz plotting functions:</p>
-<ul>
-<li>
-<a href="https://microbiome.github.io/iSEEtree/reference/AbundanceDensityPlot.html" class="external-link">AbundanceDensityPlot</a>: a density plot of the top features, where every line is a feature and the x axis shows its abundance for different samples. Its interpretation is explained in the OMA chapter on <a href="https://microbiome.github.io/OMA/docs/devel/pages/12_quality_control.html" class="external-link">Exploration</a>.</li>
-<li>
-<a href="https://microbiome.github.io/iSEEtree/reference/AbundancePlot.html" class="external-link">AbundancePlot</a>: a compositional barplot of the samples, where every bar is a sample composed by different features in different colours. Its interpretation is explained in the OMA chapter on <a href="https://microbiome.github.io/OMA/docs/devel/pages/21_microbiome_community.html" class="external-link">Community Composition</a>.</li>
-<li>
-<a href="https://microbiome.github.io/iSEEtree/reference/RDAPlot.html" class="external-link">RDAPlot</a>: an supervised ordination plot of the samples, where every dot is a sample on a reduced dimensional space and every arrow reflects the contribution of a sample variable. Its interpretation is explained in the OMA chapter on <a href="https://microbiome.github.io/OMA/docs/devel/pages/20_beta_diversity.html" class="external-link">Community Similarity</a>.</li>
-<li>
-<a href="https://microbiome.github.io/iSEEtree/reference/RowTreePlot.html" class="external-link">RowTreePlot</a>: a phylogenetic tree of the features, where every tip is a feature and two neighbouring tips are more closely related than two far apart from each other.</li>
-</ul>
-<p>By default, the iSEEtree layout also includes the following panels inherited by iSEE:</p>
-<ul>
-<li><a href="https://isee.github.io/iSEE/articles/basic.html#row-data-tables" class="external-link">RowDataTable</a></li>
-<li><a href="https://isee.github.io/iSEE/articles/basic.html#column-data-tables" class="external-link">ColumnDataTable</a></li>
-<li><a href="https://isee.github.io/iSEE/articles/basic.html#reduced-dimension-plots" class="external-link">ReducedDimensionPlot</a></li>
-<li><a href="https://isee.github.io/iSEE/articles/basic.html#heat-maps" class="external-link">ComplexHeatmapPlot</a></li>
-</ul>
-<p>The <a href="https://isee.github.io/iSEE/articles/basic.html#coldataplot" class="external-link">ColumnDataPlot</a> could also prove useful for the visualisation of column variables such as alpha diversity indices. Its interpretation is explained in the OMA chapter on <a href="https://microbiome.github.io/OMA/docs/devel/pages/14_alpha_diversity.html" class="external-link">Community Diversity</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
