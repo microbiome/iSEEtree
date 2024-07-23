@@ -9,17 +9,14 @@
 \code{iSEEtree} is an extension of \pkg{iSEE} that provides panels for the
 \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}
 container, enabling the interactive visualisation of typical microbiome data.
+The panel layout of iSEEtree is described in \link\link{iSEE}.
 }
 \examples{
 library(iSEEtree)
+
 }
 \seealso{
-Useful links:
-\itemize{
-  \item \url{https://github.com/microbiome/iSEEtree}
-  \item Report bugs at \url{https://github.com/microbiome/iSEEtree/issues}
-}
-
+[\link[iSEE:iSEE]{iSEE} \link[mia:mia]{mia}]
 }
 \author{
 Giulio Benedetti \email{giulio.benedetti@utu.fi}

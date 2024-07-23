@@ -44,9 +44,71 @@ bib <- c(
 )
 ```
 
-# Basics
+# Introduction
 
-## Install iSEEtree
+## Motivation
+
+iSEEtree is a Bioconductor package for the interactive visualisation of
+microbiome data stored in a TreeSummarizedExperiment (TreeSE) container. On the
+one side, it leverages and extends the graphics of the iSEE package, which is
+designed for the generic SummarizedExperiment class. On the other side, it
+employs the statistical and visual tools for microbiome data science provided by
+the mia family of packages. Thus, iSEE and mia represent the two building blocks
+of iSEEtree. Detailed introductory material on these two frameworks is available
+in the [iSEE-verse website](https://isee.github.io/) and the
+[OMA Bioconductor book](https://microbiome.github.io/OMA/docs/devel/),
+respectively.
+
+iSEEtree is meant for new and experienced users alike, who desire to create and
+interact with several graphics for microbiome data, without the need for an
+in-depth knowledge of the underlying mia functionality. Current
+microbiome-specific panels include phylogenetic trees, ordination plots and compositional plots, which can be further explored below in this article. Other
+more generic panels are also reused from the iSEE package and can be
+experimented in [this article](https://isee.github.io/iSEE/articles/basic.html).
+
+## Panels
+
+iSEEtree derives its microbiome-related visualisation methods from the
+[miaViz](https://microbiome.github.io/miaViz/) package, which is code-based and
+requires basic knowledge of R programming and microbiome data structures. The
+following panels represent an easy-to-use interactive version of the miaViz
+plotting functions:
+
+- [AbundanceDensityPlot](https://microbiome.github.io/iSEEtree/reference/AbundanceDensityPlot.html):
+  a density plot of the top features, where every line is a feature and the x
+  axis shows its abundance for different samples. Its interpretation is
+  explained in the OMA chapter on
+  [Exploration](https://microbiome.github.io/OMA/docs/devel/pages/12_quality_control.html).
+- [AbundancePlot](https://microbiome.github.io/iSEEtree/reference/AbundancePlot.html):
+  a compositional barplot of the samples, where every bar is a sample composed
+  by different features in different colours. Its interpretation is explained
+  in the OMA chapter on
+  [Community Composition](https://microbiome.github.io/OMA/docs/devel/pages/21_microbiome_community.html).
+- [RDAPlot](https://microbiome.github.io/iSEEtree/reference/RDAPlot.html): an
+  supervised ordination plot of the samples, where every dot is a sample on a
+  reduced dimensional space and every arrow reflects the contribution of a
+  sample variable. Its interpretation is explained in the OMA chapter on
+  [Community Similarity](https://microbiome.github.io/OMA/docs/devel/pages/20_beta_diversity.html).
+- [RowTreePlot](https://microbiome.github.io/iSEEtree/reference/RowTreePlot.html):
+  a phylogenetic tree of the features, where every tip is a feature and two
+  neighbouring tips are more closely related than two far apart from each other.
+
+By default, the iSEEtree layout also includes the following panels inherited by
+iSEE:
+
+- [RowDataTable](https://isee.github.io/iSEE/articles/basic.html#row-data-tables)
+- [ColumnDataTable](https://isee.github.io/iSEE/articles/basic.html#column-data-tables)
+- [ReducedDimensionPlot](https://isee.github.io/iSEE/articles/basic.html#reduced-dimension-plots)
+- [ComplexHeatmapPlot](https://isee.github.io/iSEE/articles/basic.html#heat-maps)
+
+The [ColumnDataPlot](https://isee.github.io/iSEE/articles/basic.html#coldataplot)
+could also prove useful for the visualisation of column variables such as
+alpha diversity indices. Its interpretation is explained in the OMA chapter on
+[Community Diversity](https://microbiome.github.io/OMA/docs/devel/pages/14_alpha_diversity.html).
+
+# Tutorial
+
+## Installation
 R is an open-source statistical environment which can be easily modified to
 enhance its functionality via packages. iSEEtree is an R package available on
 [Bioconductor](https://bioconductor.org/). R can be installed on any operating
@@ -60,43 +122,10 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install("iSEEtree")
 ```
 
-## Required knowledge
-iSEEtree is based on many other packages and in particular on those that have implemented the infrastructure needed for dealing with omics data, microbiome
-data and interactive visualisation. That is, packages like
-[_SummarizedExperiment_](https://bioconductor.org/packages/3.18/bioc/html/SummarizedExperiment.html),
-[_TreeSummarizedExperiment_](https://bioconductor.org/packages/3.18/bioc/html/TreeSummarizedExperiment.html),
-[_mia_](https://bioconductor.org/packages/3.18/bioc/html/mia.html),
-[_iSEE_](https://bioconductor.org/packages/3.18/bioc/html/iSEE.html) and
-[_shiny_](https://cran.r-project.org/web/packages/shiny/).
+## Example
 
-If you are asking yourself the question “Where do I start using Bioconductor?”
-you might be interested in
-[this blog post](https://lcolladotor.github.io/2014/10/16/startbioc/#.VkOKbq6rRuU).
-
-## Asking for help
-As package developers, we try to explain clearly how to use our packages and in
-which order to use the functions. But R and Bioconductor have a steep learning
-curve so it is critical to learn where to ask for help. The blog post quoted
-above mentions some but we would like to highlight the
-[Bioconductor support site](https://support.bioconductor.org/) as the main
-resource for getting help: remember to use the iSEEtree tag and check the
-[older posts](https://support.bioconductor.org/t/iSEEtree/). Other alternatives
-are available such as creating GitHub issues and tweeting. However, please note
-that if you want to receive help you should adhere to the
-[posting guidelines](https://www.bioconductor.org/help/support/posting-guide/).
-It is particularly critical that you provide a small reproducible example and
-your session information so package developers can track down the source of the
-error.
-
-## Citing iSEEtree
-We hope that iSEEtree will be useful for your research. Please use the following information to cite the package and the overall approach. Thank you!
-
-```{r citation}
-## Citation info
-citation("iSEEtree")
-```
-
-# Quick start to iSEEtree
+The panels described above can be generated for a model TreeSE object in the
+following example:
 
 ```{r start, message=FALSE, warning=FALSE}
 library(iSEEtree)
@@ -127,7 +156,49 @@ SCREENSHOT <- function(x, ...) knitr::include_graphics(x)
 SCREENSHOT("screenshots/get_started.png", delay=20)
 ```
 
+# Resources
+
+## Citation
+
+We hope that iSEEtree will be useful for your research. Please use the following information to cite the package and the overall approach. Thank you!
+
+```{r citation}
+## Citation info
+citation("iSEEtree")
+```
+
+## Background Knowledge
+
+iSEEtree is based on many other packages and in particular on those that have implemented the infrastructure needed for dealing with omics data, microbiome
+data and interactive visualisation. That is, packages like
+[_SummarizedExperiment_](https://bioconductor.org/packages/3.18/bioc/html/SummarizedExperiment.html),
+[_TreeSummarizedExperiment_](https://bioconductor.org/packages/3.18/bioc/html/TreeSummarizedExperiment.html),
+[_mia_](https://bioconductor.org/packages/3.18/bioc/html/mia.html),
+[_iSEE_](https://bioconductor.org/packages/3.18/bioc/html/iSEE.html) and
+[_shiny_](https://cran.r-project.org/web/packages/shiny/).
+
+If you are asking yourself the question “Where do I start using Bioconductor?”
+you might be interested in
+[this blog post](https://lcolladotor.github.io/2014/10/16/startbioc/#.VkOKbq6rRuU).
+
+## Help
+
+As package developers, we try to explain clearly how to use our packages and in
+which order to use the functions. But R and Bioconductor have a steep learning
+curve so it is critical to learn where to ask for help. The blog post quoted
+above mentions some but we would like to highlight the
+[Bioconductor support site](https://support.bioconductor.org/) as the main
+resource for getting help: remember to use the iSEEtree tag and check the
+[older posts](https://support.bioconductor.org/t/iSEEtree/). Other alternatives
+are available such as creating GitHub issues and tweeting. However, please note
+that if you want to receive help you should adhere to the
+[posting guidelines](https://www.bioconductor.org/help/support/posting-guide/).
+It is particularly critical that you provide a small reproducible example and
+your session information so package developers can track down the source of the
+error.
+
 # Reproducibility
+
 iSEEtree was made possible thanks to:
 
 - R `r Citep(bib[["R"]])`
@@ -140,27 +211,15 @@ iSEEtree was made possible thanks to:
 This package was developed using
 [_usethis_](https://cran.r-project.org/web/packages/usethis/).
 
-Code for creating the vignette.
+R session information:
 
-```{r createVignette, eval=FALSE}
-## Create the vignette
-library(rmarkdown)
-render("iSEEtree.Rmd", "BiocStyle::html_document")
-
-## Extract the R code
-library(knitr)
-knit("iSEEtree.Rmd", tangle = TRUE)
-```
-
-R session information.
-
-```{r reproduce3, echo=FALSE}
+```{r reproduce, echo=FALSE}
 ## Session info
 options(width = 120)
 sessionInfo()
 ```
 
-# Bibliography
+# References
 
 This vignette was generated using `r Biocpkg("BiocStyle")` `r Citep(bib[["BiocStyle"]])`
 with `r CRANpkg("knitr")` `r Citep(bib[["knitr"]])` and `r CRANpkg("rmarkdown")` `r Citep(bib[["rmarkdown"]])` running behind the scenes. Citations were generated with `r CRANpkg("RefManageR")` `r Citep(bib[["RefManageR"]])`.

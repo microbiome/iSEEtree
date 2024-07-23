@@ -6,7 +6,7 @@
 \alias{RDAPlot-class}
 \title{RDA plot}
 \value{
-The \code{RDAPlot(...)} contructor creates an instance of a RDAPlot class,
+The \code{RDAPlot(...)} constructor creates an instance of a RDAPlot class,
 where any slot and its value can be passed to \code{...} as a named argument.
 }
 \description{
@@ -37,7 +37,7 @@ The following slots control the thresholds used in the visualization:
 \item \code{label.size}, a numeric specifying the size of text and labels.
 \item \code{add.significance}, a logical indicating if variance and p-value
 should appear in the labels.
-\item \code{add.expl.var}, a logical indicating if variance shoud appear
+\item \code{add.expl.var}, a logical indicating if variance should appear
 on the coordinate axes.
 }
 

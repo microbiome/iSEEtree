@@ -1,5 +1,5 @@
 Package: iSEEtree
-Version: 0.99.4
+Version: 0.99.5
 Authors@R: 
     c(person(given = "Giulio", family = "Benedetti", role = c("aut", "cre"),
            email = "giulio.benedetti@utu.fi",
@@ -10,7 +10,7 @@ Authors@R:
 Title: Interactive visualisation for microbiome data
 Description:
     iSEEtree is an extension of iSEE for the TreeSummarizedExperiment.
-    It leverages the funcionality from the miaViz package for microbiome data
+    It leverages the functionality from the miaViz package for microbiome data
     visualisation to create panels that are specific for
     TreeSummarizedExperiment objects. Not surprisingly, it also depends on the
     generic panels from iSEE.
@@ -44,6 +44,6 @@ Suggests:
 URL: https://github.com/microbiome/iSEEtree
 BugReports: https://github.com/microbiome/iSEEtree/issues
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 Config/testthat/edition: 3
