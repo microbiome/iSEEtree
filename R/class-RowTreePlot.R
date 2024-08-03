@@ -120,7 +120,7 @@ RowTreePlot <- function(...) {
 #' @importFrom methods slot
 setMethod(".defineDataInterface", "RowTreePlot", function(x, se, select_info) {
   panel_name <- .getEncodedName(x)
-  print(select_info)
+
   list(.checkboxInput.iSEE(x, field="order_tree", label="Order tree",
                            value=slot(x, "order_tree")))
 })
