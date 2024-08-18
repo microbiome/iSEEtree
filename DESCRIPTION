@@ -6,7 +6,10 @@ Authors@R:
            comment = c(ORCID = "0000-0002-8732-7692")),
       person(given = "Ely", family = "Seraidarian", role = c("ctb"),
              email = "ely.seraidarian@utu.fi",
-             comment = c(ORCID = "0009-0008-8602-093X")))
+             comment = c(ORCID = "0009-0008-8602-093X")),
+      person(given = "Leo", family = "Lahti", role = c("aut"),
+             email = "leo.lahti@iki.fi",
+             comment = c(ORCID = "0000-0001-5537-637X")))
 Title: Interactive visualisation for microbiome data
 Description:
     iSEEtree is an extension of iSEE for the TreeSummarizedExperiment.
