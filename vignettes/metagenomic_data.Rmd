@@ -1,0 +1,93 @@
+---
+title: "Metagenomic Data"
+author:
+  - name: Giulio Benedetti
+    affiliation: University of Turku
+    email: giulio.benedetti@utu.fi
+date: "`r BiocStyle::doc_date()`"
+package: "`r BiocStyle::pkg_ver('iSEEtree')`"
+output: 
+  BiocStyle::html_document:
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{Metagenomic Data}
+  %\VignetteEncoding{UTF-8}  
+  %\VignetteEngine{knitr::rmarkdown}
+bibliography: references.bib
+runtime: shiny
+---
+
+```{r}
+# Import packages
+library(iSEEtree)
+library(mia)
+library(MGnifyR)
+library(scater)
+```
+
+```{r}
+# Instantiate mgnify client
+mg <- MgnifyClient(useCache = TRUE)
+```
+
+```{r}
+# Fetch sample accession numbers
+samples <- searchAnalysis(mg,
+                          accession = "MGYS00002504",
+                          type = "studies")
+```
+
+
+```{r}
+# Fetch samples as TreeSE
+tse <- getResult(mg, samples,
+                 get.taxa = TRUE,
+                 get.func = FALSE)
+```
+
+```{r}
+# Transform counts to relabundance
+tse <- transformAssay(tse,
+                      method = "relabundance",
+                      assay.type = "counts")
+
+# Transform relabundance to CLR
+tse <- transformAssay(tse,
+                      method = "clr",
+                      assay.type = "relabundance",
+                      pseudocount = TRUE)
+
+# Standardise CLR
+tse <- transformAssay(tse,
+                      method = "standardize",
+                      assay.type = "clr",
+                      MARGIN = "features",
+                      name = "clr-z")
+```
+
+```{r}
+# Estimate alpha diversity
+tse <- addAlpha(tse,
+                index = c("coverage_diversity", "shannon_diversity"),
+                assay.type = "relabundance")
+
+# Estimate beta diversity
+tse <- runMDS(tse,
+              FUN = vegan::vegdist,
+              method = "bray",
+              assay.type = "relabundance")
+```
+
+```{r}
+# Remove long variables
+colData(tse)$study_attributes.study.abstract <- NULL
+colData(tse)$sample_sample.desc <- NULL
+```
+
+```{r}
+# Launch app
+if (interactive()) {
+  iSEE(tse)
+}
+```
+
