@@ -1,6 +1,7 @@
-pandoc: '3.3'
-pkgdown: 2.1.0
+pandoc: '3.4'
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   iSEEtree: iSEEtree.html
-last_built: 2024-08-19T20:58Z
+  metagenomic_data: metagenomic_data.html
+last_built: 2024-10-02T12:35Z
