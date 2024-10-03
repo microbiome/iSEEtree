@@ -86,151 +86,92 @@ Benedetti</h4>
 Turku<br><a class="author_email" href="mailto:#"></a><a href="mailto:giulio.benedetti@utu.fi" class="email">giulio.benedetti@utu.fi</a>
       </address>
                   
-            <h4 data-toc-skip class="date">2 October 2024</h4>
+            <h4 data-toc-skip class="date">3 October 2024</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/microbiome/iSEEtree/blob/devel/vignettes/metagenomic_data.Rmd" class="external-link"><code>vignettes/metagenomic_data.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/microbiome/iSEEtree/blob/tutorial/vignettes/metagenomic_data.Rmd" class="external-link"><code>vignettes/metagenomic_data.Rmd</code></a></small>
       <div class="hidden name"><code>metagenomic_data.Rmd</code></div>
 
     </div>
 
     
     
+<p>Here, we demonstrate how to fetch a metagenomic dataset from the <a href="https://www.ebi.ac.uk/about/teams/microbiome-informatics/mgnify/" class="external-link">MGnify
+database</a> and explore it with the help of iSEEtree. For this purpose,
+we will use a relatively large dataset obtained by shotgun metagenomic
+sequencing of water samples from the Arctic Ocean during winter-spring
+transition <span class="citation">(Sousa et al. 2019)</span>.</p>
+<p>First, the following packages are imported to run the analysis.</p>
+<p>Then, the Mgnify client is instantiated.</p>
 <div class="sourceCode" id="section-cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Import packages</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/microbiome/iSEEtree" class="external-link">iSEEtree</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Loading required package: iSEE</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: SummarizedExperiment</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: MatrixGenerics</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: matrixStats</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'MatrixGenerics'</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:matrixStats':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,</span></span>
-<span><span class="co">##     colCounts, colCummaxs, colCummins, colCumprods, colCumsums,</span></span>
-<span><span class="co">##     colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,</span></span>
-<span><span class="co">##     colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,</span></span>
-<span><span class="co">##     colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,</span></span>
-<span><span class="co">##     colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,</span></span>
-<span><span class="co">##     colWeightedMeans, colWeightedMedians, colWeightedSds,</span></span>
-<span><span class="co">##     colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,</span></span>
-<span><span class="co">##     rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,</span></span>
-<span><span class="co">##     rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,</span></span>
-<span><span class="co">##     rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,</span></span>
-<span><span class="co">##     rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,</span></span>
-<span><span class="co">##     rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,</span></span>
-<span><span class="co">##     rowWeightedMads, rowWeightedMeans, rowWeightedMedians,</span></span>
-<span><span class="co">##     rowWeightedSds, rowWeightedVars</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: GenomicRanges</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: stats4</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: BiocGenerics</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'BiocGenerics'</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     IQR, mad, sd, var, xtabs</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:base':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     anyDuplicated, aperm, append, as.data.frame, basename, cbind,</span></span>
-<span><span class="co">##     colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,</span></span>
-<span><span class="co">##     get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,</span></span>
-<span><span class="co">##     match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,</span></span>
-<span><span class="co">##     Position, rank, rbind, Reduce, rownames, sapply, saveRDS, setdiff,</span></span>
-<span><span class="co">##     table, tapply, union, unique, unsplit, which.max, which.min</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: S4Vectors</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'S4Vectors'</span></span></code></pre>
-<pre><code><span><span class="co">## The following object is masked from 'package:utils':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     findMatches</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:base':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     expand.grid, I, unname</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: IRanges</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: GenomeInfoDb</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: Biobase</span></span></code></pre>
-<pre><code><span><span class="co">## Welcome to Bioconductor</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     Vignettes contain introductory material; view with</span></span>
-<span><span class="co">##     'browseVignettes()'. To cite Bioconductor, see</span></span>
-<span><span class="co">##     'citation("Biobase")', and for packages 'citation("pkgname")'.</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'Biobase'</span></span></code></pre>
-<pre><code><span><span class="co">## The following object is masked from 'package:MatrixGenerics':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     rowMedians</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:matrixStats':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     anyMissing, rowMedians</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: SingleCellExperiment</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'iSEEtree'</span></span></code></pre>
-<pre><code><span><span class="co">## The following object is masked from 'package:iSEE':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     iSEE</span></span></code></pre>
-<div class="sourceCode" id="section-cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/microbiome/mia" class="external-link">mia</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Loading required package: TreeSummarizedExperiment</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: Biostrings</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: XVector</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'Biostrings'</span></span></code></pre>
-<pre><code><span><span class="co">## The following object is masked from 'package:base':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     strsplit</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: MultiAssayExperiment</span></span></code></pre>
-<pre><code><span><span class="co">## This is mia version 1.13.36</span></span>
-<span><span class="co">## - Online documentation and vignettes: https://microbiome.github.io/mia/</span></span>
-<span><span class="co">## - Online book 'Orchestrating Microbiome Analysis (OMA)': https://microbiome.github.io/OMA/docs/devel/</span></span></code></pre>
-<div class="sourceCode" id="section-cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EBI-Metagenomics/MGnifyR" class="external-link">MGnifyR</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://bioconductor.org/packages/scater/" class="external-link">scater</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Loading required package: scuttle</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: ggplot2</span></span></code></pre>
-<div class="sourceCode" id="section-cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Instantiate mgnify client</span></span>
-<span><span class="va">mg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MGnifyR/man/MgnifyClient.html" class="external-link">MgnifyClient</a></span><span class="op">(</span>useCache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="section-cb40"><pre class="downlit sourceCode r">
+<span><span class="va">mg</span> <span class="op">&lt;-</span> <span class="fu">MgnifyClient</span><span class="op">(</span>useCache <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>We search all samples from the study of interest, which has the
+accession MGYS00001869.</p>
+<div class="sourceCode" id="section-cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fetch sample accession numbers</span></span>
-<span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MGnifyR/man/searchAnalysis.html" class="external-link">searchAnalysis</a></span><span class="op">(</span><span class="va">mg</span>,</span>
-<span>                          accession <span class="op">=</span> <span class="st">"MGYS00002504"</span>,</span>
+<span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu">searchAnalysis</span><span class="op">(</span><span class="va">mg</span>,</span>
+<span>                          accession <span class="op">=</span> <span class="st">"MGYS00001869"</span>,</span>
 <span>                          type <span class="op">=</span> <span class="st">"studies"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Fetching analyses...</span></span></code></pre>
-<pre><code><span><span class="co">##   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span></span></code></pre>
-<div class="sourceCode" id="section-cb43"><pre class="downlit sourceCode r">
+<pre><code><span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%</span></span></code></pre>
+<p>The samples are then fetched and combined into a TreeSE. This step
+might take upto 10 minutes.</p>
+<div class="sourceCode" id="section-cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fetch samples as TreeSE</span></span>
-<span><span class="va">tse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MGnifyR/man/getResult.html" class="external-link">getResult</a></span><span class="op">(</span><span class="va">mg</span>, <span class="va">samples</span>,</span>
+<span><span class="va">tse</span> <span class="op">&lt;-</span> <span class="fu">getResult</span><span class="op">(</span><span class="va">mg</span>, <span class="va">samples</span>,</span>
 <span>                 get.taxa <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                 get.func <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Fetching taxonomy data...</span></span></code></pre>
-<pre><code><span><span class="co">##   |                                                                              |                                                                      |   0%</span></span></code></pre>
-<pre><code><span><span class="co">## Warning in loadFromBiom(biom_path, removeTaxaPrefixes = TRUE, only.taxa.col =</span></span>
-<span><span class="co">## TRUE, : 'loadFromBiom' is deprecated. Use 'importBIOM' instead.</span></span></code></pre>
-<pre><code><span><span class="co">##   |                                                                              |=========                                                             |  12%</span></span></code></pre>
-<pre><code><span><span class="co">## Warning in loadFromBiom(biom_path, removeTaxaPrefixes = TRUE, only.taxa.col =</span></span>
-<span><span class="co">## TRUE, : 'loadFromBiom' is deprecated. Use 'importBIOM' instead.</span></span></code></pre>
-<pre><code><span><span class="co">##   |                                                                              |==================                                                    |  25%</span></span></code></pre>
-<pre><code><span><span class="co">## Warning in loadFromBiom(biom_path, removeTaxaPrefixes = TRUE, only.taxa.col =</span></span>
-<span><span class="co">## TRUE, : 'loadFromBiom' is deprecated. Use 'importBIOM' instead.</span></span></code></pre>
-<pre><code><span><span class="co">##   |                                                                              |==========================                                            |  38%</span></span></code></pre>
-<pre><code><span><span class="co">## Warning in loadFromBiom(biom_path, removeTaxaPrefixes = TRUE, only.taxa.col =</span></span>
-<span><span class="co">## TRUE, : 'loadFromBiom' is deprecated. Use 'importBIOM' instead.</span></span></code></pre>
-<pre><code><span><span class="co">##   |                                                                              |===================================                                   |  50%</span></span></code></pre>
-<pre><code><span><span class="co">## Warning in loadFromBiom(biom_path, removeTaxaPrefixes = TRUE, only.taxa.col =</span></span>
-<span><span class="co">## TRUE, : 'loadFromBiom' is deprecated. Use 'importBIOM' instead.</span></span></code></pre>
-<pre><code><span><span class="co">##   |                                                                              |============================================                          |  62%</span></span></code></pre>
-<pre><code><span><span class="co">## Warning in loadFromBiom(biom_path, removeTaxaPrefixes = TRUE, only.taxa.col =</span></span>
-<span><span class="co">## TRUE, : 'loadFromBiom' is deprecated. Use 'importBIOM' instead.</span></span></code></pre>
-<pre><code><span><span class="co">##   |                                                                              |====================================================                  |  75%</span></span></code></pre>
-<pre><code><span><span class="co">## Warning in loadFromBiom(biom_path, removeTaxaPrefixes = TRUE, only.taxa.col =</span></span>
-<span><span class="co">## TRUE, : 'loadFromBiom' is deprecated. Use 'importBIOM' instead.</span></span></code></pre>
-<pre><code><span><span class="co">##   |                                                                              |=============================================================         |  88%</span></span></code></pre>
-<pre><code><span><span class="co">## Warning in loadFromBiom(biom_path, removeTaxaPrefixes = TRUE, only.taxa.col =</span></span>
-<span><span class="co">## TRUE, : 'loadFromBiom' is deprecated. Use 'importBIOM' instead.</span></span></code></pre>
-<pre><code><span><span class="co">##   |                                                                              |======================================================================| 100%</span></span></code></pre>
-<pre><code><span><span class="co">## Merging with full join...</span></span></code></pre>
-<pre><code><span><span class="co">## 1/82/83/84/85/86/87/88/8</span></span></code></pre>
-<div class="sourceCode" id="section-cb64"><pre class="downlit sourceCode r">
+<pre><code><span><span class="co">#&gt;   |                                                                              |                                                                      |   0%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |===                                                                   |   4%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |=====                                                                 |   7%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |========                                                              |  11%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |==========                                                            |  15%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |=============                                                         |  19%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |================                                                      |  22%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |==================                                                    |  26%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |=====================                                                 |  30%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |=======================                                               |  33%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |==========================                                            |  37%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |=============================                                         |  41%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |===============================                                       |  44%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |==================================                                    |  48%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |====================================                                  |  52%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |=======================================                               |  56%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |=========================================                             |  59%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |============================================                          |  63%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |===============================================                       |  67%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |=================================================                     |  70%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |====================================================                  |  74%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |======================================================                |  78%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |=========================================================             |  81%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |============================================================          |  85%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |==============================================================        |  89%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |=================================================================     |  93%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |===================================================================   |  96%</span></span></code></pre>
+<pre><code><span><span class="co">#&gt;   |                                                                              |======================================================================| 100%</span></span></code></pre>
+<div class="sourceCode" id="section-cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># View TreeSE</span></span>
+<span><span class="va">tse</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; class: TreeSummarizedExperiment </span></span>
+<span><span class="co">#&gt; dim: 4057 27 </span></span>
+<span><span class="co">#&gt; metadata(0):</span></span>
+<span><span class="co">#&gt; assays(1): counts</span></span>
+<span><span class="co">#&gt; rownames(4057): 384552 1130548 ... 41722 5820</span></span>
+<span><span class="co">#&gt; rowData names(8): Kingdom Phylum ... Species taxonomy_unparsed</span></span>
+<span><span class="co">#&gt; colnames(27): MGYA00132764 MGYA00132765 ... MGYA00579273 MGYA00579274</span></span>
+<span><span class="co">#&gt; colData names(64): analysis_pipeline.version analysis_experiment.type</span></span>
+<span><span class="co">#&gt;   ... run_accession biome_string</span></span>
+<span><span class="co">#&gt; reducedDimNames(0):</span></span>
+<span><span class="co">#&gt; mainExpName: NULL</span></span>
+<span><span class="co">#&gt; altExpNames(0):</span></span>
+<span><span class="co">#&gt; rowLinks: NULL</span></span>
+<span><span class="co">#&gt; rowTree: NULL</span></span>
+<span><span class="co">#&gt; colLinks: NULL</span></span>
+<span><span class="co">#&gt; colTree: NULL</span></span></code></pre>
+<p>We apply different transformations to the counts assay, as certain
+graphs provide more useful information and more aesthetically appealing
+visualisation when created with, for example, relative abundance or
+standardised assays.</p>
+<div class="sourceCode" id="section-cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Transform counts to relabundance</span></span>
 <span><span class="va">tse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mia/man/transformAssay.html" class="external-link">transformAssay</a></span><span class="op">(</span><span class="va">tse</span>,</span>
 <span>                      method <span class="op">=</span> <span class="st">"relabundance"</span>,</span>
@@ -240,16 +181,17 @@ Turku<br><a class="author_email" href="mailto:#"></a><a href="mailto:giulio.bene
 <span><span class="va">tse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mia/man/transformAssay.html" class="external-link">transformAssay</a></span><span class="op">(</span><span class="va">tse</span>,</span>
 <span>                      method <span class="op">=</span> <span class="st">"clr"</span>,</span>
 <span>                      assay.type <span class="op">=</span> <span class="st">"relabundance"</span>,</span>
-<span>                      pseudocount <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## A pseudocount of 1.21921482565228e-05 was applied.</span></span></code></pre>
-<div class="sourceCode" id="section-cb66"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Standardise CLR</span></span>
+<span>                      pseudocount <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Standardise CLR</span></span>
 <span><span class="va">tse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mia/man/transformAssay.html" class="external-link">transformAssay</a></span><span class="op">(</span><span class="va">tse</span>,</span>
 <span>                      method <span class="op">=</span> <span class="st">"standardize"</span>,</span>
 <span>                      assay.type <span class="op">=</span> <span class="st">"clr"</span>,</span>
 <span>                      MARGIN <span class="op">=</span> <span class="st">"features"</span>,</span>
 <span>                      name <span class="op">=</span> <span class="st">"clr-z"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="section-cb67"><pre class="downlit sourceCode r">
+<p>We estimate information on alpha and beta diversity so that it can be
+accessed from the app.</p>
+<div class="sourceCode" id="section-cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Estimate alpha diversity</span></span>
 <span><span class="va">tse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mia/man/addAlpha.html" class="external-link">addAlpha</a></span><span class="op">(</span><span class="va">tse</span>,</span>
 <span>                index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"coverage_diversity"</span>, <span class="st">"shannon_diversity"</span><span class="op">)</span>,</span>
@@ -259,16 +201,36 @@ Turku<br><a class="author_email" href="mailto:#"></a><a href="mailto:giulio.bene
 <span><span class="va">tse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scater/man/runMDS.html" class="external-link">runMDS</a></span><span class="op">(</span><span class="va">tse</span>,</span>
 <span>              FUN <span class="op">=</span> <span class="fu">vegan</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/vegan/man/vegdist.html" class="external-link">vegdist</a></span>,</span>
 <span>              method <span class="op">=</span> <span class="st">"bray"</span>,</span>
+<span>              ncomp <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>              assay.type <span class="op">=</span> <span class="st">"relabundance"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="section-cb68"><pre class="downlit sourceCode r">
+<p>To prevent the column data table to take too much space, we remove
+the two long variables that are causing the expansion. In principle, the
+app can also run without this deletion.</p>
+<div class="sourceCode" id="section-cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Remove long variables</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">tse</span><span class="op">)</span><span class="op">$</span><span class="va">study_attributes.study.abstract</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">tse</span><span class="op">)</span><span class="op">$</span><span class="va">sample_sample.desc</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span></code></pre></div>
-<div class="sourceCode" id="section-cb69"><pre class="downlit sourceCode r">
+<span><span class="va">max_col_length</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">tse</span><span class="op">)</span>, <span class="fl">2</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">tse</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">tse</span><span class="op">)</span><span class="op">[</span> , <span class="va">max_col_length</span> <span class="op">&lt;</span> <span class="fl">20</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">max_col_length</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
+<p>Finally, the app is launched by passing the TreeSE object to
+<code>iSEE</code>. After tuning the parameters for the different panels,
+the app appears as illustrated by the image below.</p>
+<div class="sourceCode" id="section-cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Launch app</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/iSEE.html">iSEE</a></span><span class="op">(</span><span class="va">tse</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
+<p><img src="screenshots%2Fmetagenomic_data.png" width="100%"></p>
+<p>To know more about how to explore big data with iSEE and iSEEtree,
+check the related <a href="https://isee.github.io/iSEE/articles/bigdata.html" class="external-link">iSEE
+article</a>.</p>
+<div id="section-refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="section-ref-de2019diversity" class="csl-entry">
+Sousa, António Gaspar G de, Maria Paola Tomasino, Pedro Duarte, Mar
+Fernández-Méndez, Philipp Assmy, Hugo Ribeiro, Jaroslaw Surkont, et al.
+2019. <span>“Diversity and Composition of Pelagic Prokaryotic and
+Protist Communities in a Thin Arctic Sea-Ice Regime.”</span>
+<em>Microbial Ecology</em> 78: 388–408. <a href="https://doi.org/10.1007/s00248-018-01314-2" class="external-link">https://doi.org/10.1007/s00248-018-01314-2</a>.
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
