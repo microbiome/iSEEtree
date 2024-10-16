@@ -4,6 +4,8 @@ reference:
 - contents:
   - AbundanceDensityPlot
   - AbundancePlot
+  - ColumnTreePlot
+  - LoadingPlot
   - RDAPlot
   - RowTreePlot
 - title: Other

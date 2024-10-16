@@ -145,3 +145,9 @@ SCREENSHOT("screenshots/metagenomic_data.png", delay=20)
 
 To know more about how to explore big data with iSEE and iSEEtree, check the
 related [iSEE article](https://isee.github.io/iSEE/articles/bigdata.html).
+
+```{r reproduce, echo=FALSE}
+## Session info
+options(width = 120)
+sessionInfo()
+```

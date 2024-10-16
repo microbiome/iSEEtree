@@ -1,0 +1,49 @@
+test_that("ColumnTreePlot", {
+  
+  output <- new.env()
+  pObjects <- new.env()
+  rObjects <- new.env()
+  select_info <- list(single = list(feature = "---", sample = "---"),
+                      multi = list(row = "---", column = "---"))
+  
+  data("Tengeler2020", package = "mia")
+  tse <- Tengeler2020
+  panel <- ColumnTreePlot()
+  
+  panel[["layout"]] <- "rectangular"
+  
+  expect_identical(.getEncodedName(panel), "ColumnTreePlotNA")
+  expect_identical(.fullName(panel), "Column tree plot")
+  expect_identical(.panelColor(panel), "steelblue")
+  
+  expect_s3_class(.defineInterface(panel, tse, select_info)[[1]][[1]], "shiny.tag.list")
+  expect_length(.defineDataInterface(panel, tse, select_info), 1)
+  
+  expect_s3_class(.defineOutput(panel), "shiny.tag.list")
+  # expect_match(.generateOutput(panel, tse)[["commands"]][["fun"]],
+  #              'p <- miaViz::plotColTree(se, layout="rectangular", add_legend=TRUE,
+  #   order_tree=FALSE)',
+  #              fixed = TRUE)
+  
+  expect_true(.hideInterface(panel, "ColumnSelectionSource"))
+  expect_false(.multiSelectionResponsive(panel, "row"))
+  expect_true(.multiSelectionResponsive(panel, "column"))
+  
+  expect_contains(slotNames(panel), c("layout", "add_legend", "edge_colour_by",
+      "tip_colour_by", "order_tree", "tip_size_by", "tip_shape_by",
+      "edge_size_by", "node_size_by", "node_shape_by", "node_colour_by"))
+  
+  expect_contains(.definePanelTour(panel)[[1]],
+      c("#ColumnTreePlotNA_DataBoxOpen", "#ColumnTreePlotNA_VisualBoxOpen",
+      "#ColumnTreePlotNA", "#ColumnTreePlotNA_SelectionBoxOpen"))
+  
+  expect_s3_class(.create_visual_box_for_coltree(panel, tse), "shiny.tag.list")
+  
+  expect_null(.renderOutput(panel, tse, output = output, pObjects = pObjects, rObjects = rObjects))
+  expect_s3_class(output$ColumnTreePlotNA, "shiny.render.function")
+  expect_s3_class(output$ColumnTreePlotNA_INTERNAL_PanelMultiSelectInfo, "shiny.render.function")
+  expect_s3_class(output$ColumnTreePlotNA_INTERNAL_PanelSelectLinkInfo, "shiny.render.function")
+  
+  # expect_identical(.exportOutput(panel, tse), "ColumnTreePlotNA.pdf")
+  
+})

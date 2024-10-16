@@ -1,5 +1,5 @@
 Package: iSEEtree
-Version: 0.99.7
+Version: 0.99.8
 Authors@R: 
     c(person(given = "Giulio", family = "Benedetti", role = c("aut", "cre"),
            email = "giulio.benedetti@utu.fi",
@@ -17,7 +17,7 @@ Description:
     visualisation to create panels that are specific for
     TreeSummarizedExperiment objects. Not surprisingly, it also depends on the
     generic panels from iSEE.
-biocViews: Microbiome, Software, Visualization, GUI, ShinyApps
+biocViews: Microbiome, Software, Visualization, GUI, ShinyApps, DataImport
 License: Artistic-2.0
 Encoding: UTF-8
 Depends:
