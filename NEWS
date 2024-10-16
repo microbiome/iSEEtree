@@ -14,3 +14,6 @@ Changes in version 0.99.2
 
 Changes in version 0.99.3
 * Added .exportOutput method
+
+Changes in version 0.99.8
+* Added ColumnTreePlot and LoadingPlot panels

@@ -8,7 +8,7 @@
 #' to generate the plot.
 #'
 #' @section Slot overview:
-#' The following slots control the thresholds used in the visualization:
+#' The following slots control the thresholds used in the visualisation:
 #' \itemize{
 #' \item \code{add.ellipse}, a string specifying ellipse layout (filled, coloured or absent). 
 #' \item \code{colour_by}, a string specifying the parameter to color by.

@@ -6,7 +6,7 @@
 #' to generate the plot.
 #'
 #' @section Slot overview:
-#' The following slots control the thresholds used in the visualization:
+#' The following slots control the thresholds used in the visualisation:
 #' \itemize{
 #' \item \code{layout}, a string specifying abundance layout (jitter, density or points). 
 #' \item \code{assay.type}, a string specifying the assay to visualize.
