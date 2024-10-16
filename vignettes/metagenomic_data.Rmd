@@ -8,6 +8,8 @@ date: "`r BiocStyle::doc_date()`"
 package: "`r BiocStyle::pkg_ver('iSEEtree')`"
 output: 
   BiocStyle::html_document:
+    fig_height: 7
+    fig_width: 10
     toc_float: true
 vignette: >
   %\VignetteIndexEntry{Metagenomic Data}
@@ -17,7 +19,23 @@ bibliography: references.bib
 runtime: shiny
 ---
 
-```{r}
+Here, we demonstrate how to fetch a metagenomic dataset from the
+[MGnify database](https://www.ebi.ac.uk/about/teams/microbiome-informatics/mgnify/)
+and explore it with the help of iSEEtree. For this purpose, we will use a
+relatively large dataset obtained by shotgun metagenomic sequencing of water
+samples from the Arctic Ocean during winter-spring transition [@de2019diversity].
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = "#>"
+)
+```
+
+First, the following packages are imported to run the analysis.
+
+```{r vignetteSetup, echo=FALSE}
 # Import packages
 library(iSEEtree)
 library(mia)
@@ -25,27 +43,41 @@ library(MGnifyR)
 library(scater)
 ```
 
-```{r}
+Then, the Mgnify client is instantiated.
+
+```{r client}
 # Instantiate mgnify client
 mg <- MgnifyClient(useCache = TRUE)
 ```
 
-```{r}
+We search all samples from the study of interest, which has the accession
+MGYS00001869.
+
+```{r samples}
 # Fetch sample accession numbers
 samples <- searchAnalysis(mg,
-                          accession = "MGYS00002504",
+                          accession = "MGYS00001869",
                           type = "studies")
 ```
 
+The samples are then fetched and combined into a TreeSE. This step might take
+upto 10 minutes.
 
-```{r}
+```{r analyses}
 # Fetch samples as TreeSE
 tse <- getResult(mg, samples,
                  get.taxa = TRUE,
                  get.func = FALSE)
+
+# View TreeSE
+tse
 ```
 
-```{r}
+We apply different transformations to the counts assay, as certain graphs
+provide more useful information and more aesthetically appealing  visualisation
+when created with, for example, relative abundance or standardised assays.
+
+```{r transform}
 # Transform counts to relabundance
 tse <- transformAssay(tse,
                       method = "relabundance",
@@ -65,7 +97,10 @@ tse <- transformAssay(tse,
                       name = "clr-z")
 ```
 
-```{r}
+We estimate information on alpha and beta diversity so that it can be accessed
+from the app.
+
+```{r diversity}
 # Estimate alpha diversity
 tse <- addAlpha(tse,
                 index = c("coverage_diversity", "shannon_diversity"),
@@ -75,19 +110,38 @@ tse <- addAlpha(tse,
 tse <- runMDS(tse,
               FUN = vegan::vegdist,
               method = "bray",
+              ncomp = 10,
               assay.type = "relabundance")
 ```
 
-```{r}
+To prevent the column data table to take too much space, we remove the two long
+variables that are causing the expansion. In principle, the app can also run
+without this deletion.
+
+```{r polish}
 # Remove long variables
-colData(tse)$study_attributes.study.abstract <- NULL
-colData(tse)$sample_sample.desc <- NULL
+max_col_length <- apply(colData(tse), 2, function(x) max(nchar(x)))
+colData(tse) <- colData(tse)[ , max_col_length < 20 | is.na(max_col_length)]
 ```
 
-```{r}
+Finally, the app is launched by passing the TreeSE object to `iSEE`. After
+tuning the parameters for the different panels, the app appears as illustrated
+by the image below.
+
+```{r app}
 # Launch app
 if (interactive()) {
   iSEE(tse)
 }
 ```
 
+```{r screenfun, eval=!exists("SCREENSHOT"), include=FALSE}
+SCREENSHOT <- function(x, ...) knitr::include_graphics(x)
+```
+
+```{r screenplot, echo=FALSE, out.width="100%"}
+SCREENSHOT("screenshots/metagenomic_data.png", delay=20)
+```
+
+To know more about how to explore big data with iSEE and iSEEtree, check the
+related [iSEE article](https://isee.github.io/iSEE/articles/bigdata.html).
