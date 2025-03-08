@@ -69,9 +69,21 @@ RowTreePlot <- function(...) {
 setMethod(".fullName", "RowTreePlot", function(x) "Row tree plot")
 setMethod(".panelColor", "RowTreePlot", function(x) "#4EEE94")
 
+#' @importFrom methods slot callNextMethod
+#' @importFrom TreeSummarizedExperiment rowTree
+#' @importFrom ape Ntip
+setMethod(".defineDataInterface", "RowTreePlot", function(x, se, select_info) {
+  panel_name <- .getEncodedName(x)
+  out <- callNextMethod()
+  
+  list(.selectInput.iSEE(x, field="collapse", label="Collapse nodes:",
+          choices=seq_len(rowTree(se)$Nnode) + Ntip(rowTree(se)),
+          multiple = TRUE, selected=slot(x, "collapse")), out)
+})
+
 #' @importFrom miaViz plotRowTree
-#' @importFrom ggtree geom_tiplab collapse
-#' @importFrom ggplot2 geom_text
+#' @importFrom ggtree geom_tiplab collapse rotate_tree
+#' @importFrom ggplot2 geom_text aes
 #' @importFrom purrr reduce
 setMethod(".generateOutput", "RowTreePlot",
     function(x, se, all_memory, all_contents) {
@@ -123,9 +135,17 @@ setMethod(".generateOutput", "RowTreePlot",
     rotate_angle <- deparse(slot(x, "rotate.angle"))
     if( slot(x, "layout") != "rectangular" ){
         fun_call <- paste0(fun_call,
-            sprintf("; p <- rotate_tree(p, angle=%s)", rotate_angle))
+            sprintf("; p <- ggtree::rotate_tree(p, angle=%s)", rotate_angle))
     }
 
+    if( slot(x, "add.tip.lab") ){
+        fun_call <- paste0(fun_call, "; p <- p + geom_tiplab(size = 1)")
+    }
+    if( slot(x, "add.node.lab") ){
+        fun_call <- paste0(fun_call,
+            "; p <- p + geom_text(ggplot2::aes(label = node), hjust = -0.3, size = 2)")
+    }
+    
     nodes <- paste(slot(x, "collapse"), collapse = ", ")
     if( nodes != "NA" ){
         fun_call <- paste0(fun_call,
@@ -134,14 +154,6 @@ setMethod(".generateOutput", "RowTreePlot",
                 nodes))
     }
 
-    if( slot(x, "add.tip.lab") ){
-        fun_call <- paste0(fun_call, "; p <- p + geom_tiplab(size = 1)")
-    }
-    if( slot(x, "add.node.lab") ){
-        fun_call <- paste0(fun_call,
-            "; p <- p + geom_text(aes(label = node), hjust = -0.3, size = 2)")
-    }
-    
     fun_cmd <- paste(strwrap(fun_call, width = 80, exdent = 4), collapse = "\n")
     plot_out <- .textEval(fun_cmd, panel_env)
     all_cmds[["fun"]] <- fun_cmd

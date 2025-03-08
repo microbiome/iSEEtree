@@ -17,12 +17,11 @@ test_that("RowTreePlot", {
   expect_identical(.panelColor(panel), "#4EEE94")
   
   expect_s3_class(.defineInterface(panel, tse, select_info)[[1]][[1]], "shiny.tag.list")
-  expect_length(.defineDataInterface(panel, tse, select_info), 1)
+  expect_length(.defineDataInterface(panel, tse, select_info), 2)
   
   expect_s3_class(.defineOutput(panel), "shiny.tag.list")
   expect_match(.generateOutput(panel, tse)[["commands"]][["fun"]],
-      'p <- miaViz::plotRowTree(se, layout="rectangular", add_legend=TRUE,
-    order_tree=FALSE)',
+      'p <- plotRowTree(se, layout="rectangular", add.legend=TRUE, order.tree=FALSE,\n    open.angle=0)',
       fixed = TRUE)
   
   expect_true(.hideInterface(panel, "ColumnSelectionSource"))
@@ -39,7 +38,7 @@ test_that("RowTreePlot", {
                   c("#RowTreePlotNA_DataBoxOpen", "#RowTreePlotNA_VisualBoxOpen",
                     "#RowTreePlotNA", "#RowTreePlotNA_SelectionBoxOpen"))
   
-  expect_s3_class(.create_visual_box_for_rowtree(panel, tse), "shiny.tag.list")
+  expect_s3_class(.create_visual_box_for_tree(panel, tse), "shiny.tag.list")
   
   expect_null(.renderOutput(panel, tse, output = output, pObjects = pObjects, rObjects = rObjects))
   expect_s3_class(output$RowTreePlotNA, "shiny.render.function")

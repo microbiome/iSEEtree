@@ -110,10 +110,7 @@ setMethod("initialize", "TreePlot", function(.Object, ...) {
 #' @importFrom methods slot
 setMethod(".defineDataInterface", "TreePlot", function(x, se, select_info) {
   panel_name <- .getEncodedName(x)
-  list(.selectInput.iSEE(x, field="collapse", label="Collapse nodes:",
-          choices=as.numeric(rowLinks(se)$nodeNum), multiple = TRUE,
-          selected=slot(x, "collapse")),
-       .checkboxInput.iSEE(x, field="add.node.lab", label="Show node labels",
+  list(.checkboxInput.iSEE(x, field="add.node.lab", label="Show node labels",
           value=slot(x, "add.node.lab")),
        .checkboxInput.iSEE(x, field="add.tip.lab", label="Show tip labels",
           value=slot(x, "add.tip.lab")),
@@ -129,14 +126,12 @@ setMethod(".defineDataInterface", "TreePlot", function(x, se, select_info) {
 
 #' @importFrom methods callNextMethod
 setMethod(".defineInterface", "TreePlot", function(x, se, select_info) {
-    
     out <- callNextMethod()
     list(out[1], .create_visual_box_for_tree(x, se), out[-1])
 })
 
 setMethod(".createObservers", "TreePlot",
     function(x, se, input, session, pObjects, rObjects) {
-    
     callNextMethod()
     panel_name <- .getEncodedName(x)
 
@@ -214,10 +209,12 @@ setMethod(".definePanelTour", "TreePlot", function(x) {
     callNextMethod())
 })
 
-#' @importFrom SummarizedExperiment rowData
-#' @importFrom TreeSummarizedExperiment rowTreeNames
+#' @importFrom SummarizedExperiment rowData colData
 .create_visual_box_for_tree <- function(x, se) {
     panel_name <- .getEncodedName(x)
+    tr_data <- switch(panel_name,
+        RowTreePlotNA = rowData, ColumnTreePlotNA = colData)
+
     .addSpecificTour(class(x)[1], "layout", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_layout + .selectize-control"), intro = "Here, we can select the
@@ -230,19 +227,19 @@ setMethod(".definePanelTour", "TreePlot", function(x) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_edge_colour"), intro = "Here, we can choose
             whether or not to colour the lines by a variable from the
-            <code>rowData</code>. When active, the available options are listed
+            <code>metadata</code>. When active, the available options are listed
             and one of them can be selected.")))})
     .addSpecificTour(class(x)[1], "tip_colour", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_tip_colour"), intro = "Here, we can choose
             whether or not to colour the tips by a variable from the
-            <code>rowData</code>. When active, the available options are listed
+            <code>metadata</code>. When active, the available options are listed
             and one of them can be selected.")))})
     .addSpecificTour(class(x)[1], "node_colour", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_node_colour"), intro = "Here, we can choose
             whether or not to colour the nodes by a variable from the
-            <code>rowData</code>. When active, the available options are listed
+            <code>metadata</code>. When active, the available options are listed
             and one of them can be selected.")))})
     .addSpecificTour(class(x)[1], "order_tree", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
@@ -307,6 +304,13 @@ setMethod(".definePanelTour", "TreePlot", function(x) {
     collapseBox(paste0(panel_name, "_VisualBoxOpen"),
         title="Visual parameters", open=FALSE,
         # Tree layout
+        .selectInput.iSEE(x, field="layout", label="Layout:",
+            choices=c("fan", "rectangular", "circular", "slanted",
+                "inward_circular", "radial", "unrooted", "equal_angle",
+                "daylight", "dendrogram", "ape", "ellipse", "roundrect"),
+                selected=slot(x, "layout")),
+        .checkboxInput.iSEE(x, field="add_legend", label="View legend",
+            value=slot(x, "add_legend")),
         .checkboxGroupInput.iSEE(x, field="visual_parameters", label=NULL,
             inline=TRUE, selected=slot(x, "visual_parameters"),
             choices=c("Colour", "Size", "Shape")),
@@ -320,17 +324,17 @@ setMethod(".definePanelTour", "TreePlot", function(x) {
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_colour_parameters"), "Edge",
                         .selectInput.iSEE(x, field="edge_colour_by",
-                            label="Color lines by", choices=names(rowData(se)),
+                            label="Color lines by", choices=names(tr_data(se)),
                             selected=slot(x, "edge_colour_by"))),
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_colour_parameters"), "Node",
                         .selectInput.iSEE(x, field="node_colour_by",
-                            label="Color nodes by", choices=names(rowData(se)),
+                            label="Color nodes by", choices=names(tr_data(se)),
                             selected=slot(x, "node_colour_by"))),
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_colour_parameters"), "Tip",
                         .selectInput.iSEE(x, field="tip_colour_by",
-                            label="Color tips by", choices=names(rowData(se)),
+                            label="Color tips by", choices=names(tr_data(se)),
                             selected=slot(x, "tip_colour_by"))))),
         
         .conditionalOnCheckGroup(
@@ -342,17 +346,17 @@ setMethod(".definePanelTour", "TreePlot", function(x) {
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_size_parameters"), "Edge",
                         .selectInput.iSEE(x, field="edge_size_by",
-                            label="Size lines by", choices=names(rowData(se)),
+                            label="Size lines by", choices=names(tr_data(se)),
                             selected=slot(x, "edge_size_by"))),
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_size_parameters"), "Node",
                         .selectInput.iSEE(x, field="node_size_by",
-                            label="Size nodes by", choices=names(rowData(se)),
+                            label="Size nodes by", choices=names(tr_data(se)),
                             selected=slot(x, "node_size_by"))),
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_size_parameters"), "Tip",
                         .selectInput.iSEE(x, field="tip_size_by",
-                            label="Size tips by", choices=names(rowData(se)),
+                            label="Size tips by", choices=names(tr_data(se)),
                             selected=slot(x, "tip_size_by"))))),
         
         .conditionalOnCheckGroup(
@@ -364,22 +368,13 @@ setMethod(".definePanelTour", "TreePlot", function(x) {
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_shape_parameters"), "Node",
                         .selectInput.iSEE(x, field="node_shape_by",
-                            label="Shape nodes by", choices=names(rowData(se)),
+                            label="Shape nodes by", choices=names(tr_data(se)),
                             selected=slot(x, "node_shape_by"))),
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_shape_parameters"), "Tip",
                         .selectInput.iSEE(x, field="tip_shape_by",
-                            label="Shape tips by", choices=names(rowData(se)),
-                            selected=slot(x, "tip_shape_by"))))),
-    
-        .selectInput.iSEE(x, field="layout", label="Layout:",
-            choices=c("circular", "rectangular", "slanted", "fan",
-                "inward_circular", "radial", "unrooted", "equal_angle",
-                "daylight", "dendrogram", "ape", "ellipse", "roundrect"),
-                selected=slot(x, "layout")),
-        # Colour legend
-        .checkboxInput.iSEE(x, field="add_legend", label="View legend",
-            value=slot(x, "add_legend")))
+                            label="Shape tips by", choices=names(tr_data(se)),
+                            selected=slot(x, "tip_shape_by"))))))
 }
 
 #' @importFrom methods slot

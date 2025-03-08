@@ -69,7 +69,22 @@ ColumnTreePlot <- function(...) {
 setMethod(".fullName", "ColumnTreePlot", function(x) "Column tree plot")
 setMethod(".panelColor", "ColumnTreePlot", function(x) "steelblue")
 
+#' @importFrom methods slot callNextMethod
+#' @importFrom TreeSummarizedExperiment colTree
+#' @importFrom ape Ntip
+setMethod(".defineDataInterface", "ColumnTreePlot", function(x, se, select_info) {
+  panel_name <- .getEncodedName(x)
+  out <- callNextMethod()
+  
+  list(.selectInput.iSEE(x, field="collapse", label="Collapse nodes:",
+          choices=seq_len(colTree(se)$Nnode) + Ntip(colTree(se)),
+          multiple = TRUE, selected=slot(x, "collapse")), out)
+})
+
 #' @importFrom miaViz plotColTree
+#' @importFrom ggtree geom_tiplab collapse rotate_tree
+#' @importFrom ggplot2 geom_text aes
+#' @importFrom purrr reduce
 setMethod(".generateOutput", "ColumnTreePlot",
     function(x, se, all_memory, all_contents) {
     
@@ -121,6 +136,22 @@ setMethod(".generateOutput", "ColumnTreePlot",
     if( slot(x, "layout") != "rectangular" ){
         fun_call <- paste0(fun_call,
             sprintf("; p <- ggtree::rotate_tree(p, angle=%s)", rotate_angle))
+    }
+    
+    if( slot(x, "add.tip.lab") ){
+        fun_call <- paste0(fun_call, "; p <- p + geom_tiplab(size = 1)")
+    }
+    if( slot(x, "add.node.lab") ){
+        fun_call <- paste0(fun_call,
+            "; p <- p + geom_text(ggplot2::aes(label = node), hjust = -0.3, size = 2)")
+    }
+    
+    nodes <- paste(slot(x, "collapse"), collapse = ", ")
+    if( nodes != "NA" ){
+        fun_call <- paste0(fun_call,
+            sprintf(
+                "; reduce(c(%s), function(x, y) collapse(x, y), .init = p)",
+                nodes))
     }
     
     fun_cmd <- paste(strwrap(fun_call, width = 80, exdent = 4), collapse = "\n")

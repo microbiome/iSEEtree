@@ -24,6 +24,7 @@ Depends:
     R (>= 4.4.0),
     iSEE (>= 2.19.2)
 Imports:
+    ape,
     ggplot2,
     ggtree,
     grDevices,

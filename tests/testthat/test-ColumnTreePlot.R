@@ -17,7 +17,7 @@ test_that("ColumnTreePlot", {
   expect_identical(.panelColor(panel), "steelblue")
   
   expect_s3_class(.defineInterface(panel, tse, select_info)[[1]][[1]], "shiny.tag.list")
-  expect_length(.defineDataInterface(panel, tse, select_info), 1)
+  expect_length(.defineDataInterface(panel, tse, select_info), 6)
   
   expect_s3_class(.defineOutput(panel), "shiny.tag.list")
   # expect_match(.generateOutput(panel, tse)[["commands"]][["fun"]],
@@ -37,7 +37,7 @@ test_that("ColumnTreePlot", {
       c("#ColumnTreePlotNA_DataBoxOpen", "#ColumnTreePlotNA_VisualBoxOpen",
       "#ColumnTreePlotNA", "#ColumnTreePlotNA_SelectionBoxOpen"))
   
-  expect_s3_class(.create_visual_box_for_coltree(panel, tse), "shiny.tag.list")
+  expect_s3_class(.create_visual_box_for_tree(panel, tse), "shiny.tag.list")
   
   expect_null(.renderOutput(panel, tse, output = output, pObjects = pObjects, rObjects = rObjects))
   expect_s3_class(output$ColumnTreePlotNA, "shiny.render.function")
