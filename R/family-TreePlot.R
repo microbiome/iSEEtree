@@ -67,8 +67,11 @@ setValidity2("TreePlot", function(x) {
     msg <- .singleStringError(msg, x, fields=c("layout", "edge_colour_by",
         "tip_colour_by", "tip_size_by", "edge_size_by", "tip_shape_by",
         "node_colour_by", "node_size_by", "node_shape_by"))
-    msg <- .validLogicalError(msg, x, fields=c("add_legend", "order_tree"))
-    
+    msg <- .validLogicalError(msg, x, fields=c("add_legend", "order_tree",
+        "branch.length", "add.node.lab", "add.tip.lab"))
+    msg <- .validNumberError(msg, x, "open.angle", lower=0, upper=360)
+    msg <- .validNumberError(msg, x, "rotate.angle", lower=0, upper=360)
+
     if (length(msg)) {
         return(msg)
     }
@@ -79,7 +82,7 @@ setValidity2("TreePlot", function(x) {
 #' @importFrom methods callNextMethod
 setMethod("initialize", "TreePlot", function(.Object, ...) {
     args <- list(...)
-    args <- .emptyDefault(args, "layout", "circular")
+    args <- .emptyDefault(args, "layout", "fan")
     args <- .emptyDefault(args, "add_legend", TRUE)
     args <- .emptyDefault(args, "edge_colour_by", NA_character_)
     args <- .emptyDefault(args, "edge_size_by", NA_character_)
@@ -94,17 +97,34 @@ setMethod("initialize", "TreePlot", function(.Object, ...) {
     args <- .emptyDefault(args, "shape_parameters", NA_character_)
     args <- .emptyDefault(args, "size_parameters", NA_character_)
     args <- .emptyDefault(args, "order_tree", FALSE)
+    args <- .emptyDefault(args, "collapse", NA_character_)
+    args <- .emptyDefault(args, "add.node.lab", FALSE)
+    args <- .emptyDefault(args, "add.tip.lab", FALSE)
+    args <- .emptyDefault(args, "open.angle", 0)
+    args <- .emptyDefault(args, "rotate.angle", 0)
+    args <- .emptyDefault(args, "branch.length", FALSE)
 
     do.call(callNextMethod, c(list(.Object), args))
 })
 
-#' @importFrom iSEE .getEncodedName .checkboxInput.iSEE
 #' @importFrom methods slot
 setMethod(".defineDataInterface", "TreePlot", function(x, se, select_info) {
   panel_name <- .getEncodedName(x)
-
-  list(.checkboxInput.iSEE(x, field="order_tree", label="Order tree",
-                           value=slot(x, "order_tree")))
+  list(.selectInput.iSEE(x, field="collapse", label="Collapse nodes:",
+          choices=as.numeric(rowLinks(se)$nodeNum), multiple = TRUE,
+          selected=slot(x, "collapse")),
+       .checkboxInput.iSEE(x, field="add.node.lab", label="Show node labels",
+          value=slot(x, "add.node.lab")),
+       .checkboxInput.iSEE(x, field="add.tip.lab", label="Show tip labels",
+          value=slot(x, "add.tip.lab")),
+       .sliderInput.iSEE(x, field="open.angle", label="Open by angle:",
+          min=0, max=360, step=1, value=slot(x, "open.angle")),
+       .sliderInput.iSEE(x, field="rotate.angle", label="Rotate by angle:",
+          min=0, max=360, step=1, value=slot(x, "rotate.angle")),
+       .checkboxInput.iSEE(x, field="order_tree", label="Order tree",
+          value=slot(x, "order_tree")),
+       .checkboxInput.iSEE(x, field="branch.length", label="Equalise length",
+          value=slot(x, "branch.length")))
 })
 
 #' @importFrom methods callNextMethod
@@ -123,73 +143,24 @@ setMethod(".createObservers", "TreePlot",
     .createProtectedParameterObservers(panel_name, c("layout", "add_legend",
         "RowSelectionSource", "order_tree", "size_parameters", "visual_parameters",
         "shape_parameters", "colour_parameters", "open.angle", "rotate.angle",
-        "branch.length"), input=input, pObjects=pObjects, rObjects=rObjects)
+        "branch.length", "collapse"), input=input, pObjects=pObjects,
+        rObjects=rObjects)
     
     .createUnprotectedParameterObservers(panel_name, c("edge_colour_by",
         "tip_colour_by", "tip_size_by", "tip_shape_by", "node_size_by",
-        "node_shape_by", "node_colour_by", "edge_size_by"), input=input,
-        pObjects=pObjects, rObjects=rObjects)
+        "node_shape_by", "node_colour_by", "edge_size_by", "add.node.lab",
+        "add.tip.lab"), input=input, pObjects=pObjects, rObjects=rObjects)
     
     invisible(NULL)
 })
 
-#' @importFrom miaViz plotRowTree plotColTree
-setMethod(".generateOutput", "TreePlot",
-    function(x, se, all_memory, all_contents) {
-    
+#' @importFrom shiny plotOutput
+#' @importFrom shinyWidgets addSpinner
+setMethod(".defineOutput", "TreePlot", function(x) {
     panel_name <- .getEncodedName(x)
-    panel_env <- new.env()
-    all_cmds <- list()
-    args <- character(0)
-    print(panel_name)
-    if( panel_name == "RowTreePlotNA" ){
-        margin <- "row_selected"
-        plot_fun <- "p <- miaViz::plotRowTree(se, %s)"
-    }else if( panel_name == "ColumnTreePlotNA" ){
-        margin <- "col_selected"
-        plot_fun <- "p <- miaViz::plotColTree(se, %s)"
-    }
 
-    all_cmds[["select"]] <- .processMultiSelections(
-        x, all_memory, all_contents, panel_env
-    )
-
-    if( exists(margin, envir=panel_env, inherits=FALSE) ) {
-        panel_env[["se"]] <- se[unlist(panel_env[[margin]]), ]
-    } else {
-        panel_env[["se"]] <- se
-    }
-    
-    args[["layout"]] <- deparse(slot(x, "layout"))
-    args[["add_legend"]] <- deparse(slot(x, "add_legend"))
-    args[["order_tree"]] <- deparse(slot(x, "order_tree"))
-    
-    if( "Colour" %in% slot(x, "visual_parameters") ){
-        args <- .assign_viz_param(args, x, "Edge", "colour")
-        args <- .assign_viz_param(args, x, "Node", "colour")
-        args <- .assign_viz_param(args, x, "Tip", "colour")
-    }
-    
-    if( "Shape" %in% slot(x, "visual_parameters") ){
-        args <- .assign_viz_param(args, x, "Node", "shape")
-        args <- .assign_viz_param(args, x, "Tip", "shape")
-    }
-    
-    if( "Size" %in% slot(x, "visual_parameters") ){
-        args <- .assign_viz_param(args, x, "Edge", "size")
-        args <- .assign_viz_param(args, x, "Node", "size")
-        args <- .assign_viz_param(args, x, "Tip", "size")
-    }
-  
-    args <- sprintf("%s=%s", names(args), args)
-    args <- paste(args, collapse=", ")
-    fun_call <- sprintf(plot_fun, args)
-
-    fun_cmd <- paste(strwrap(fun_call, width = 80, exdent = 4), collapse = "\n")
-    plot_out <- .textEval(fun_cmd, panel_env)
-    all_cmds[["fun"]] <- fun_cmd
-
-    list(commands=all_cmds, plot=plot_out, varname=NULL, contents=NULL)
+    addSpinner(plotOutput(panel_name,
+        height = paste0(slot(x, "PanelHeight"), "px")), color=.panelColor(x))
 })
 
 #' @importFrom shiny renderPlot
@@ -228,10 +199,10 @@ setMethod(".exportOutput", "TreePlot",
 #' @importFrom methods callNextMethod
 setMethod(".definePanelTour", "TreePlot", function(x) {
     rbind(c(paste0("#", .getEncodedName(x)), sprintf(
-        "The <font color=\"%s\">RowTreePlot</font> panel contains a phylogenetic
+        "The <font color=\"%s\">%s</font> panel contains a phylogenetic
         tree from the 
         <i><a href='https://microbiome.github.io/miaViz/reference/plotTree.html'>miaViz</a></i>
-        package.", .getPanelColor(x))),
+        package.", .getPanelColor(x), .fullName(x))),
     .addTourStep(x, "DataBoxOpen", "The <i>Data parameters</i> box shows the
         available parameters that can be tweaked to control the data on
         the heatmap.<br/><br/><strong>Action:</strong> click on this

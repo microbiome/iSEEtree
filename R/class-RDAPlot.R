@@ -64,7 +64,6 @@
 #' @name RDAPlot
 NULL
 
-#' @importFrom iSEE .singleStringError .validLogicalError .validNumberError
 #' @importFrom S4Vectors setValidity2
 setValidity2("RDAPlot", function(x) {
     msg <- character(0)
@@ -90,7 +89,6 @@ setValidity2("RDAPlot", function(x) {
     TRUE
 })
 
-#' @importFrom iSEE .emptyDefault
 #' @importFrom methods callNextMethod
 setMethod("initialize", "RDAPlot", function(.Object, ...) {
     args <- list(...)
@@ -144,7 +142,6 @@ setMethod(".defineInterface", "RDAPlot", function(x, se, select_info) {
     list(out[1], .create_visual_box_for_rda(x, se), out[-1])
 })
 
-#' @importFrom iSEE .getEncodedName .createProtectedParameterObservers
 setMethod(".createObservers", "RDAPlot",
     function(x, se, input, session, pObjects, rObjects) {
     
@@ -154,21 +151,19 @@ setMethod(".createObservers", "RDAPlot",
     .createProtectedParameterObservers(panel_name, c("dimred",
         "confidence.level"), input=input, pObjects=pObjects, rObjects=rObjects)
     
-    .createProtectedParameterObservers(panel_name, c("add.ellipse", "colour_by",
-        "vec.text", "add.vectors", "add.expl.var", "add.significance",
-        "ellipse.alpha", "ellipse.linewidth", "ellipse.linetype", "vec.size",
-        "vec.colour", "vec.linetype", "arrow.size", "label.colour",
-        "label.size", "visual_parameters"), input=input, pObjects=pObjects,
-        rObjects=rObjects)
+    .createUnprotectedParameterObservers(panel_name, c("add.ellipse",
+        "colour_by", "vec.text", "add.vectors", "add.expl.var",
+        "add.significance", "ellipse.alpha", "ellipse.linewidth",
+        "ellipse.linetype", "vec.size", "vec.colour", "vec.linetype",
+        "arrow.size", "label.colour", "label.size", "visual_parameters"),
+        input=input, pObjects=pObjects, rObjects=rObjects)
     
     invisible(NULL)
 })
 
 setMethod(".fullName", "RDAPlot", function(x) "RDA plot")
-
 setMethod(".panelColor", "RDAPlot", function(x) "#CD5B45")
 
-#' @importFrom iSEE .getEncodedName
 #' @importFrom shiny plotOutput
 #' @importFrom shinyWidgets addSpinner
 setMethod(".defineOutput", "RDAPlot", function(x) {
@@ -178,7 +173,6 @@ setMethod(".defineOutput", "RDAPlot", function(x) {
         height = paste0(slot(x, "PanelHeight"), "px")), color=.panelColor(x))
 })
 
-#' @importFrom iSEE .processMultiSelections .textEval
 #' @importFrom miaViz plotRowTree
 setMethod(".generateOutput", "RDAPlot",
     function(x, se, all_memory, all_contents) {
@@ -238,8 +232,6 @@ setMethod(".generateOutput", "RDAPlot",
     list(commands=all_cmds, plot=plot_out, varname=NULL, contents=NULL)
 })
 
-#' @importMethodsFrom iSEE .renderOutput
-#' @importFrom iSEE .getEncodedName .retrieveOutput
 #' @importFrom shiny renderPlot
 setMethod(".renderOutput", "RDAPlot",
     function(x, se, output, pObjects, rObjects) {
@@ -292,7 +284,6 @@ setMethod(".multiSelectionResponsive", "RDAPlot", function(x, dim = character(0)
 })
 
 #' @importFrom methods callNextMethod
-#' @importFrom iSEE .getEncodedName .addTourStep
 setMethod(".definePanelTour", "RDAPlot", function(x) {
     rbind(c(paste0("#", .getEncodedName(x)), sprintf(
         "The <font color=\"%s\">RDA Plot</font> panel contains a representation

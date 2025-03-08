@@ -51,7 +51,6 @@
 #' @name LoadingPlot
 NULL
 
-#' @importFrom iSEE .singleStringError .validNumberError .validLogicalError
 #' @importFrom S4Vectors setValidity2
 setValidity2("LoadingPlot", function(x) {
     msg <- character(0)
@@ -67,7 +66,6 @@ setValidity2("LoadingPlot", function(x) {
     TRUE
 })
 
-#' @importFrom iSEE .emptyDefault
 #' @importFrom methods callNextMethod
 setMethod("initialize", "LoadingPlot", function(.Object, ...) {
     args <- list(...)
@@ -85,7 +83,6 @@ LoadingPlot <- function(...) {
     new("LoadingPlot", ...)
 }
 
-#' @importFrom iSEE .getEncodedName .selectInput.iSEE .numericInput.iSEE
 #' @importFrom methods slot
 #' @importFrom SingleCellExperiment reducedDim reducedDimNames
 setMethod(".defineDataInterface", "LoadingPlot",
@@ -109,8 +106,6 @@ setMethod(".defineInterface", "LoadingPlot",
     list(out[1], .create_visual_box_for_loading_plot(x, se), out[-1])
 })
 
-#' @importFrom iSEE .getEncodedName .createProtectedParameterObservers
-#'   .createUnprotectedParameterObservers
 setMethod(".createObservers", "LoadingPlot",
     function(x, se, input, session, pObjects, rObjects) {
     
@@ -128,13 +123,9 @@ setMethod(".createObservers", "LoadingPlot",
     invisible(NULL)
 })
 
-setMethod(".fullName", "LoadingPlot",
-    function(x) "Loading plot")
-
-#' @importMethodsFrom iSEE .panelColor
+setMethod(".fullName", "LoadingPlot", function(x) "Loading plot")
 setMethod(".panelColor", "LoadingPlot", function(x) "yellow")
 
-#' @importFrom iSEE .getEncodedName
 #' @importFrom shiny plotOutput
 #' @importFrom shinyWidgets addSpinner
 setMethod(".defineOutput", "LoadingPlot", function(x) {
@@ -145,8 +136,6 @@ setMethod(".defineOutput", "LoadingPlot", function(x) {
         color=.panelColor(x))
 })
 
-#' @importMethodsFrom iSEE .generateOutput
-#' @importFrom iSEE .processMultiSelections .textEval
 #' @importFrom miaViz plotLoadings
 setMethod(".generateOutput", "LoadingPlot",
     function(x, se, all_memory, all_contents) {
@@ -188,7 +177,6 @@ setMethod(".generateOutput", "LoadingPlot",
     list(commands=all_cmds, plot=plot_out, varname=NULL, contents=NULL)
 })
 
-#' @importFrom iSEE .getEncodedName .retrieveOutput
 #' @importFrom shiny renderPlot
 #' @importFrom methods callNextMethod
 setMethod(".renderOutput", "LoadingPlot",
@@ -244,7 +232,6 @@ setMethod(".multiSelectionResponsive", "LoadingPlot",
 })
 
 #' @importFrom methods callNextMethod
-#' @importFrom iSEE .getEncodedName .addTourStep
 setMethod(".definePanelTour", "LoadingPlot", function(x) {
     rbind(c(paste0("#", .getEncodedName(x)), sprintf(
         "The <font color=\"%s\">Loading Plot</font> panel
@@ -261,8 +248,6 @@ setMethod(".definePanelTour", "LoadingPlot", function(x) {
     callNextMethod())
 })
 
-#' @importFrom iSEE .getEncodedName collapseBox .selectInput.iSEE
-#'   .radioButtons.iSEE .conditionalOnRadio .checkboxInput.iSEE
 #' @importFrom methods slot
 #' @importFrom SummarizedExperiment colData
 .create_visual_box_for_loading_plot <- function(x, se) {

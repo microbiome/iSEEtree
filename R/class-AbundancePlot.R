@@ -41,7 +41,6 @@
 #' @name AbundancePlot
 NULL
 
-#' @importFrom iSEE .singleStringError .validLogicalError
 #' @importFrom S4Vectors setValidity2
 setValidity2("AbundancePlot", function(x) {
     
@@ -75,8 +74,6 @@ AbundancePlot <- function(...) {
     new("AbundancePlot", ...)
 }
 
-#' @importFrom iSEE .getEncodedName .checkboxInput.iSEE .radioButtons.iSEE
-#'   .conditionalOnRadio .selectInput.iSEE
 #' @importFrom methods slot
 #' @importFrom SummarizedExperiment colData
 setMethod(".defineDataInterface", "AbundancePlot", function(x, se, select_info) {
@@ -108,8 +105,6 @@ setMethod(".defineInterface", "AbundancePlot", function(x, se, select_info) {
     list(out[1], .create_visual_box_for_abund_plot(x, se), out[-1])
 })
 
-#' @importFrom iSEE .getEncodedName .createProtectedParameterObservers 
-#' .createUnprotectedParameterObservers
 setMethod(".createObservers", "AbundancePlot",
     function(x, se, input, session, pObjects, rObjects) {
     
@@ -127,10 +122,8 @@ setMethod(".createObservers", "AbundancePlot",
 })
 
 setMethod(".fullName", "AbundancePlot", function(x) "Abundance plot")
-
 setMethod(".panelColor", "AbundancePlot", function(x) "#00E5EE")
 
-#' @importFrom iSEE .getEncodedName
 #' @importFrom shiny plotOutput
 #' @importFrom shinyWidgets addSpinner
 setMethod(".defineOutput", "AbundancePlot", function(x) {
@@ -141,7 +134,6 @@ setMethod(".defineOutput", "AbundancePlot", function(x) {
 })
 
 #' @importFrom miaViz plotRowTree
-#' @importFrom iSEE .processMultiSelections
 setMethod(".generateOutput", "AbundancePlot",
     function(x, se, all_memory, all_contents) {
     
@@ -185,7 +177,6 @@ setMethod(".generateOutput", "AbundancePlot",
     list(commands=all_cmds, plot=plot_out, varname=NULL, contents=NULL)
 })
 
-#' @importFrom iSEE .getEncodedName .retrieveOutput
 #' @importFrom shiny renderPlot
 #' @importFrom methods callNextMethod
 setMethod(".renderOutput", "AbundancePlot",
@@ -239,7 +230,6 @@ setMethod(".multiSelectionResponsive", "AbundancePlot",
 })
 
 #' @importFrom methods callNextMethod
-#' @importFrom iSEE .getEncodedName .addTourStep
 setMethod(".definePanelTour", "AbundancePlot", function(x) {
     rbind(c(paste0("#", .getEncodedName(x)), sprintf(
         "The <font color=\"%s\">Abundance Plot</font> panel
@@ -258,8 +248,6 @@ setMethod(".definePanelTour", "AbundancePlot", function(x) {
     callNextMethod())
 })
 
-#' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE
-# .addSpecificTour
 #' @importFrom methods slot
 #' @importFrom mia taxonomyRanks
 #' @importFrom SummarizedExperiment rowData
