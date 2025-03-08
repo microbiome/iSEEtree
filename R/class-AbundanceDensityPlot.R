@@ -46,13 +46,6 @@
 #' @name AbundanceDensityPlot
 NULL
 
-#' @rdname AbundanceDensityPlot
-#' @export
-setClass("AbundanceDensityPlot", contains="Panel", slots=c(layout="character",
-    assay.type="character", n="numeric", dots_colour="character",
-    dots_colour_by="character", add_legend="logical", flipped="logical",
-    order_descending="logical", dots_shape="character", dots_shape_by="character"))
-
 #' @importFrom iSEE .singleStringError .validNumberError .validLogicalError
 #' @importFrom S4Vectors setValidity2
 setValidity2("AbundanceDensityPlot", function(x) {

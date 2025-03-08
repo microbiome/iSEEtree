@@ -1,10 +1,10 @@
-#' Column tree plot
+#' Tree plot
 #'
-#' Hierarchical tree for the columns of a
+#' Hierarchical tree for the rows of a
 #' \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}
-#' object. The tree represents the sample hierarchy of the study and gets stored
-#' in the \code{\link[TreeSummarizedExperiment:rowLinks]{colTree}} slot of the
-#' experiment object. The panel implements \code{\link[miaViz:plotTree]{plotColTree}}
+#' object. The tree can be produced with \code{\link[mia:taxonomy-methods]{addTaxonomyTree}}
+#' and gets stored in the \code{\link[TreeSummarizedExperiment:rowLinks]{rowTree}}
+#' slot of the experiment object. The panel implements \code{\link[miaViz:plotTree]{plotRowTree}}
 #' to generate the plot.
 #'
 #' @section Slot overview:
@@ -35,7 +35,7 @@
 #' In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
 #'
 #' @return
-#' The \code{ColumnTreePlot(...)} constructor creates an instance of a ColumnTreePlot
+#' The \code{RowTreePlot(...)} constructor creates an instance of a RowTreePlot
 #' class, where any slot and its value can be passed to \code{...} as a named
 #' argument.
 #'
@@ -47,7 +47,7 @@
 #' tse <- Tengeler2020
 #' 
 #' # Store panel into object
-#' panel <- ColumnTreePlot()
+#' panel <- RowTreePlot()
 #' # View some adjustable parameters
 #' head(slotNames(panel))
 #'
@@ -57,12 +57,11 @@
 #' }
 #' 
 #' @docType methods
-#' @name ColumnTreePlot
+#' @name TreePlot
 NULL
 
-#' @importFrom iSEE .singleStringError .validLogicalError
 #' @importFrom S4Vectors setValidity2
-setValidity2("ColumnTreePlot", function(x) {
+setValidity2("TreePlot", function(x) {
     msg <- character(0)
     
     msg <- .singleStringError(msg, x, fields=c("layout", "edge_colour_by",
@@ -77,9 +76,8 @@ setValidity2("ColumnTreePlot", function(x) {
     TRUE
 })
 
-#' @importFrom iSEE .emptyDefault
 #' @importFrom methods callNextMethod
-setMethod("initialize", "ColumnTreePlot", function(.Object, ...) {
+setMethod("initialize", "TreePlot", function(.Object, ...) {
     args <- list(...)
     args <- .emptyDefault(args, "layout", "circular")
     args <- .emptyDefault(args, "add_legend", TRUE)
@@ -100,15 +98,9 @@ setMethod("initialize", "ColumnTreePlot", function(.Object, ...) {
     do.call(callNextMethod, c(list(.Object), args))
 })
 
-#' @export
-#' @importFrom methods new
-ColumnTreePlot <- function(...) {
-    new("ColumnTreePlot", ...)
-}
-
 #' @importFrom iSEE .getEncodedName .checkboxInput.iSEE
 #' @importFrom methods slot
-setMethod(".defineDataInterface", "ColumnTreePlot", function(x, se, select_info) {
+setMethod(".defineDataInterface", "TreePlot", function(x, se, select_info) {
   panel_name <- .getEncodedName(x)
 
   list(.checkboxInput.iSEE(x, field="order_tree", label="Order tree",
@@ -116,15 +108,13 @@ setMethod(".defineDataInterface", "ColumnTreePlot", function(x, se, select_info)
 })
 
 #' @importFrom methods callNextMethod
-setMethod(".defineInterface", "ColumnTreePlot", function(x, se, select_info) {
+setMethod(".defineInterface", "TreePlot", function(x, se, select_info) {
     
     out <- callNextMethod()
-    list(out[1], .create_visual_box_for_rowtree(x, se), out[-1])
+    list(out[1], .create_visual_box_for_tree(x, se), out[-1])
 })
 
-#' @importFrom iSEE .getEncodedName .createProtectedParameterObservers
-#'   .createUnprotectedParameterObservers
-setMethod(".createObservers", "ColumnTreePlot",
+setMethod(".createObservers", "TreePlot",
     function(x, se, input, session, pObjects, rObjects) {
     
     callNextMethod()
@@ -132,8 +122,8 @@ setMethod(".createObservers", "ColumnTreePlot",
 
     .createProtectedParameterObservers(panel_name, c("layout", "add_legend",
         "RowSelectionSource", "order_tree", "size_parameters", "visual_parameters",
-        "shape_parameters", "colour_parameters"), input=input, pObjects=pObjects,
-        rObjects=rObjects)
+        "shape_parameters", "colour_parameters", "open.angle", "rotate.angle",
+        "branch.length"), input=input, pObjects=pObjects, rObjects=rObjects)
     
     .createUnprotectedParameterObservers(panel_name, c("edge_colour_by",
         "tip_colour_by", "tip_size_by", "tip_shape_by", "node_size_by",
@@ -143,36 +133,29 @@ setMethod(".createObservers", "ColumnTreePlot",
     invisible(NULL)
 })
 
-setMethod(".fullName", "ColumnTreePlot", function(x) "Column tree plot")
-
-#' @importMethodsFrom iSEE .panelColor
-setMethod(".panelColor", "ColumnTreePlot", function(x) "steelblue")
-
-#' @importFrom iSEE .getEncodedName
-#' @importFrom shiny plotOutput
-#' @importFrom shinyWidgets addSpinner
-setMethod(".defineOutput", "ColumnTreePlot", function(x) {
-    panel_name <- .getEncodedName(x)
-    
-    addSpinner(plotOutput(panel_name,
-        height = paste0(slot(x, "PanelHeight"), "px")), color=.panelColor(x))
-})
-
-#' @importFrom iSEE .processMultiSelections .textEval
-#' @importFrom miaViz plotColTree
-setMethod(".generateOutput", "ColumnTreePlot",
+#' @importFrom miaViz plotRowTree plotColTree
+setMethod(".generateOutput", "TreePlot",
     function(x, se, all_memory, all_contents) {
     
+    panel_name <- .getEncodedName(x)
     panel_env <- new.env()
     all_cmds <- list()
     args <- character(0)
+    print(panel_name)
+    if( panel_name == "RowTreePlotNA" ){
+        margin <- "row_selected"
+        plot_fun <- "p <- miaViz::plotRowTree(se, %s)"
+    }else if( panel_name == "ColumnTreePlotNA" ){
+        margin <- "col_selected"
+        plot_fun <- "p <- miaViz::plotColTree(se, %s)"
+    }
 
     all_cmds[["select"]] <- .processMultiSelections(
         x, all_memory, all_contents, panel_env
     )
 
-    if( exists("col_selected", envir=panel_env, inherits=FALSE) ) {
-        panel_env[["se"]] <- se[unlist(panel_env[["col_selected"]]), ]
+    if( exists(margin, envir=panel_env, inherits=FALSE) ) {
+        panel_env[["se"]] <- se[unlist(panel_env[[margin]]), ]
     } else {
         panel_env[["se"]] <- se
     }
@@ -200,7 +183,7 @@ setMethod(".generateOutput", "ColumnTreePlot",
   
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse=", ")
-    fun_call <- sprintf("p <- miaViz::plotColTree(se, %s)", args)
+    fun_call <- sprintf(plot_fun, args)
 
     fun_cmd <- paste(strwrap(fun_call, width = 80, exdent = 4), collapse = "\n")
     plot_out <- .textEval(fun_cmd, panel_env)
@@ -209,10 +192,9 @@ setMethod(".generateOutput", "ColumnTreePlot",
     list(commands=all_cmds, plot=plot_out, varname=NULL, contents=NULL)
 })
 
-#' @importFrom iSEE .getEncodedName .retrieveOutput
 #' @importFrom shiny renderPlot
 #' @importFrom methods callNextMethod
-setMethod(".renderOutput", "ColumnTreePlot",
+setMethod(".renderOutput", "TreePlot",
     function(x, se, output, pObjects, rObjects) {
 
     panel_name <- .getEncodedName(x)
@@ -226,7 +208,7 @@ setMethod(".renderOutput", "ColumnTreePlot",
 })
 
 #' @importFrom grDevices pdf dev.off
-setMethod(".exportOutput", "ColumnTreePlot",
+setMethod(".exportOutput", "TreePlot",
     function(x, se, all_memory, all_contents) {
             
     contents <- .generateOutput(x, se, all_memory=all_memory,
@@ -244,31 +226,9 @@ setMethod(".exportOutput", "ColumnTreePlot",
 })
 
 #' @importFrom methods callNextMethod
-setMethod(".hideInterface", "ColumnTreePlot", function(x, field) {
-    
-    if( field %in% c("SelectionHistory", "ColumnSelectionRestrict",
-        "ColumnSelectionDynamicSource", "ColumnSelectionSource") ){
-        TRUE
-    } else {
-        callNextMethod()
-    }
-})
-
-setMethod(".multiSelectionResponsive", "ColumnTreePlot",
-    function(x, dim = character(0)) {
-    
-    if( "column" %in% dim ){
-        return(TRUE)
-    }
-
-    return(FALSE)
-})
-
-#' @importFrom methods callNextMethod
-#' @importFrom iSEE .getEncodedName .getPanelColor .addTourStep
-setMethod(".definePanelTour", "ColumnTreePlot", function(x) {
+setMethod(".definePanelTour", "TreePlot", function(x) {
     rbind(c(paste0("#", .getEncodedName(x)), sprintf(
-        "The <font color=\"%s\">ColumnTreePlot</font> panel contains a phylogenetic
+        "The <font color=\"%s\">RowTreePlot</font> panel contains a phylogenetic
         tree from the 
         <i><a href='https://microbiome.github.io/miaViz/reference/plotTree.html'>miaViz</a></i>
         package.", .getPanelColor(x))),
@@ -283,11 +243,9 @@ setMethod(".definePanelTour", "ColumnTreePlot", function(x) {
     callNextMethod())
 })
 
-#' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE
-#'   .radioButtons.iSEE .conditionalOnRadio .addSpecificTour
-#' @importFrom SummarizedExperiment colData
+#' @importFrom SummarizedExperiment rowData
 #' @importFrom TreeSummarizedExperiment rowTreeNames
-.create_visual_box_for_coltree <- function(x, se) {
+.create_visual_box_for_tree <- function(x, se) {
     panel_name <- .getEncodedName(x)
     .addSpecificTour(class(x)[1], "layout", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
@@ -301,19 +259,19 @@ setMethod(".definePanelTour", "ColumnTreePlot", function(x) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_edge_colour"), intro = "Here, we can choose
             whether or not to colour the lines by a variable from the
-            <code>colData</code>. When active, the available options are listed
+            <code>rowData</code>. When active, the available options are listed
             and one of them can be selected.")))})
     .addSpecificTour(class(x)[1], "tip_colour", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_tip_colour"), intro = "Here, we can choose
             whether or not to colour the tips by a variable from the
-            <code>colData</code>. When active, the available options are listed
+            <code>rowData</code>. When active, the available options are listed
             and one of them can be selected.")))})
     .addSpecificTour(class(x)[1], "node_colour", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_node_colour"), intro = "Here, we can choose
             whether or not to colour the nodes by a variable from the
-            <code>colData</code>. When active, the available options are listed
+            <code>rowData</code>. When active, the available options are listed
             and one of them can be selected.")))})
     .addSpecificTour(class(x)[1], "order_tree", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
@@ -391,17 +349,17 @@ setMethod(".definePanelTour", "ColumnTreePlot", function(x) {
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_colour_parameters"), "Edge",
                         .selectInput.iSEE(x, field="edge_colour_by",
-                            label="Color lines by", choices=names(colData(se)),
+                            label="Color lines by", choices=names(rowData(se)),
                             selected=slot(x, "edge_colour_by"))),
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_colour_parameters"), "Node",
                         .selectInput.iSEE(x, field="node_colour_by",
-                            label="Color nodes by", choices=names(colData(se)),
+                            label="Color nodes by", choices=names(rowData(se)),
                             selected=slot(x, "node_colour_by"))),
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_colour_parameters"), "Tip",
                         .selectInput.iSEE(x, field="tip_colour_by",
-                            label="Color tips by", choices=names(colData(se)),
+                            label="Color tips by", choices=names(rowData(se)),
                             selected=slot(x, "tip_colour_by"))))),
         
         .conditionalOnCheckGroup(
@@ -413,17 +371,17 @@ setMethod(".definePanelTour", "ColumnTreePlot", function(x) {
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_size_parameters"), "Edge",
                         .selectInput.iSEE(x, field="edge_size_by",
-                            label="Size lines by", choices=names(colData(se)),
+                            label="Size lines by", choices=names(rowData(se)),
                             selected=slot(x, "edge_size_by"))),
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_size_parameters"), "Node",
                         .selectInput.iSEE(x, field="node_size_by",
-                            label="Size nodes by", choices=names(colData(se)),
+                            label="Size nodes by", choices=names(rowData(se)),
                             selected=slot(x, "node_size_by"))),
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_size_parameters"), "Tip",
                         .selectInput.iSEE(x, field="tip_size_by",
-                            label="Size tips by", choices=names(colData(se)),
+                            label="Size tips by", choices=names(rowData(se)),
                             selected=slot(x, "tip_size_by"))))),
         
         .conditionalOnCheckGroup(
@@ -435,12 +393,12 @@ setMethod(".definePanelTour", "ColumnTreePlot", function(x) {
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_shape_parameters"), "Node",
                         .selectInput.iSEE(x, field="node_shape_by",
-                            label="Shape nodes by", choices=names(colData(se)),
+                            label="Shape nodes by", choices=names(rowData(se)),
                             selected=slot(x, "node_shape_by"))),
                 .conditionalOnCheckGroup(
                     paste0(panel_name, "_shape_parameters"), "Tip",
                         .selectInput.iSEE(x, field="tip_shape_by",
-                            label="Shape tips by", choices=names(colData(se)),
+                            label="Shape tips by", choices=names(rowData(se)),
                             selected=slot(x, "tip_shape_by"))))),
     
         .selectInput.iSEE(x, field="layout", label="Layout:",

@@ -41,13 +41,6 @@
 #' @name AbundancePlot
 NULL
 
-#' @rdname AbundancePlot
-#' @export
-setClass("AbundancePlot", contains="Panel",
-    slots=c(rank="character", use_relative="logical", add_legend="logical",
-            order_sample_by_row="character", order_sample="character", 
-            decreasing="logical", order_sample_by_column="character"))
-
 #' @importFrom iSEE .singleStringError .validLogicalError
 #' @importFrom S4Vectors setValidity2
 setValidity2("AbundancePlot", function(x) {

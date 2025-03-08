@@ -51,11 +51,6 @@
 #' @name LoadingPlot
 NULL
 
-#' @rdname LoadingPlot
-#' @export
-setClass("LoadingPlot", contains="Panel", slots=c(dimred="character",
-    layout="character", ncomponents="numeric", add.tree="logical"))
-
 #' @importFrom iSEE .singleStringError .validNumberError .validLogicalError
 #' @importFrom S4Vectors setValidity2
 setValidity2("LoadingPlot", function(x) {

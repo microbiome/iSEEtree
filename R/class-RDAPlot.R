@@ -64,18 +64,6 @@
 #' @name RDAPlot
 NULL
 
-setClassUnion("charlog", c("character", "logical"))
-
-#' @rdname RDAPlot
-#' @export
-setClass("RDAPlot", contains="Panel", slots=c(dimred="character",
-    add.ellipse="charlog", colour_by="character", vec.text="logical",
-    add.vectors="logical", ellipse.alpha="numeric", confidence.level="numeric",
-    add.significance="logical", add.expl.var="logical", ellipse.linewidth="numeric",
-    ellipse.linetype="numeric", vec.size="numeric", vec.colour="character",
-    vec.linetype="numeric", arrow.size="numeric", label.colour="character",
-    label.size="numeric", visual_parameters="character"))
-
 #' @importFrom iSEE .singleStringError .validLogicalError .validNumberError
 #' @importFrom S4Vectors setValidity2
 setValidity2("RDAPlot", function(x) {
@@ -134,7 +122,6 @@ RDAPlot <- function(...) {
     new("RDAPlot", ...)
 }
 
-#' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE .sliderInput.iSEE
 #' @importFrom SingleCellExperiment reducedDimNames
 #' @importFrom methods slot
 setMethod(".defineDataInterface", "RDAPlot", function(x, se, select_info) {
@@ -325,9 +312,6 @@ setMethod(".definePanelTour", "RDAPlot", function(x) {
 #' @importFrom SummarizedExperiment colData
 #' @importFrom grDevices rainbow
 #' @importFrom methods slot
-#' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE .sliderInput.iSEE
-#'   .conditionalOnCheckSolo .checkboxGroupInput.iSEE .conditionalOnCheckGroup
-#'   .numericInput.iSEE
 .create_visual_box_for_rda <- function(x, se) {
     panel_name <- .getEncodedName(x)
     

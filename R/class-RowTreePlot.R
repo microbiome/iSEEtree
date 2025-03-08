@@ -60,16 +60,6 @@
 #' @name RowTreePlot
 NULL
 
-#' @rdname RowTreePlot
-#' @export
-setClass("RowTreePlot", contains="Panel", slots=c(layout="character",
-    add_legend="logical", edge_colour_by="character", tip_colour_by="character",
-    order_tree="logical", tip_size_by="character", edge_size_by="character",
-    tip_shape_by="character", node_size_by="character", node_shape_by="character",
-    node_colour_by="character", visual_parameters="character", 
-    size_parameters="character", shape_parameters="character",
-    colour_parameters="character"))
-
 #' @importFrom iSEE .singleStringError .validLogicalError
 #' @importFrom S4Vectors setValidity2
 setValidity2("RowTreePlot", function(x) {
@@ -78,7 +68,10 @@ setValidity2("RowTreePlot", function(x) {
     msg <- .singleStringError(msg, x, fields=c("layout", "edge_colour_by",
         "tip_colour_by", "tip_size_by", "edge_size_by", "tip_shape_by",
         "node_colour_by", "node_size_by", "node_shape_by"))
-    msg <- .validLogicalError(msg, x, fields=c("add_legend", "order_tree"))
+    msg <- .validLogicalError(msg, x,
+        fields=c("add_legend", "order_tree", "branch.length"))
+    msg <- .validNumberError(msg, x, "open.angle", lower=0, upper=360)
+    msg <- .validNumberError(msg, x, "rotate.angle", lower=0, upper=360)
     
     if (length(msg)) {
         return(msg)
@@ -91,7 +84,7 @@ setValidity2("RowTreePlot", function(x) {
 #' @importFrom methods callNextMethod
 setMethod("initialize", "RowTreePlot", function(.Object, ...) {
     args <- list(...)
-    args <- .emptyDefault(args, "layout", "circular")
+    args <- .emptyDefault(args, "layout", "fan")
     args <- .emptyDefault(args, "add_legend", TRUE)
     args <- .emptyDefault(args, "edge_colour_by", NA_character_)
     args <- .emptyDefault(args, "edge_size_by", NA_character_)
@@ -106,6 +99,9 @@ setMethod("initialize", "RowTreePlot", function(.Object, ...) {
     args <- .emptyDefault(args, "shape_parameters", NA_character_)
     args <- .emptyDefault(args, "size_parameters", NA_character_)
     args <- .emptyDefault(args, "order_tree", FALSE)
+    args <- .emptyDefault(args, "open.angle", 0)
+    args <- .emptyDefault(args, "rotate.angle", 0)
+    args <- .emptyDefault(args, "branch.length", FALSE)
 
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -116,13 +112,18 @@ RowTreePlot <- function(...) {
     new("RowTreePlot", ...)
 }
 
-#' @importFrom iSEE .getEncodedName .checkboxInput.iSEE
 #' @importFrom methods slot
 setMethod(".defineDataInterface", "RowTreePlot", function(x, se, select_info) {
   panel_name <- .getEncodedName(x)
 
   list(.checkboxInput.iSEE(x, field="order_tree", label="Order tree",
-                           value=slot(x, "order_tree")))
+          value=slot(x, "order_tree")),
+       .checkboxInput.iSEE(x, field="branch.length", label="Equalise length",
+          value=slot(x, "branch.length")),
+       .sliderInput.iSEE(x, field="open.angle", label="Open by angle:",
+          min=0, max=360, step=1, value=slot(x, "open.angle")),
+       .sliderInput.iSEE(x, field="rotate.angle", label="Rotate by angle:",
+          min=0, max=360, step=1, value=slot(x, "rotate.angle")))
 })
 
 #' @importFrom methods callNextMethod
@@ -130,27 +131,6 @@ setMethod(".defineInterface", "RowTreePlot", function(x, se, select_info) {
     
     out <- callNextMethod()
     list(out[1], .create_visual_box_for_rowtree(x, se), out[-1])
-})
-
-#' @importFrom iSEE .getEncodedName .createProtectedParameterObservers
-#'   .createUnprotectedParameterObservers
-setMethod(".createObservers", "RowTreePlot",
-    function(x, se, input, session, pObjects, rObjects) {
-    
-    callNextMethod()
-    panel_name <- .getEncodedName(x)
-
-    .createProtectedParameterObservers(panel_name, c("layout", "add_legend",
-        "RowSelectionSource", "order_tree", "size_parameters", "visual_parameters",
-        "shape_parameters", "colour_parameters"), input=input, pObjects=pObjects,
-        rObjects=rObjects)
-    
-    .createUnprotectedParameterObservers(panel_name, c("edge_colour_by",
-        "tip_colour_by", "tip_size_by", "tip_shape_by", "node_size_by",
-        "node_shape_by", "node_colour_by", "edge_size_by"), input=input,
-        pObjects=pObjects, rObjects=rObjects)
-    
-    invisible(NULL)
 })
 
 setMethod(".fullName", "RowTreePlot", function(x) "Row tree plot")
@@ -168,8 +148,7 @@ setMethod(".defineOutput", "RowTreePlot", function(x) {
         height = paste0(slot(x, "PanelHeight"), "px")), color=.panelColor(x))
 })
 
-#' @importFrom iSEE .processMultiSelections .textEval
-#' @importFrom miaViz plotRowTree
+#' @importFrom miaViz plotRowTree 
 setMethod(".generateOutput", "RowTreePlot",
     function(x, se, all_memory, all_contents) {
     
@@ -188,9 +167,14 @@ setMethod(".generateOutput", "RowTreePlot",
     }
     
     args[["layout"]] <- deparse(slot(x, "layout"))
-    args[["add_legend"]] <- deparse(slot(x, "add_legend"))
-    args[["order_tree"]] <- deparse(slot(x, "order_tree"))
+    args[["add.legend"]] <- deparse(slot(x, "add_legend"))
+    args[["order.tree"]] <- deparse(slot(x, "order_tree"))
+    args[["open.angle"]] <- deparse(slot(x, "open.angle"))
     
+    if( slot(x, "branch.length") ){
+        args[["branch.length"]] <- deparse("none")
+    }
+     
     if( "Colour" %in% slot(x, "visual_parameters") ){
         args <- .assign_viz_param(args, x, "Edge", "colour")
         args <- .assign_viz_param(args, x, "Node", "colour")
@@ -211,6 +195,12 @@ setMethod(".generateOutput", "RowTreePlot",
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse=", ")
     fun_call <- sprintf("p <- miaViz::plotRowTree(se, %s)", args)
+    
+    rotate_angle <- deparse(slot(x, "rotate.angle"))
+    if( slot(x, "layout") != "rectangular" ){
+        fun_call <- paste0(fun_call,
+            sprintf("; p <- ggtree::rotate_tree(p, angle=%s)", rotate_angle))
+    }
 
     fun_cmd <- paste(strwrap(fun_call, width = 80, exdent = 4), collapse = "\n")
     plot_out <- .textEval(fun_cmd, panel_env)
@@ -219,7 +209,6 @@ setMethod(".generateOutput", "RowTreePlot",
     list(commands=all_cmds, plot=plot_out, varname=NULL, contents=NULL)
 })
 
-#' @importFrom iSEE .getEncodedName .retrieveOutput
 #' @importFrom shiny renderPlot
 #' @importFrom methods callNextMethod
 setMethod(".renderOutput", "RowTreePlot",
@@ -275,7 +264,6 @@ setMethod(".multiSelectionResponsive", "RowTreePlot",
 })
 
 #' @importFrom methods callNextMethod
-#' @importFrom iSEE .getEncodedName .getPanelColor .addTourStep
 setMethod(".definePanelTour", "RowTreePlot", function(x) {
     rbind(c(paste0("#", .getEncodedName(x)), sprintf(
         "The <font color=\"%s\">RowTreePlot</font> panel contains a phylogenetic
@@ -293,8 +281,6 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
     callNextMethod())
 })
 
-#' @importFrom iSEE .getEncodedName .selectInput.iSEE .checkboxInput.iSEE
-#'   .radioButtons.iSEE .conditionalOnRadio .addSpecificTour
 #' @importFrom SummarizedExperiment rowData
 #' @importFrom TreeSummarizedExperiment rowTreeNames
 .create_visual_box_for_rowtree <- function(x, se) {
@@ -454,7 +440,7 @@ setMethod(".definePanelTour", "RowTreePlot", function(x) {
                             selected=slot(x, "tip_shape_by"))))),
     
         .selectInput.iSEE(x, field="layout", label="Layout:",
-            choices=c("circular", "rectangular", "slanted", "fan",
+            choices=c("fan", "rectangular", "slanted", "circular",
                 "inward_circular", "radial", "unrooted", "equal_angle",
                 "daylight", "dendrogram", "ape", "ellipse", "roundrect"),
                 selected=slot(x, "layout")),
