@@ -69,7 +69,10 @@ RowTreePlot <- function(...) {
 setMethod(".fullName", "RowTreePlot", function(x) "Row tree plot")
 setMethod(".panelColor", "RowTreePlot", function(x) "#4EEE94")
 
-#' @importFrom miaViz plotRowTree 
+#' @importFrom miaViz plotRowTree
+#' @importFrom ggtree geom_tiplab collapse
+#' @importFrom ggplot2 geom_text
+#' @importFrom purrr reduce
 setMethod(".generateOutput", "RowTreePlot",
     function(x, se, all_memory, all_contents) {
     
@@ -115,24 +118,24 @@ setMethod(".generateOutput", "RowTreePlot",
   
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse = ", ")
-    fun_call <- sprintf("p <- miaViz::plotRowTree(se, %s)", args)
+    fun_call <- sprintf("p <- plotRowTree(se, %s)", args)
     
     rotate_angle <- deparse(slot(x, "rotate.angle"))
     if( slot(x, "layout") != "rectangular" ){
         fun_call <- paste0(fun_call,
-            sprintf("; p <- ggtree::rotate_tree(p, angle=%s)", rotate_angle))
+            sprintf("; p <- rotate_tree(p, angle=%s)", rotate_angle))
     }
 
     nodes <- paste(slot(x, "collapse"), collapse = ", ")
     if( nodes != "NA" ){
         fun_call <- paste0(fun_call,
             sprintf(
-                "; purrr::reduce(c(%s), function(x, y) collapse(x, y), .init = p)",
+                "; reduce(c(%s), function(x, y) collapse(x, y), .init = p)",
                 nodes))
     }
 
     if( slot(x, "add.tip.lab") ){
-        fun_call <- paste0(fun_call, "; p <- p + ggtree::geom_tiplab(size = 1)")
+        fun_call <- paste0(fun_call, "; p <- p + geom_tiplab(size = 1)")
     }
     if( slot(x, "add.node.lab") ){
         fun_call <- paste0(fun_call,
