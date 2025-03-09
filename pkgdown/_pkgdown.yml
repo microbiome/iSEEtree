@@ -16,8 +16,9 @@ reference:
   - TreePlot
   - RowTreePlot
   - ColumnTreePlot
-  # - RowGraphPlot
-  # - ColumnGraphPlot
+  - GraphPlot
+  - RowGraphPlot
+  - ColumnGraphPlot
 # - subtitle: Others
 # - contents:
   # - RowTilePlot

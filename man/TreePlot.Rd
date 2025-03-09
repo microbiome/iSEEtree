@@ -5,64 +5,55 @@
 \alias{TreePlot-class}
 \alias{TreePlot}
 \title{Tree plot}
-\value{
-The \code{RowTreePlot(...)} constructor creates an instance of a RowTreePlot
-class, where any slot and its value can be passed to \code{...} as a named
-argument.
-}
 \description{
-Hierarchical tree for the rows of a
+The TreePlot is a virtual class that creates a hierarchical tree of either
+the features or samples of a
 \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}
-object. The tree can be produced with \code{\link[mia:taxonomy-methods]{addTaxonomyTree}}
-and gets stored in the \code{\link[TreeSummarizedExperiment:rowLinks]{rowTree}}
-slot of the experiment object. The panel implements \code{\link[miaViz:plotTree]{plotRowTree}}
-to generate the plot.
+object. The \linkS4class{RowTreePlot} and \linkS4class{ColumnTreePlot}
+classes belong to this family and are specialised to visualise the rowTree
+and the colTree, respectively.
 }
 \section{Slot overview}{
 
 The following slots control the thresholds used in the visualisation:
 \itemize{
-\item \code{layout}, a string specifying tree layout
-\item \code{add_legend}, a logical indicating if color legend should appear.
-\item \code{edge_colour_by}, a string specifying parameter to color lines by
-when \code{colour_parameters = "Edge"}.
-\item \code{edge_size_by}, a string specifying parameter to size lines by
-when \code{size_parameters = "Edge"}.
-\item \code{tip_colour_by}, a string specifying parameter to color tips by
-when \code{colour_parameters = "Tip"}.
-\item \code{tip_size_by}, a string specifying parameter to size tips by
-when \code{size_parameters = "Tip"}.
-\item \code{tip_shape_by}, a string specifying parameter to shape tips by
-when \code{shape_parameters = "Tip"}.
-\item \code{node_colour_by}, a string specifying parameter to color nodes by
-when \code{colour_parameters = "Node"}.
-\item \code{node_size_by}, a string specifying parameter to size nodes by
-when \code{size_parameters = "Node"}.
-\item \code{node_shape_by}, a string specifying parameter to shape nodes by
-when \code{shape_parameters = "Node"}.
-\item \code{order_tree}, a logical indicating if tree is ordered by
-alphabetic order of taxonomic levels.
+\item \code{layout}: \code{Character scalar}. Tree layout.
+(Default: \code{"fan"})
+\item \code{add.legend}: \code{Logical scalar}. Should legend be shown.
+(Default: \code{TRUE})
+\item \code{edge.colour.by}: \code{Character scalar}. Parameter to colour
+lines by when \code{colour_parameters = "Edge"}. (Default: \code{NULL})
+\item \code{edge.size.by}: \code{Character scalar}. Parameter to size lines
+by when \code{size_parameters = "Edge"}. (Default: \code{NULL})
+\item \code{tip.colour.by}: \code{Character scalar}. Parameter to colour tips
+by when \code{colour_parameters = "Tip"}. (Default: \code{NULL})
+\item \code{tip.size.by}: \code{Character scalar}. Parameter to size tips by
+when \code{size_parameters = "Tip"}. (Default: \code{NULL})
+\item \code{tip.shape.by}: \code{Character scalar}. Parameter to shape tips
+by when \code{shape_parameters = "Tip"}. (Default: \code{NULL})
+\item \code{node.colour.by}: \code{Character scalar}. Parameter to colour
+nodes by when \code{colour_parameters = "Node"}. (Default: \code{NULL})
+\item \code{node.size.by}: \code{Character scalar}. Parameter to size nodes
+by when \code{size_parameters = "Node"}. (Default: \code{NULL})
+\item \code{node.shape.by}: \code{Character scalar}. Parameter to shape nodes
+by when \code{shape_parameters = "Node"}. (Default: \code{NULL})
+\item \code{order.tree}: \code{Logical scalar}. Should the tree be ordered
+alphabetically by the taxonomic levels. (Default: \code{FALSE})
+\item \code{open.angle}: \code{Numeric scalar}. Angle by which the tree is
+opened when \code{layout} is \code{"fan"}. (Default: \code{0})
+\item \code{rotate.angle}: \code{Numeric scalar}. Angle by which the tree is
+rotated. (Default: \code{0})
+\item \code{branch.length}: \code{Logical scalar}. Should branch length be
+equalised. (Default: \code{FALSE})
 }
 
-In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
+In addition, this class inherits all slots from its parent
+\linkS4class{Panel} class.
 }
 
-\examples{
-# Import TreeSE
-library(mia)
-data("Tengeler2020", package = "mia")
-tse <- Tengeler2020
-
-# Store panel into object
-panel <- RowTreePlot()
-# View some adjustable parameters
-head(slotNames(panel))
-
-# Launch iSEE with custom initial panel
-if (interactive()) {
-  iSEE(tse, initial = c(panel))
-}
-
+\seealso{
+\linkS4class{RowTreePlot}
+\linkS4class{ColumnTreePlot}
 }
 \author{
 Giulio Benedetti

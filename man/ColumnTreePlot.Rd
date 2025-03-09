@@ -6,9 +6,9 @@
 \alias{ColumnTreePlot}
 \title{Column tree plot}
 \value{
-The \code{ColumnTreePlot(...)} constructor creates an instance of a ColumnTreePlot
-class, where any slot and its value can be passed to \code{...} as a named
-argument.
+The \code{ColumnTreePlot(...)} constructor creates an instance of a
+ColumnTreePlot class, where any slot and its value can be passed to
+\code{...} as a named argument.
 }
 \description{
 Hierarchical tree for the columns of a
@@ -20,31 +20,8 @@ to generate the plot.
 }
 \section{Slot overview}{
 
-The following slots control the thresholds used in the visualisation:
-\itemize{
-\item \code{layout}, a string specifying tree layout
-\item \code{add_legend}, a logical indicating if color legend should appear.
-\item \code{edge_colour_by}, a string specifying parameter to color lines by
-when \code{colour_parameters = "Edge"}.
-\item \code{edge_size_by}, a string specifying parameter to size lines by
-when \code{size_parameters = "Edge"}.
-\item \code{tip_colour_by}, a string specifying parameter to color tips by
-when \code{colour_parameters = "Tip"}.
-\item \code{tip_size_by}, a string specifying parameter to size tips by
-when \code{size_parameters = "Tip"}.
-\item \code{tip_shape_by}, a string specifying parameter to shape tips by
-when \code{shape_parameters = "Tip"}.
-\item \code{node_colour_by}, a string specifying parameter to color nodes by
-when \code{colour_parameters = "Node"}.
-\item \code{node_size_by}, a string specifying parameter to size nodes by
-when \code{size_parameters = "Node"}.
-\item \code{node_shape_by}, a string specifying parameter to shape nodes by
-when \code{shape_parameters = "Node"}.
-\item \code{order_tree}, a logical indicating if tree is ordered by
-alphabetic order of taxonomic levels.
-}
 
-In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
+This class inherits all slots from its parent class \linkS4class{TreePlot}.
 }
 
 \examples{
@@ -63,6 +40,10 @@ if (interactive()) {
   iSEE(tse, initial = c(panel))
 }
 
+}
+\seealso{
+\linkS4class{TreePlot}
+\linkS4class{RowTreePlot}
 }
 \author{
 Giulio Benedetti

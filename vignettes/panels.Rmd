@@ -59,6 +59,8 @@ the app. This catalogue is divided into four sections:
 
 ## Prevalence plot
 
+Coming soon!
+
 ## Complex heatmap plot
 
 # Ordination Analysis {#sec-ordination}
@@ -72,17 +74,32 @@ the app. This catalogue is divided into four sections:
 
 ## RDA plot
 
+The RDA plot visualises results for a distance-based Redundance Analysis (dbRDA)
+performed on a TreeSE object with the mia function runRDA. It is based on the
+miaViz function plotRDA.
+
 Supported operations:
 
+- selecting reduced dimension
+- adjusting statistical parameters
 - customising aesthetics
 
 ## Scree plot
 
+Coming soon!
+
 ## Loading plot
 
+Supported operations:
 
+- selecting layout (heatmap, barplot or lollipop)
 
 ## Reduced dimension plot
+
+The Reduced dimension plot is inherited from iSEE. It is based on the
+scater function plotReducedDim and and can be used to visualise the results
+of an ordination analysis with both supervised and unsupervised methods as dot
+plot with reduced dimensions as coordinate axes.
 
 # Structural Analysis {#sec-structure}
 
@@ -95,7 +112,9 @@ Supported operations:
 
 ## Row/Column tree plots
 
-[RowTreePlot]() and [ColumnTreePlot]() belong to the [TreePlot]() panel family.
+Row and column tree plots belong to the TreePlot family. They can be used to
+visualise the hierarchical organisation of the features or samples by means
+of a tree. They are based on the miaViz functions plotRowTree and plotColTree.
 
 Supported operations:
 
@@ -107,6 +126,18 @@ Supported operations:
 - customising aesthetics
 
 ## Row/Column graph plots
+
+Row and column graph plots belong to the GraphPlot family. They can be used to
+visualise the network organisation of the features or samples by means of a
+graph. They are based on the miaViz functions plotRowGraph and plotColGraph.
+
+Supported operations:
+
+- selecting graph and assay type
+- labelling nodes
+- selecting graph layout
+- selecting edge type
+- customising aesthetics
 
 # Other panels {#sec-other}
 
@@ -120,9 +151,18 @@ Supported operations:
 
 ## Row/Column tile plots
 
+Coming soon!
+
 ## Mediation plot
 
+Coming soon!
+
 ## Row/Column data plots
+
+The Row and column data plots are inherited from iSEE. They are based on the
+scater functions plotRowData and plotColData and can be used to visualise
+feature or sample metadata as scatter plots when the x variable is continuous or
+boxplots when the x variable is discrete.
 
 # Reproducibility
 
