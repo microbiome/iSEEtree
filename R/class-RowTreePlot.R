@@ -95,7 +95,6 @@ setMethod(".generateOutput", "RowTreePlot",
     
     if( "Colour" %in% slot(x, "visual_parameters") ){
         args <- .assign_viz_param(args, x, "Edge", "colour")
-        print(args)
         args <- .assign_viz_param(args, x, "Node", "colour")
         args <- .assign_viz_param(args, x, "Tip", "colour")
     }
@@ -138,7 +137,6 @@ setMethod(".generateOutput", "RowTreePlot",
     }
 
     fun_cmd <- paste(strwrap(fun_call, width = 80, exdent = 4), collapse = "\n")
-    print(fun_cmd)
     plot_out <- .textEval(fun_cmd, panel_env)
     all_cmds[["fun"]] <- fun_cmd
 

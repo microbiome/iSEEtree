@@ -29,6 +29,10 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r screenfun, eval=!exists("SCREENSHOT"), include=FALSE}
+SCREENSHOT <- function(x, ...) knitr::include_graphics(x)
+```
+
 # Introduction
 
 This page introduces users to the complete catalogue of panels provided by
@@ -55,7 +59,15 @@ the app. This catalogue is divided into four sections:
 
 ## Abundance plot
 
+```{r abundance_density_plot, echo=FALSE, out.width="100%"}
+SCREENSHOT("screenshots/AbundancePlot.png", delay=20)
+```
+
 ## Abundance density plot
+
+```{r abundance_plot, echo=FALSE, out.width="100%"}
+SCREENSHOT("screenshots/AbundanceDensityPlot.png", delay=20)
+```
 
 ## Prevalence plot
 
@@ -124,6 +136,10 @@ Supported operations:
 - labeling nodes and tips
 - selecting tree layout
 - customising aesthetics
+
+```{r tree_plot, echo=FALSE, out.width="100%"}
+SCREENSHOT("screenshots/RowTreePlot.png", delay=20)
+```
 
 ## Row/Column graph plots
 

@@ -175,8 +175,8 @@ setMethod(".definePanelTour", "GraphPlot", function(x) {
 #' @importFrom SummarizedExperiment rowData colData
 .create_visual_box_for_graph <- function(x, se) {
     panel_name <- .getEncodedName(x)
-    gr_data <- switch(panel_name,
-        RowGraphPlotNA = rowData(se), ColumnGraphPlotNA = colData(se))
+    gr_data <- switch(substr(panel_name, 1, 3),
+        Row = rowData(se), Col = colData(se))
 
     .addSpecificTour(class(x)[1], "layout", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
