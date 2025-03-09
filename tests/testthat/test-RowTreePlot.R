@@ -21,7 +21,7 @@ test_that("RowTreePlot", {
   
   expect_s3_class(.defineOutput(panel), "shiny.tag.list")
   expect_match(.generateOutput(panel, tse)[["commands"]][["fun"]],
-      'p <- plotRowTree(se, layout="rectangular", add.legend=TRUE, order.tree=FALSE,\n    open.angle=0)',
+      'p <- miaViz::plotRowTree(se, layout="rectangular", add.legend=TRUE,\n    order.tree=FALSE, open.angle=0)',
       fixed = TRUE)
   
   expect_true(.hideInterface(panel, "ColumnSelectionSource"))
