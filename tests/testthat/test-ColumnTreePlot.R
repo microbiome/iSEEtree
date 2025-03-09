@@ -27,17 +27,19 @@ test_that("ColumnTreePlot", {
   
   expect_s3_class(.defineOutput(panel), "shiny.tag.list")
   # expect_match(.generateOutput(panel, tse)[["commands"]][["fun"]],
-  #              'p <- miaViz::plotColTree(se, layout="rectangular", add_legend=TRUE,
-  #   order_tree=FALSE)',
+  #              'p <- miaViz::plotColTree(se, layout="rectangular", add.legend=TRUE,
+  #   order.tree=FALSE)',
   #              fixed = TRUE)
   
   expect_true(.hideInterface(panel, "ColumnSelectionSource"))
   expect_false(.multiSelectionResponsive(panel, "row"))
   expect_true(.multiSelectionResponsive(panel, "column"))
   
-  expect_contains(slotNames(panel), c("layout", "add_legend", "edge_colour_by",
-      "tip_colour_by", "order_tree", "tip_size_by", "tip_shape_by",
-      "edge_size_by", "node_size_by", "node_shape_by", "node_colour_by"))
+  expect_contains(slotNames(panel), c("layout", "add.legend", "edge.colour.by",
+      "tip.colour.by", "order.tree", "tip.size.by", "tip.shape.by",
+      "edge.size.by", "node.size.by", "node.shape.by", "node.colour.by",
+      "add.node.lab", "add.tip.lab", "branch.length", "open.angle",
+      "rotate.angle"))
   
   expect_contains(.definePanelTour(panel)[[1]],
       c("#ColumnTreePlotNA_DataBoxOpen", "#ColumnTreePlotNA_VisualBoxOpen",

@@ -85,8 +85,8 @@ setMethod(".generateOutput", "ColumnTreePlot",
     }
     
     args[["layout"]] <- deparse(slot(x, "layout"))
-    args[["add.legend"]] <- deparse(slot(x, "add_legend"))
-    args[["order.tree"]] <- deparse(slot(x, "order_tree"))
+    args[["add.legend"]] <- deparse(slot(x, "add.legend"))
+    args[["order.tree"]] <- deparse(slot(x, "order.tree"))
     args[["open.angle"]] <- deparse(slot(x, "open.angle"))
     
     if( slot(x, "branch.length") ){

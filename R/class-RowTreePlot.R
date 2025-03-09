@@ -85,16 +85,17 @@ setMethod(".generateOutput", "RowTreePlot",
     }
     
     args[["layout"]] <- deparse(slot(x, "layout"))
-    args[["add.legend"]] <- deparse(slot(x, "add_legend"))
-    args[["order.tree"]] <- deparse(slot(x, "order_tree"))
+    args[["add.legend"]] <- deparse(slot(x, "add.legend"))
+    args[["order.tree"]] <- deparse(slot(x, "order.tree"))
     args[["open.angle"]] <- deparse(slot(x, "open.angle"))
     
     if( slot(x, "branch.length") ){
         args[["branch.length"]] <- deparse("none")
     }
-     
+    
     if( "Colour" %in% slot(x, "visual_parameters") ){
         args <- .assign_viz_param(args, x, "Edge", "colour")
+        print(args)
         args <- .assign_viz_param(args, x, "Node", "colour")
         args <- .assign_viz_param(args, x, "Tip", "colour")
     }
@@ -112,7 +113,7 @@ setMethod(".generateOutput", "RowTreePlot",
   
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse = ", ")
-    fun_call <- sprintf("p <- plotRowTree(se, %s)", args)
+    fun_call <- sprintf("p <- miaViz::plotRowTree(se, %s)", args)
     
     rotate_angle <- deparse(slot(x, "rotate.angle"))
     if( slot(x, "layout") != "rectangular" ){
@@ -137,6 +138,7 @@ setMethod(".generateOutput", "RowTreePlot",
     }
 
     fun_cmd <- paste(strwrap(fun_call, width = 80, exdent = 4), collapse = "\n")
+    print(fun_cmd)
     plot_out <- .textEval(fun_cmd, panel_env)
     all_cmds[["fun"]] <- fun_cmd
 

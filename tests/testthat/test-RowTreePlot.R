@@ -28,15 +28,15 @@ test_that("RowTreePlot", {
   expect_false(.multiSelectionResponsive(panel, "column"))
   expect_true(.multiSelectionResponsive(panel, "row"))
   
-  expect_contains(slotNames(panel),
-                  c("layout", "add_legend", "edge_colour_by",
-                    "tip_colour_by", "order_tree", "tip_size_by",
-                    "tip_shape_by", "edge_size_by", "node_size_by",
-                    "node_shape_by", "node_colour_by"))
+  expect_contains(slotNames(panel), c("layout", "add.legend", "edge.colour.by",
+      "tip.colour.by", "order.tree", "tip.size.by", "tip.shape.by",
+      "edge.size.by", "node.size.by", "node.shape.by", "node.colour.by",
+      "add.node.lab", "add.tip.lab", "branch.length", "open.angle",
+      "rotate.angle"))
   
   expect_contains(.definePanelTour(panel)[[1]],
-                  c("#RowTreePlotNA_DataBoxOpen", "#RowTreePlotNA_VisualBoxOpen",
-                    "#RowTreePlotNA", "#RowTreePlotNA_SelectionBoxOpen"))
+      c("#RowTreePlotNA_DataBoxOpen", "#RowTreePlotNA_VisualBoxOpen",
+      "#RowTreePlotNA", "#RowTreePlotNA_SelectionBoxOpen"))
   
   expect_s3_class(.create_visual_box_for_tree(panel, tse), "shiny.tag.list")
   

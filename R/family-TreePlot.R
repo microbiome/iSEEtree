@@ -207,6 +207,8 @@ setMethod(".definePanelTour", "TreePlot", function(x) {
     panel_name <- .getEncodedName(x)
     tr_data <- switch(panel_name,
         RowTreePlotNA = rowData(se), ColumnTreePlotNA = colData(se))
+    print("Hello")
+    print(tr_data)
 
     .addSpecificTour(class(x)[1], "layout", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
@@ -373,8 +375,8 @@ setMethod(".definePanelTour", "TreePlot", function(x) {
 #' @importFrom methods slot
 .assign_viz_param <- function(args, x, element, aesthetic) {
   
-    param_name <- paste(tolower(element), aesthetic, "by", sep = "_")
-  
+    param_name <- paste(tolower(element), aesthetic, "by", sep = ".")
+    
     if( element %in% slot(x, paste(aesthetic, "parameters", sep = "_")) ){
         args[[param_name]] <- deparse(slot(x, param_name))
     }
