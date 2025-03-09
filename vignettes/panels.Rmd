@@ -31,14 +31,27 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-# Compositional Analysis
+This page introduces users to the complete catalogue of panels provided by
+iSEEtree. Each panel is presented individually and visualised as it appears in
+the app. This catalogue is divided into four sections:
 
-| Panel name             | Class name            | Plot function | Outline     |
-|------------------------|-----------------------|---------------|-------------|
-| Abundance plot         | AbundancePlot         | [plotAbundance](https://microbiome.github.io/miaViz/reference/plotAbundance.html) | Feature composition by sample |
-| Abundance density plot | AbundanceDensityPlot  | [plotAbundanceDensity](https://microbiome.github.io/miaViz/reference/plotAbundanceDensity.html) | Feature distribution across samples |
-| Prevalence plot        | PrevalencePlot        | [plotPrevalence](https://microbiome.github.io/miaViz/reference/plotPrevalence.html) | something |
-| Complex heatmap plot   | ComplexHeatmapPlot    | fun | something |
+- [compositional analysis](#sec-composition): abundance plot, abundance density
+  plot, prevalence plot and complex heatmap plot
+- [ordination analysis](#sec-ordination): RDA plot, Scree plot, loading plot and
+  reduced dimension plot
+- [structural analysis](#sec-structure): row/column tree plots and row/column
+  graph plots
+- [other](#sec-other): row/column tile plots, mediation plot and row/column data
+  plots
+
+# Compositional Analysis {#sec-composition}
+
+| Panel name             | Panel class          | Purpose                             |
+|------------------------|----------------------|-------------------------------------|
+| Abundance plot         | AbundancePlot        | Feature composition by sample       |
+| Abundance density plot | AbundanceDensityPlot | Feature distribution across samples |
+| Prevalence plot        | PrevalencePlot       | Feature prevalence across samples   |
+| Complex heatmap plot   | ComplexHeatmapPlot   | Whole assay composition             |
 
 ## Abundance plot
 
@@ -48,45 +61,62 @@ knitr::opts_chunk$set(
 
 ## Complex heatmap plot
 
-# Ordination Analysis
+# Ordination Analysis {#sec-ordination}
 
-| Panel name             | Class name           | Plot function | Outline     |
-|------------------------|----------------------|---------------|-------------|
-| RDA plot               | RDAPlot              | [plotRDA](https://microbiome.github.io/miaViz/reference/plotCCA.html) | supervised ordination |
-| Scree plot             | ScreePlot            | [plotScree](https://microbiome.github.io/miaViz/reference/plotScree.html) | Explained variance by component  |
-| Loading plot           | LoadingPlot          | [plotLoadings](https://microbiome.github.io/miaViz/reference/plotLoadings.html) | Feature loadings by component |
-| Reduced dimension plot | ReducedDimensionPlot | fun | any ordination result |
+| Panel name             | Panel class          | Purpose                         |
+|------------------------|----------------------|---------------------------------|
+| RDA plot               | RDAPlot              | Supervised ordination           |
+| Scree plot             | ScreePlot            | Explained variance by component |
+| Loading plot           | LoadingPlot          | Feature loadings by component   |
+| Reduced dimension plot | ReducedDimensionPlot | Any ordination result           |
 
 ## RDA plot
+
+Supported operations:
+
+- customising aesthetics
 
 ## Scree plot
 
 ## Loading plot
 
+
+
 ## Reduced dimension plot
 
-# Structural Analysis
+# Structural Analysis {#sec-structure}
 
-| Panel name         | Class name       | Plot function | Outline     |
-|--------------------|------------------|---------------|-------------|
-| Row tree plot      | RowTreePlot      | [plotRowTree](https://microbiome.github.io/miaViz/reference/plotTree.html) | hierarchical structure of features |
-| Column tree plot   | ColumnTreePlot   | [plotColTree](https://microbiome.github.io/miaViz/reference/plotTree.html) | hierarchical structure of samples  |
-| Row graph plot     | RowGraphPlot     | [plotRowGraph](https://microbiome.github.io/miaViz/reference/plotGraph.html) | network structure of features |
-| Column graph plot  | ColumnGraphPlot  | [plotColGraph](https://microbiome.github.io/miaViz/reference/plotGraph.html) | network structure of samples |
+| Panel name         | Panel class      | Purpose                            |
+|--------------------|------------------|------------------------------------|
+| Row tree plot      | RowTreePlot      | Hierarchical structure of features |
+| Column tree plot   | ColumnTreePlot   | Hierarchical structure of samples  |
+| Row graph plot     | RowGraphPlot     | Network structure of features      |
+| Column graph plot  | ColumnGraphPlot  | Network structure of samples       |
 
 ## Row/Column tree plots
 
+[RowTreePlot]() and [ColumnTreePlot]() belong to the [TreePlot]() panel family.
+
+Supported operations:
+
+- collapsing and expanding clades
+- rotating and opening trees
+- ordering trees
+- labeling nodes and tips
+- selecting tree layout
+- customising aesthetics
+
 ## Row/Column graph plots
 
-# Other panels
+# Other panels {#sec-other}
 
-| Panel name         | Class name       | Plot function | Outline     |
-|--------------------|------------------|---------------|-------------|
-| Row tile plot      | RowTreePlot      | [plotRowTile](https://microbiome.github.io/miaViz/reference/plotColTile.html) | variable distribution across feature groups |
-| Column tile plot   | ColumnTreePlot   | [plotColTile](https://microbiome.github.io/miaViz/reference/plotColTile.html) | variable distribution across sample groups  |
-| Mediation plot     | MediationPlot    | [plotMediation](https://microbiome.github.io/miaViz/reference/plotMediation.html) | results of mediation analysis |
-| Row data plot  | RowDataPlot  | fun | variables from feature metadata |
-| Column data plot  | ColumnDataPlot  | fun | variables from sample metadata |
+| Panel name         | Panel class    | Purpose                                     |
+|--------------------|----------------|---------------------------------------------|
+| Row tile plot      | RowTreePlot    | Variable distribution across feature groups |
+| Column tile plot   | ColumnTreePlot | Variable distribution across sample groups  |
+| Mediation plot     | MediationPlot  | Results of mediation analysis               |
+| Row data plot      | RowDataPlot    | Variables from feature metadata             |
+| Column data plot   | ColumnDataPlot | Variables from sample metadata              |
 
 ## Row/Column tile plots
 

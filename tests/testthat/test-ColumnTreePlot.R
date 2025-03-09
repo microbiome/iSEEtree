@@ -8,6 +8,12 @@ test_that("ColumnTreePlot", {
   
   data("Tengeler2020", package = "mia")
   tse <- Tengeler2020
+  
+  tse <- TreeSummarizedExperiment(
+      assays = list(counts = t(assay(tse, "counts"))),
+      colData = rowData(tse), rowData = colData(tse),
+      colTree = rowTree(tse))
+  
   panel <- ColumnTreePlot()
   
   panel[["layout"]] <- "rectangular"
@@ -17,7 +23,7 @@ test_that("ColumnTreePlot", {
   expect_identical(.panelColor(panel), "steelblue")
   
   expect_s3_class(.defineInterface(panel, tse, select_info)[[1]][[1]], "shiny.tag.list")
-  expect_length(.defineDataInterface(panel, tse, select_info), 6)
+  expect_length(.defineDataInterface(panel, tse, select_info), 2)
   
   expect_s3_class(.defineOutput(panel), "shiny.tag.list")
   # expect_match(.generateOutput(panel, tse)[["commands"]][["fun"]],

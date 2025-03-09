@@ -23,8 +23,7 @@ test_that("LoadingPlot", {
   
   expect_s3_class(.defineOutput(panel), "shiny.tag.list")
   expect_match(.generateOutput(panel, tse)[["commands"]][["fun"]],
-  'p <- miaViz::plotLoadings(se, dimred="PCA", layout="heatmap", ',
-  'add.tree=FALSE,\n    ncomponents=5)',
+  "p <- miaViz::plotLoadings(se, dimred=\"PCA\", layout=\"heatmap\", add.tree=FALSE,\n    ncomponents=5)",
   fixed = TRUE)
   
   expect_true(.hideInterface(panel, "ColumnSelectionSource"))

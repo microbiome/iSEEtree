@@ -19,8 +19,8 @@ test_that("AbundanceDensityPlot", {
   
   expect_s3_class(.defineOutput(panel), "shiny.tag.list")
   expect_match(.generateOutput(panel, tse)[["commands"]][["fun"]],
-    'p <- miaViz::plotAbundanceDensity(se, layout="jitter", add_legend=TRUE,\n',
-    'assay.type="counts", n=5)', fixed = TRUE)
+    "p <- miaViz::plotAbundanceDensity(se, layout=\"jitter\", add_legend=TRUE,\n    assay.type=\"counts\", flipped=FALSE, order_descending=TRUE, n=5)",
+    fixed = TRUE)
   
   expect_true(.hideInterface(panel, "ColumnSelectionSource"))
   expect_false(.multiSelectionResponsive(panel, "column"))
