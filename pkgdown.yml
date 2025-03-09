@@ -1,6 +1,7 @@
-pandoc: '3.6'
+pandoc: 3.6.3
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   iSEEtree: iSEEtree.html
-last_built: 2024-12-14T08:31Z
+  panels: panels.html
+last_built: 2025-03-09T07:59Z

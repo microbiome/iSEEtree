@@ -2,6 +2,7 @@
 <url><loc>/404.html</loc></url>
 <url><loc>/articles/iSEEtree.html</loc></url>
 <url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/panels.html</loc></url>
 <url><loc>/authors.html</loc></url>
 <url><loc>/index.html</loc></url>
 <url><loc>/reference/AbundanceDensityPlot.html</loc></url>
@@ -10,6 +11,7 @@
 <url><loc>/reference/LoadingPlot.html</loc></url>
 <url><loc>/reference/RDAPlot.html</loc></url>
 <url><loc>/reference/RowTreePlot.html</loc></url>
+<url><loc>/reference/TreePlot.html</loc></url>
 <url><loc>/reference/iSEE.html</loc></url>
 <url><loc>/reference/iSEEtree.html</loc></url>
 <url><loc>/reference/index.html</loc></url>
