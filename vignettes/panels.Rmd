@@ -1,0 +1,245 @@
+---
+title: "Panel Catalogue"
+author: 
+  - name: Giulio Benedetti
+    affiliation: University of Turku
+    email: giulio.benedetti@utu.fi
+output:
+    BiocStyle::html_document:
+        fig_height: 7
+        fig_width: 10
+        toc: true
+        toc_float: true
+        toc_depth: 2
+        number_sections: true
+        self_contained: true
+        code_folding: show
+date: "`r doc_date()`"
+package: "`r pkg_ver('iSEEtree')`"
+vignette: >
+    %\VignetteIndexEntry{iSEEtree}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r screenfun, eval=!exists("SCREENSHOT"), include=FALSE}
+SCREENSHOT <- function(x, ...) knitr::include_graphics(x)
+```
+
+# Introduction
+
+This page introduces users to the complete catalogue of panels provided by
+iSEEtree. Each panel is presented individually and visualised as it appears in
+the app. This catalogue is divided into four sections:
+
+- [compositional analysis](#sec-composition): abundance plot, abundance density
+  plot, prevalence plot and complex heatmap plot
+- [ordination analysis](#sec-ordination): RDA plot, Scree plot, loading plot and
+  reduced dimension plot
+- [structural analysis](#sec-structure): row/column tree plots and row/column
+  graph plots
+- [other](#sec-other): row/column tile plots, mediation plot and row/column data
+  plots
+
+# Compositional Analysis {#sec-composition}
+
+| Panel name             | Panel class          | Purpose                             |
+|------------------------|----------------------|-------------------------------------|
+| Abundance plot         | AbundancePlot        | Feature composition by sample       |
+| Abundance density plot | AbundanceDensityPlot | Feature distribution across samples |
+| Prevalence plot        | PrevalencePlot       | Feature prevalence across samples   |
+| Complex heatmap plot   | ComplexHeatmapPlot   | Whole assay composition             |
+
+## Abundance plot
+
+The Abundance plot illustrates the feature composition of each sample with a
+barplot of the relative or absolute feature abundace. This panel is based on the
+miaViz function plotAbundance.
+
+Supported operations:
+
+- Selecting taxonomic rank of the composition
+- Choosing either absolute or relative abundance
+- Ordering samples by feature or sample metadata
+- Customising aesthetics
+
+```{r abundance_density_plot, echo=FALSE, out.width="60%"}
+SCREENSHOT("screenshots/AbundancePlot.png", delay=20)
+```
+
+## Abundance density plot
+
+The Abundance density plot provides an alternative way to visualise abundance.
+In this panel, each row represents the feature distribution across the samples.
+It is based on the miaViz function plotAbundanceDensity.
+
+Supported operations:
+
+- selecting layout (jitter, density or dot plot)
+- specifying the number of top features to show
+- customising aesthetics
+
+```{r abundance_plot, echo=FALSE, out.width="60%"}
+SCREENSHOT("screenshots/AbundanceDensityPlot.png", delay=20)
+```
+
+## Prevalence plot
+
+Coming soon!
+
+## Complex heatmap plot
+
+# Ordination Analysis {#sec-ordination}
+
+| Panel name             | Panel class          | Purpose                         |
+|------------------------|----------------------|---------------------------------|
+| RDA plot               | RDAPlot              | Supervised ordination           |
+| Scree plot             | ScreePlot            | Explained variance by component |
+| Loading plot           | LoadingPlot          | Feature loadings by component   |
+| Reduced dimension plot | ReducedDimensionPlot | Any ordination result           |
+
+## RDA plot
+
+The RDA plot visualises results for a distance-based Redundance Analysis (dbRDA)
+performed on a TreeSE object with the mia function runRDA. It is based on the
+miaViz function plotRDA.
+
+Supported operations:
+
+- selecting reduced dimension
+- adjusting statistical parameters
+- customising aesthetics
+
+```{r rda_plot, echo=FALSE, out.width="60%"}
+SCREENSHOT("screenshots/RDAPlot.png", delay=20)
+```
+
+## Scree plot
+
+The Scree plot shows the proportion of variance explained by each component
+of a dimensionality reduction analysis by means of a line plot or barplot. It
+is based on the miaViz function plotScree.
+
+Supported operations:
+
+- selecting reduced dimension
+- changing number of components
+- showing individual or cumulative variance
+- adding components labels and names
+
+```{r scree_plot, echo=FALSE, out.width="60%"}
+SCREENSHOT("screenshots/ScreePlot.png", delay=20)
+```
+
+## Loading plot
+
+The Loading plot visualises the contributions of each feature to the components
+of a reduced dimension of choice. It is based on the miaViz function
+plotLoadings.
+
+Supported operations:
+
+- selecting layout (barplot, heatmap or lollipop)
+- changing number of components
+- adding feature tree
+
+```{r loading_plot, echo=FALSE, out.width="60%"}
+SCREENSHOT("screenshots/LoadingPlot.png", delay=20)
+```
+
+## Reduced dimension plot
+
+The Reduced dimension plot is inherited from iSEE. It is based on the
+scater function plotReducedDim and and can be used to visualise the results
+of an ordination analysis with both supervised and unsupervised methods as dot
+plot with reduced dimensions as coordinate axes.
+
+# Structural Analysis {#sec-structure}
+
+| Panel name         | Panel class      | Purpose                            |
+|--------------------|------------------|------------------------------------|
+| Row tree plot      | RowTreePlot      | Hierarchical structure of features |
+| Column tree plot   | ColumnTreePlot   | Hierarchical structure of samples  |
+| Row graph plot     | RowGraphPlot     | Network structure of features      |
+| Column graph plot  | ColumnGraphPlot  | Network structure of samples       |
+
+## Row/Column tree plots
+
+Row and column tree plots belong to the TreePlot family. They can be used to
+visualise the hierarchical organisation of the features or samples by means
+of a tree. They are based on the miaViz functions plotRowTree and plotColTree.
+
+Supported operations:
+
+- collapsing and expanding clades
+- rotating and opening trees
+- ordering trees
+- labeling nodes and tips
+- selecting tree layout
+- customising aesthetics
+
+```{r tree_plot, echo=FALSE, out.width="60%"}
+SCREENSHOT("screenshots/RowTreePlot.png", delay=20)
+```
+
+## Row/Column graph plots
+
+Row and column graph plots belong to the GraphPlot family. They can be used to
+visualise the network organisation of the features or samples by means of a
+graph. They are based on the miaViz functions plotRowGraph and plotColGraph.
+
+Supported operations:
+
+- selecting graph and assay type
+- labelling nodes
+- selecting graph layout
+- selecting edge type
+- customising aesthetics
+
+```{r graph_plot, echo=FALSE, out.width="60%"}
+SCREENSHOT("screenshots/RowGraphPlot.png", delay=20)
+```
+
+# Other panels {#sec-other}
+
+| Panel name         | Panel class    | Purpose                                     |
+|--------------------|----------------|---------------------------------------------|
+| Row tile plot      | RowTreePlot    | Variable distribution across feature groups |
+| Column tile plot   | ColumnTreePlot | Variable distribution across sample groups  |
+| Mediation plot     | MediationPlot  | Results of mediation analysis               |
+| Row data plot      | RowDataPlot    | Variables from feature metadata             |
+| Column data plot   | ColumnDataPlot | Variables from sample metadata              |
+
+## Row/Column tile plots
+
+Coming soon!
+
+## Mediation plot
+
+Coming soon!
+
+## Row/Column data plots
+
+The Row and column data plots are inherited from iSEE. They are based on the
+scater functions plotRowData and plotColData and can be used to visualise
+feature or sample metadata as scatter plots when the x variable is continuous or
+boxplots when the x variable is discrete.
+
+# Reproducibility
+
+R session information:
+
+```{r reproduce, echo=FALSE}
+## Session info
+options(width = 120)
+sessionInfo()
+```
+
+# References

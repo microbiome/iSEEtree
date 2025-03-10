@@ -1,0 +1,133 @@
+#' Row graph plot
+#'
+#' Network organisation for the features of a
+#' \code{\link[SummarizedExperiment:SummarizedExperiment-class]{SummarizedExperiment}}
+#' object. The igraph should be stored in the \code{metadata} slot by a name
+#' containing \code{"graph"}. This panel uses
+#' \code{\link[miaViz:plotColGraph]{plotRowGraph}}
+#' to generate the plot.
+#'
+#' @section Slot overview:
+#'
+#' This class inherits all slots from its parent class \linkS4class{GraphPlot}.
+#'
+#' @return
+#' The \code{RowGraphPlot(...)} constructor creates an instance of a
+#' RowGraphPlot class, where any slot and its value can be passed to \code{...}
+#' as a named argument.
+#'
+#' @examples
+#' library(mia)
+#' library(miaViz)
+#' data("GlobalPatterns", library = "mia")
+#' data("row_graph", library = "miaViz")
+#' 
+#' tse <- GlobalPatterns
+#' tse <- agglomerateByRank(tse,
+#'                          rank = "Genus",
+#'                          na.rm = TRUE)
+#'                          
+#' metadata(tse)$graph <- row_graph
+#' 
+#' # Store panel into object
+#' panel <- RowGraphPlot()
+#' # View some adjustable parameters
+#' head(slotNames(panel))
+#'
+#' # Launch iSEE with custom initial panel
+#' if (interactive()) {
+#'   iSEE(tse, initial = c(panel))
+#' }
+#' 
+#' @seealso
+#' \linkS4class{GraphPlot}
+#' \linkS4class{ColumnGraphPlot}
+#' 
+#' @author Giulio Benedetti
+#' 
+#' @docType methods
+#' @name RowGraphPlot
+NULL
+
+#' @export
+#' @importFrom methods new
+RowGraphPlot <- function(...) {
+    new("RowGraphPlot", ...)
+}
+
+setMethod(".fullName", "RowGraphPlot", function(x) "Row graph plot")
+setMethod(".panelColor", "RowGraphPlot", function(x) "orange")
+
+#' @importFrom miaViz plotRowGraph
+setMethod(".generateOutput", "RowGraphPlot",
+    function(x, se, all_memory, all_contents) {
+    
+    panel_env <- new.env()
+    all_cmds <- list()
+    args <- character(0)
+
+    all_cmds[["select"]] <- .processMultiSelections(
+        x, all_memory, all_contents, panel_env
+    )
+
+    if( exists("row_selected", envir=panel_env, inherits=FALSE) ) {
+        panel_env[["se"]] <- se[unlist(panel_env[["row_selected"]]), ]
+    } else {
+        panel_env[["se"]] <- se
+    }
+    
+    args[["name"]] <- deparse(slot(x, "name"))
+    args[["assay.type"]] <- deparse(slot(x, "assay.type"))
+    args[["show.label"]] <- deparse(slot(x, "show.label"))
+    args[["layout"]] <- deparse(slot(x, "layout"))
+    args[["edge.type"]] <- deparse(slot(x, "edge.type"))
+    args[["add.legend"]] <- deparse(slot(x, "add.legend"))
+    
+    if( "Colour" %in% slot(x, "visual_parameters") ){
+        args <- .assign_viz_param(args, x, "Edge", "colour")
+        args <- .assign_viz_param(args, x, "Node", "colour",
+            arg.name = "colour.by")
+    }
+    
+    if( "Shape" %in% slot(x, "visual_parameters") ){
+        args <- .assign_viz_param(args, x, "Node", "shape",
+            arg.name = "shape.by")
+    }
+    
+    if( "Size" %in% slot(x, "visual_parameters") ){
+        args <- .assign_viz_param(args, x, "Edge", "size",
+            arg.name = "edge.width.by")
+        args <- .assign_viz_param(args, x, "Node", "size", arg.name = "size.by")
+    }
+
+    args <- sprintf("%s=%s", names(args), args)
+    args <- paste(args, collapse = ", ")
+    fun_call <- sprintf("p <- miaViz::plotRowGraph(se, %s)", args)
+    
+    fun_cmd <- paste(strwrap(fun_call, width = 80, exdent = 4), collapse = "\n")
+    plot_out <- .textEval(fun_cmd, panel_env)
+    all_cmds[["fun"]] <- fun_cmd
+
+    list(commands=all_cmds, plot=plot_out, varname=NULL, contents=NULL)
+})
+
+#' @importFrom methods callNextMethod
+setMethod(".hideInterface", "RowGraphPlot", function(x, field) {
+    
+    if( field %in% c("SelectionHistory", "ColumnSelectionRestrict",
+        "ColumnSelectionDynamicSource", "ColumnSelectionSource") ){
+        TRUE
+    } else {
+        callNextMethod()
+    }
+})
+
+setMethod(".multiSelectionResponsive", "RowGraphPlot",
+    function(x, dim = character(0)) {
+    
+    if( "row" %in% dim ){
+        return(TRUE)
+    }
+
+    return(FALSE)
+})

@@ -1,5 +1,5 @@
 Package: iSEEtree
-Version: 1.1.2
+Version: 1.2.0
 Authors@R: 
     c(person(given = "Giulio", family = "Benedetti", role = c("aut", "cre"),
            email = "giulio.benedetti@utu.fi",
@@ -24,15 +24,20 @@ Depends:
     R (>= 4.4.0),
     iSEE (>= 2.19.2)
 Imports:
+    ape,
+    ggplot2,
+    ggtree,
     grDevices,
     methods,
     miaViz,
+    purrr,
     S4Vectors,
     shiny,
     mia,
     shinyWidgets,
     SingleCellExperiment,
     SummarizedExperiment,
+    tidygraph,
     TreeSummarizedExperiment,
     utils
 Suggests:

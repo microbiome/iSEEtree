@@ -1,14 +1,30 @@
 destination: docs
 reference:
 - title: Panels
+- subtitle: Compositional analysis
 - contents:
-  - AbundanceDensityPlot
   - AbundancePlot
-  - ColumnTreePlot
-  - LoadingPlot
+  - AbundanceDensityPlot
+  # - PrevalencePlot
+- subtitle: Ordination analysis
+- contents:
   - RDAPlot
+  - ScreePlot
+  - LoadingPlot
+- subtitle: Structural analysis
+- contents:
+  - TreePlot
   - RowTreePlot
-- title: Other
+  - ColumnTreePlot
+  - GraphPlot
+  - RowGraphPlot
+  - ColumnGraphPlot
+# - subtitle: Others
+# - contents:
+  # - RowTilePlot
+  # - ColumnTilePlot
+  # - MediationPlot
+- title: Interface
 - subtitle: Default layout
 - contents:
   - iSEE

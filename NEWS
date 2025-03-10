@@ -1,23 +1,21 @@
-Changes in version 0.1.3
+Changes in version 0.1.X
 * Moved to microbiome org
-
-Changes in version 0.1.4
 * Added panel tours
 * Prepared for submission
 
-Changes in version 0.99.0
+Changes in version 0.99.X
 * Submitted to Bioconductor
-
-Changes in version 0.99.2
 * Extended data params for all panels
 * Extended viz params for RDAPlot and RowTreePlot
-
-Changes in version 0.99.3
 * Added .exportOutput method
-
-Changes in version 0.99.8
 * Added ColumnTreePlot and LoadingPlot panels
 
-Changes in version 1.1.1
+Changes in version 1.1.X
 * Updated .multiSelectionResponsive
 * Conformed to iSEE v2.19.2
+
+Changes in version 1.2.X
+* Created TreePlot family
+* Added typical tree operations
+* Created GraphPlot family
+* Added ScreePlot panel

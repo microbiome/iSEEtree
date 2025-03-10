@@ -21,7 +21,6 @@
 #' LoadingPlot class, where any slot and its value can be passed to
 #' \code{...} as a named argument.
 #'
-#' @author Giulio Benedetti
 #' @examples
 #' # Import libraries
 #' library(mia)
@@ -47,16 +46,12 @@
 #'   iSEE(tse, initial = c(panel))
 #' }
 #' 
+#' @author Giulio Benedetti
+#' 
 #' @docType methods
 #' @name LoadingPlot
 NULL
 
-#' @rdname LoadingPlot
-#' @export
-setClass("LoadingPlot", contains="Panel", slots=c(dimred="character",
-    layout="character", ncomponents="numeric", add.tree="logical"))
-
-#' @importFrom iSEE .singleStringError .validNumberError .validLogicalError
 #' @importFrom S4Vectors setValidity2
 setValidity2("LoadingPlot", function(x) {
     msg <- character(0)
@@ -72,12 +67,11 @@ setValidity2("LoadingPlot", function(x) {
     TRUE
 })
 
-#' @importFrom iSEE .emptyDefault
 #' @importFrom methods callNextMethod
 setMethod("initialize", "LoadingPlot", function(.Object, ...) {
     args <- list(...)
     args <- .emptyDefault(args, "dimred", "PCA")
-    args <- .emptyDefault(args, "layout", "heatmap")
+    args <- .emptyDefault(args, "layout", "barplot")
     args <- .emptyDefault(args, "ncomponents", 5)
     args <- .emptyDefault(args, "add.tree", FALSE)
     
@@ -90,7 +84,6 @@ LoadingPlot <- function(...) {
     new("LoadingPlot", ...)
 }
 
-#' @importFrom iSEE .getEncodedName .selectInput.iSEE .numericInput.iSEE
 #' @importFrom methods slot
 #' @importFrom SingleCellExperiment reducedDim reducedDimNames
 setMethod(".defineDataInterface", "LoadingPlot",
@@ -114,8 +107,6 @@ setMethod(".defineInterface", "LoadingPlot",
     list(out[1], .create_visual_box_for_loading_plot(x, se), out[-1])
 })
 
-#' @importFrom iSEE .getEncodedName .createProtectedParameterObservers
-#'   .createUnprotectedParameterObservers
 setMethod(".createObservers", "LoadingPlot",
     function(x, se, input, session, pObjects, rObjects) {
     
@@ -133,13 +124,9 @@ setMethod(".createObservers", "LoadingPlot",
     invisible(NULL)
 })
 
-setMethod(".fullName", "LoadingPlot",
-    function(x) "Loading plot")
+setMethod(".fullName", "LoadingPlot", function(x) "Loading plot")
+setMethod(".panelColor", "LoadingPlot", function(x) "#CCCC00")
 
-#' @importMethodsFrom iSEE .panelColor
-setMethod(".panelColor", "LoadingPlot", function(x) "yellow")
-
-#' @importFrom iSEE .getEncodedName
 #' @importFrom shiny plotOutput
 #' @importFrom shinyWidgets addSpinner
 setMethod(".defineOutput", "LoadingPlot", function(x) {
@@ -150,8 +137,6 @@ setMethod(".defineOutput", "LoadingPlot", function(x) {
         color=.panelColor(x))
 })
 
-#' @importMethodsFrom iSEE .generateOutput
-#' @importFrom iSEE .processMultiSelections .textEval
 #' @importFrom miaViz plotLoadings
 setMethod(".generateOutput", "LoadingPlot",
     function(x, se, all_memory, all_contents) {
@@ -193,7 +178,6 @@ setMethod(".generateOutput", "LoadingPlot",
     list(commands=all_cmds, plot=plot_out, varname=NULL, contents=NULL)
 })
 
-#' @importFrom iSEE .getEncodedName .retrieveOutput
 #' @importFrom shiny renderPlot
 #' @importFrom methods callNextMethod
 setMethod(".renderOutput", "LoadingPlot",
@@ -249,7 +233,6 @@ setMethod(".multiSelectionResponsive", "LoadingPlot",
 })
 
 #' @importFrom methods callNextMethod
-#' @importFrom iSEE .getEncodedName .addTourStep
 setMethod(".definePanelTour", "LoadingPlot", function(x) {
     rbind(c(paste0("#", .getEncodedName(x)), sprintf(
         "The <font color=\"%s\">Loading Plot</font> panel
@@ -266,8 +249,6 @@ setMethod(".definePanelTour", "LoadingPlot", function(x) {
     callNextMethod())
 })
 
-#' @importFrom iSEE .getEncodedName collapseBox .selectInput.iSEE
-#'   .radioButtons.iSEE .conditionalOnRadio .checkboxInput.iSEE
 #' @importFrom methods slot
 #' @importFrom SummarizedExperiment colData
 .create_visual_box_for_loading_plot <- function(x, se) {
@@ -288,7 +269,7 @@ setMethod(".definePanelTour", "LoadingPlot", function(x) {
         paste0(panel_name, "_Visual"), title="Visual parameters", open=FALSE,
             # Panel layout
             .selectInput.iSEE(x, field="layout", label="Layout",
-                choices=c("barplot", "heatmap"),
+                choices=c("barplot", "heatmap", "lollipop"),
                 selected=slot(x, "layout")),
             # Add tree
             .checkboxInput.iSEE(x, field="add.tree", label="View tree",

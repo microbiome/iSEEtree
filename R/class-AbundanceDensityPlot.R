@@ -46,14 +46,6 @@
 #' @name AbundanceDensityPlot
 NULL
 
-#' @rdname AbundanceDensityPlot
-#' @export
-setClass("AbundanceDensityPlot", contains="Panel", slots=c(layout="character",
-    assay.type="character", n="numeric", dots_colour="character",
-    dots_colour_by="character", add_legend="logical", flipped="logical",
-    order_descending="logical", dots_shape="character", dots_shape_by="character"))
-
-#' @importFrom iSEE .singleStringError .validNumberError .validLogicalError
 #' @importFrom S4Vectors setValidity2
 setValidity2("AbundanceDensityPlot", function(x) {
     msg <- character(0)
@@ -69,7 +61,6 @@ setValidity2("AbundanceDensityPlot", function(x) {
     TRUE
 })
 
-#' @importFrom iSEE .emptyDefault
 #' @importFrom methods callNextMethod
 setMethod("initialize", "AbundanceDensityPlot", function(.Object, ...) {
     args <- list(...)
@@ -93,8 +84,6 @@ AbundanceDensityPlot <- function(...) {
     new("AbundanceDensityPlot", ...)
 }
 
-#' @importFrom iSEE .getEncodedName .selectInput.iSEE .numericInput.iSEE .checkboxInput.iSEE
-#'  .radioButtons.iSEE .conditionalOnRadio
 #' @importFrom methods slot
 #' @importFrom SummarizedExperiment assayNames
 setMethod(".defineDataInterface", "AbundanceDensityPlot",
@@ -134,8 +123,6 @@ setMethod(".defineInterface", "AbundanceDensityPlot",
     list(out[1], .create_visual_box_for_abunddens_plot(x, se), out[-1])
 })
 
-#' @importFrom iSEE .getEncodedName .createProtectedParameterObservers
-#'   .createUnprotectedParameterObservers
 setMethod(".createObservers", "AbundanceDensityPlot",
     function(x, se, input, session, pObjects, rObjects) {
     
@@ -153,13 +140,9 @@ setMethod(".createObservers", "AbundanceDensityPlot",
     invisible(NULL)
 })
 
-setMethod(".fullName", "AbundanceDensityPlot",
-    function(x) "Abundance density plot")
-
-#' @importMethodsFrom iSEE .panelColor
+setMethod(".fullName", "AbundanceDensityPlot", function(x) "Abundance density plot")
 setMethod(".panelColor", "AbundanceDensityPlot", function(x) "#8B5A2B")
 
-#' @importFrom iSEE .getEncodedName
 #' @importFrom shiny plotOutput
 #' @importFrom shinyWidgets addSpinner
 setMethod(".defineOutput", "AbundanceDensityPlot", function(x) {
@@ -170,8 +153,6 @@ setMethod(".defineOutput", "AbundanceDensityPlot", function(x) {
         color=.panelColor(x))
 })
 
-#' @importMethodsFrom iSEE .generateOutput
-#' @importFrom iSEE .processMultiSelections .textEval
 #' @importFrom miaViz plotRowTree
 setMethod(".generateOutput", "AbundanceDensityPlot",
     function(x, se, all_memory, all_contents) {
@@ -223,7 +204,6 @@ setMethod(".generateOutput", "AbundanceDensityPlot",
     list(commands=all_cmds, plot=plot_out, varname=NULL, contents=NULL)
 })
 
-#' @importFrom iSEE .getEncodedName .retrieveOutput
 #' @importFrom shiny renderPlot
 #' @importFrom methods callNextMethod
 setMethod(".renderOutput", "AbundanceDensityPlot",
@@ -279,7 +259,6 @@ setMethod(".multiSelectionResponsive", "AbundanceDensityPlot",
 })
 
 #' @importFrom methods callNextMethod
-#' @importFrom iSEE .getEncodedName .addTourStep
 setMethod(".definePanelTour", "AbundanceDensityPlot", function(x) {
     rbind(c(paste0("#", .getEncodedName(x)), sprintf(
         "The <font color=\"%s\">Abundance Density Plot</font> panel
@@ -296,8 +275,6 @@ setMethod(".definePanelTour", "AbundanceDensityPlot", function(x) {
     callNextMethod())
 })
 
-#' @importFrom iSEE .getEncodedName collapseBox .selectInput.iSEE
-#'   .radioButtons.iSEE .conditionalOnRadio .checkboxInput.iSEE
 #' @importFrom methods slot
 #' @importFrom SummarizedExperiment colData
 .create_visual_box_for_abunddens_plot <- function(x, se) {
