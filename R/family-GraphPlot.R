@@ -258,10 +258,8 @@ setMethod(".definePanelTour", "GraphPlot", function(x) {
         title="Visual parameters", open=FALSE,
         # Graph layout
         .selectInput.iSEE(x, field="layout", label="Layout:",
-            choices=c("kk", "fan", "link", "arc", "parallel", "linear", "matrix",
-                "treemap", "circlepack", "partition", "hive", "cactustree",
-                "backbone", "centrality", "eigen", "fabric", "focus", "pmds",
-                "stress", "unrooted", "htree"), selected=slot(x, "layout")),
+            choices=c("kk", "linear", "matrix", "backbone", "fabric", "stress",
+            "unrooted"), selected=slot(x, "layout")),
         .selectInput.iSEE(x, field="edge.type", label="Edge type:",
             choices=c("fan", "link", "arc", "parallel"),
             selected=slot(x, "edge.type")),

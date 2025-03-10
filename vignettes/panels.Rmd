@@ -59,13 +59,13 @@ the app. This catalogue is divided into four sections:
 
 ## Abundance plot
 
-```{r abundance_density_plot, echo=FALSE, out.width="100%"}
+```{r abundance_density_plot, echo=FALSE, out.width="80%"}
 SCREENSHOT("screenshots/AbundancePlot.png", delay=20)
 ```
 
 ## Abundance density plot
 
-```{r abundance_plot, echo=FALSE, out.width="100%"}
+```{r abundance_plot, echo=FALSE, out.width="60%"}
 SCREENSHOT("screenshots/AbundanceDensityPlot.png", delay=20)
 ```
 
@@ -98,7 +98,9 @@ Supported operations:
 
 ## Scree plot
 
-Coming soon!
+```{r scree_plot, echo=FALSE, out.width="20%"}
+SCREENSHOT("screenshots/ScreePlot.png", delay=20)
+```
 
 ## Loading plot
 
@@ -137,7 +139,7 @@ Supported operations:
 - selecting tree layout
 - customising aesthetics
 
-```{r tree_plot, echo=FALSE, out.width="100%"}
+```{r tree_plot, echo=FALSE, out.width="40%"}
 SCREENSHOT("screenshots/RowTreePlot.png", delay=20)
 ```
 

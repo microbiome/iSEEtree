@@ -56,6 +56,13 @@ setClass("RDAPlot", contains="Panel", slots=c(dimred="character",
 setClass("LoadingPlot", contains="Panel", slots=c(dimred="character",
     layout="character", ncomponents="numeric", add.tree="logical"))
 
+#' @rdname ScreePlot
+#' @export
+setClass("ScreePlot", contains="Panel", slots=c(dimred="character",
+    show.barplot="logical", show.points="logical", show.line="logical",
+    show.labels="logical", add.proportion="logical", add.cumulative="logical",
+    n="numeric", show.names="logical", eig.name="character"))
+
 #' @rdname AbundancePlot
 #' @export
 setClass("AbundancePlot", contains="Panel",

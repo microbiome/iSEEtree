@@ -18,3 +18,4 @@ Changes in version 1.2.X
 * Created TreePlot family
 * Added typical tree operations
 * Created GraphPlot family
+* Added ScreePlot panel

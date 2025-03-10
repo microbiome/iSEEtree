@@ -9,7 +9,7 @@ reference:
 - subtitle: Ordination analysis
 - contents:
   - RDAPlot
-  # - ScreePlot
+  - ScreePlot
   - LoadingPlot
 - subtitle: Structural analysis
 - contents:

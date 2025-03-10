@@ -21,7 +21,6 @@
 #' LoadingPlot class, where any slot and its value can be passed to
 #' \code{...} as a named argument.
 #'
-#' @author Giulio Benedetti
 #' @examples
 #' # Import libraries
 #' library(mia)
@@ -46,6 +45,8 @@
 #' if (interactive()) {
 #'   iSEE(tse, initial = c(panel))
 #' }
+#' 
+#' @author Giulio Benedetti
 #' 
 #' @docType methods
 #' @name LoadingPlot
