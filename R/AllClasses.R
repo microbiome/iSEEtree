@@ -67,13 +67,14 @@ setClass("ScreePlot", contains="Panel", slots=c(dimred="character",
 #' @export
 setClass("AbundancePlot", contains="Panel",
     slots=c(rank="character", use_relative="logical", add_legend="logical",
-            order_sample_by_row="character", order_sample="character", 
-            decreasing="logical", order_sample_by_column="character"))
+    order_sample_by_row="character", order_sample="character", 
+    decreasing="logical", order_sample_by_column="character"))
 
 #' @rdname AbundanceDensityPlot
 #' @export
 setClass("AbundanceDensityPlot", contains="Panel", slots=c(layout="character",
     assay.type="character", n="numeric", dots_colour="character",
     dots_colour_by="character", add_legend="logical", flipped="logical",
-    order_descending="logical", dots_shape="character", dots_shape_by="character"))
+    order_descending="logical", dots_shape="character",
+    dots_shape_by="character"))
 

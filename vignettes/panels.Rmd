@@ -59,11 +59,32 @@ the app. This catalogue is divided into four sections:
 
 ## Abundance plot
 
-```{r abundance_density_plot, echo=FALSE, out.width="80%"}
+The Abundance plot illustrates the feature composition of each sample with a
+barplot of the relative or absolute feature abundace. This panel is based on the
+miaViz function plotAbundance.
+
+Supported operations:
+
+- Selecting taxonomic rank of the composition
+- Choosing either absolute or relative abundance
+- Ordering samples by feature or sample metadata
+- Customising aesthetics
+
+```{r abundance_density_plot, echo=FALSE, out.width="60%"}
 SCREENSHOT("screenshots/AbundancePlot.png", delay=20)
 ```
 
 ## Abundance density plot
+
+The Abundance density plot provides an alternative way to visualise abundance.
+In this panel, each row represents the feature distribution across the samples.
+It is based on the miaViz function plotAbundanceDensity.
+
+Supported operations:
+
+- selecting layout (jitter, density or dot plot)
+- specifying the number of top features to show
+- customising aesthetics
 
 ```{r abundance_plot, echo=FALSE, out.width="60%"}
 SCREENSHOT("screenshots/AbundanceDensityPlot.png", delay=20)
@@ -96,17 +117,42 @@ Supported operations:
 - adjusting statistical parameters
 - customising aesthetics
 
+```{r rda_plot, echo=FALSE, out.width="60%"}
+SCREENSHOT("screenshots/RDAPlot.png", delay=20)
+```
+
 ## Scree plot
 
-```{r scree_plot, echo=FALSE, out.width="20%"}
+The Scree plot shows the proportion of variance explained by each component
+of a dimensionality reduction analysis by means of a line plot or barplot. It
+is based on the miaViz function plotScree.
+
+Supported operations:
+
+- selecting reduced dimension
+- changing number of components
+- showing individual or cumulative variance
+- adding components labels and names
+
+```{r scree_plot, echo=FALSE, out.width="60%"}
 SCREENSHOT("screenshots/ScreePlot.png", delay=20)
 ```
 
 ## Loading plot
 
+The Loading plot visualises the contributions of each feature to the components
+of a reduced dimension of choice. It is based on the miaViz function
+plotLoadings.
+
 Supported operations:
 
-- selecting layout (heatmap, barplot or lollipop)
+- selecting layout (barplot, heatmap or lollipop)
+- changing number of components
+- adding feature tree
+
+```{r loading_plot, echo=FALSE, out.width="60%"}
+SCREENSHOT("screenshots/LoadingPlot.png", delay=20)
+```
 
 ## Reduced dimension plot
 
@@ -139,7 +185,7 @@ Supported operations:
 - selecting tree layout
 - customising aesthetics
 
-```{r tree_plot, echo=FALSE, out.width="40%"}
+```{r tree_plot, echo=FALSE, out.width="60%"}
 SCREENSHOT("screenshots/RowTreePlot.png", delay=20)
 ```
 
@@ -157,7 +203,7 @@ Supported operations:
 - selecting edge type
 - customising aesthetics
 
-```{r graph_plot, echo=FALSE, out.width="100%"}
+```{r graph_plot, echo=FALSE, out.width="60%"}
 SCREENSHOT("screenshots/RowGraphPlot.png", delay=20)
 ```
 

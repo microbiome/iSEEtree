@@ -71,7 +71,7 @@ setValidity2("LoadingPlot", function(x) {
 setMethod("initialize", "LoadingPlot", function(.Object, ...) {
     args <- list(...)
     args <- .emptyDefault(args, "dimred", "PCA")
-    args <- .emptyDefault(args, "layout", "heatmap")
+    args <- .emptyDefault(args, "layout", "barplot")
     args <- .emptyDefault(args, "ncomponents", 5)
     args <- .emptyDefault(args, "add.tree", FALSE)
     
@@ -125,7 +125,7 @@ setMethod(".createObservers", "LoadingPlot",
 })
 
 setMethod(".fullName", "LoadingPlot", function(x) "Loading plot")
-setMethod(".panelColor", "LoadingPlot", function(x) "yellow")
+setMethod(".panelColor", "LoadingPlot", function(x) "#CCCC00")
 
 #' @importFrom shiny plotOutput
 #' @importFrom shinyWidgets addSpinner
@@ -269,7 +269,7 @@ setMethod(".definePanelTour", "LoadingPlot", function(x) {
         paste0(panel_name, "_Visual"), title="Visual parameters", open=FALSE,
             # Panel layout
             .selectInput.iSEE(x, field="layout", label="Layout",
-                choices=c("barplot", "heatmap"),
+                choices=c("barplot", "heatmap", "lollipop"),
                 selected=slot(x, "layout")),
             # Add tree
             .checkboxInput.iSEE(x, field="add.tree", label="View tree",
