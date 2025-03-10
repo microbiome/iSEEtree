@@ -16,7 +16,7 @@ test_that("LoadingPlot", {
   
   expect_identical(.getEncodedName(panel), "LoadingPlotNA")
   expect_identical(.fullName(panel), "Loading plot")
-  expect_identical(.panelColor(panel), "yellow")
+  expect_identical(.panelColor(panel), "#CCCC00")
   
   expect_s3_class(.defineInterface(panel, tse, select_info)[[1]][[1]], "shiny.tag.list")
   expect_length(.defineDataInterface(panel, tse, select_info), 2)
