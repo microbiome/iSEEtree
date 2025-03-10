@@ -83,27 +83,13 @@ argument.</p>
     <h2>Slot overview</h2>
 
 
-<p>The following slots control the thresholds used in the visualisation:</p><ul><li><p><code>layout</code>, a string specifying tree layout</p></li>
-<li><p><code>add_legend</code>, a logical indicating if color legend should appear.</p></li>
-<li><p><code>edge_colour_by</code>, a string specifying parameter to color lines by
-when <code>colour_parameters = "Edge"</code>.</p></li>
-<li><p><code>edge_size_by</code>, a string specifying parameter to size lines by
-when <code>size_parameters = "Edge"</code>.</p></li>
-<li><p><code>tip_colour_by</code>, a string specifying parameter to color tips by
-when <code>colour_parameters = "Tip"</code>.</p></li>
-<li><p><code>tip_size_by</code>, a string specifying parameter to size tips by
-when <code>size_parameters = "Tip"</code>.</p></li>
-<li><p><code>tip_shape_by</code>, a string specifying parameter to shape tips by
-when <code>shape_parameters = "Tip"</code>.</p></li>
-<li><p><code>node_colour_by</code>, a string specifying parameter to color nodes by
-when <code>colour_parameters = "Node"</code>.</p></li>
-<li><p><code>node_size_by</code>, a string specifying parameter to size nodes by
-when <code>size_parameters = "Node"</code>.</p></li>
-<li><p><code>node_shape_by</code>, a string specifying parameter to shape nodes by
-when <code>shape_parameters = "Node"</code>.</p></li>
-<li><p><code>order_tree</code>, a logical indicating if tree is ordered by
-alphabetic order of taxonomic levels.</p></li>
-</ul><p>In addition, this class inherits all slots from its parent <a href="https://isee.github.io/iSEE/reference/Panel-class.html" class="external-link">Panel</a> class.</p>
+
+<p>This class inherits all slots from its parent class <a href="TreePlot.html">TreePlot</a>.</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><a href="TreePlot.html">TreePlot</a>
+<a href="ColumnTreePlot.html">ColumnTreePlot</a></p></div>
     </div>
     <div id="author">
     <h2>Author</h2>
@@ -121,8 +107,8 @@ alphabetic order of taxonomic levels.</p></li>
 <span class="r-in"><span><span class="va">panel</span> <span class="op">&lt;-</span> <span class="fu">RowTreePlot</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># View some adjustable parameters</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">slotNames</span><span class="op">(</span><span class="va">panel</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "layout"         "add_legend"     "edge_colour_by" "tip_colour_by" </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "order_tree"     "tip_size_by"   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "layout"         "add.legend"     "edge.colour.by" "tip.colour.by" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "order.tree"     "tip.size.by"   </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Launch iSEE with custom initial panel</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>

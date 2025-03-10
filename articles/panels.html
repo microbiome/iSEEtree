@@ -86,7 +86,7 @@ Benedetti</h4>
 Turku<br><a class="author_email" href="mailto:#"></a><a href="mailto:giulio.benedetti@utu.fi" class="email">giulio.benedetti@utu.fi</a>
       </address>
                   
-            <h4 data-toc-skip class="date">9 March 2025</h4>
+            <h4 data-toc-skip class="date">10 March 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/microbiome/iSEEtree/blob/review/vignettes/panels.Rmd" class="external-link"><code>vignettes/panels.Rmd</code></a></small>
       <div class="hidden name"><code>panels.Rmd</code></div>
@@ -158,14 +158,17 @@ plot and row/column data plots</li>
 <div class="section level3">
 <h3 id="abundance-plot">Abundance plot<a class="anchor" aria-label="anchor" href="#abundance-plot"></a>
 </h3>
+<p><img src="screenshots%2FAbundancePlot.png" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="abundance-density-plot">Abundance density plot<a class="anchor" aria-label="anchor" href="#abundance-density-plot"></a>
 </h3>
+<p><img src="screenshots%2FAbundanceDensityPlot.png" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="prevalence-plot">Prevalence plot<a class="anchor" aria-label="anchor" href="#prevalence-plot"></a>
 </h3>
+<p>Coming soon!</p>
 </div>
 <div class="section level3">
 <h3 id="complex-heatmap-plot">Complex heatmap plot<a class="anchor" aria-label="anchor" href="#complex-heatmap-plot"></a>
@@ -212,22 +215,36 @@ plot and row/column data plots</li>
 <div class="section level3">
 <h3 id="rda-plot">RDA plot<a class="anchor" aria-label="anchor" href="#rda-plot"></a>
 </h3>
+<p>The RDA plot visualises results for a distance-based Redundance
+Analysis (dbRDA) performed on a TreeSE object with the mia function
+runRDA. It is based on the miaViz function plotRDA.</p>
 <p>Supported operations:</p>
 <ul>
+<li>selecting reduced dimension</li>
+<li>adjusting statistical parameters</li>
 <li>customising aesthetics</li>
 </ul>
 </div>
 <div class="section level3">
 <h3 id="scree-plot">Scree plot<a class="anchor" aria-label="anchor" href="#scree-plot"></a>
 </h3>
+<p>Coming soon!</p>
 </div>
 <div class="section level3">
 <h3 id="loading-plot">Loading plot<a class="anchor" aria-label="anchor" href="#loading-plot"></a>
 </h3>
+<p>Supported operations:</p>
+<ul>
+<li>selecting layout (heatmap, barplot or lollipop)</li>
+</ul>
 </div>
 <div class="section level3">
 <h3 id="reduced-dimension-plot">Reduced dimension plot<a class="anchor" aria-label="anchor" href="#reduced-dimension-plot"></a>
 </h3>
+<p>The Reduced dimension plot is inherited from iSEE. It is based on the
+scater function plotReducedDim and and can be used to visualise the
+results of an ordination analysis with both supervised and unsupervised
+methods as dot plot with reduced dimensions as coordinate axes.</p>
 </div>
 </div>
 <div class="section level2">
@@ -270,8 +287,10 @@ plot and row/column data plots</li>
 <div class="section level3">
 <h3 id="rowcolumn-tree-plots">Row/Column tree plots<a class="anchor" aria-label="anchor" href="#rowcolumn-tree-plots"></a>
 </h3>
-<p><a href="">RowTreePlot</a> and <a href="">ColumnTreePlot</a> belong
-to the <a href="">TreePlot</a> panel family.</p>
+<p>Row and column tree plots belong to the TreePlot family. They can be
+used to visualise the hierarchical organisation of the features or
+samples by means of a tree. They are based on the miaViz functions
+plotRowTree and plotColTree.</p>
 <p>Supported operations:</p>
 <ul>
 <li>collapsing and expanding clades</li>
@@ -281,10 +300,24 @@ to the <a href="">TreePlot</a> panel family.</p>
 <li>selecting tree layout</li>
 <li>customising aesthetics</li>
 </ul>
+<p><img src="screenshots%2FRowTreePlot.png" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="rowcolumn-graph-plots">Row/Column graph plots<a class="anchor" aria-label="anchor" href="#rowcolumn-graph-plots"></a>
 </h3>
+<p>Row and column graph plots belong to the GraphPlot family. They can
+be used to visualise the network organisation of the features or samples
+by means of a graph. They are based on the miaViz functions plotRowGraph
+and plotColGraph.</p>
+<p>Supported operations:</p>
+<ul>
+<li>selecting graph and assay type</li>
+<li>labelling nodes</li>
+<li>selecting graph layout</li>
+<li>selecting edge type</li>
+<li>customising aesthetics</li>
+</ul>
+<p><img src="screenshots%2FRowGraphPlot.png" width="100%"></p>
 </div>
 </div>
 <div class="section level2">
@@ -332,14 +365,20 @@ to the <a href="">TreePlot</a> panel family.</p>
 <div class="section level3">
 <h3 id="rowcolumn-tile-plots">Row/Column tile plots<a class="anchor" aria-label="anchor" href="#rowcolumn-tile-plots"></a>
 </h3>
+<p>Coming soon!</p>
 </div>
 <div class="section level3">
 <h3 id="mediation-plot">Mediation plot<a class="anchor" aria-label="anchor" href="#mediation-plot"></a>
 </h3>
+<p>Coming soon!</p>
 </div>
 <div class="section level3">
 <h3 id="rowcolumn-data-plots">Row/Column data plots<a class="anchor" aria-label="anchor" href="#rowcolumn-data-plots"></a>
 </h3>
+<p>The Row and column data plots are inherited from iSEE. They are based
+on the scater functions plotRowData and plotColData and can be used to
+visualise feature or sample metadata as scatter plots when the x
+variable is continuous or boxplots when the x variable is discrete.</p>
 </div>
 </div>
 <div class="section level2">
