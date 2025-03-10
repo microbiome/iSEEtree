@@ -52,7 +52,9 @@ setGeneric("iSEE", iSEE::iSEE)
 #' @importFrom iSEE createLandingPage ExperimentColorMap ReducedDimensionPlot
 #'   ComplexHeatmapPlot RowDataTable ColumnDataTable
 #' @importFrom TreeSummarizedExperiment TreeSummarizedExperiment rowLinks
+#'   colLinks
 #' @importFrom SingleCellExperiment reducedDims
+#' @importFrom S4Vectors metadata
 #' @importFrom SummarizedExperiment rowData colData
 #' @importFrom mia taxonomyRanks
 setMethod("iSEE", "TreeSummarizedExperiment",
@@ -65,8 +67,14 @@ setMethod("iSEE", "TreeSummarizedExperiment",
     initial <- .check_panel(se, initial, "RowDataTable", rowData)
     initial <- .check_panel(se, initial, "ColumnDataTable", colData)
     initial <- .check_panel(se, initial, "RowTreePlot", rowLinks)
+    initial <- .check_panel(se, initial, "ColumnTreePlot", colLinks)
     initial <- .check_panel(se, initial, "AbundancePlot", taxonomyRanks)
     initial <- .check_panel(se, initial, "ReducedDimensionPlot", reducedDims)
+    initial <- .check_panel(se, initial, "LoadingPlot", reducedDims)
+    initial <- .check_panel(se, initial, "ScreePlot", reducedDims)
+    initial <- .check_panel(se, initial, "RDAPlot", reducedDims)
+    initial <- .check_panel(se, initial, "RowGraphPlot", metadata)
+    initial <- .check_panel(se, initial, "ColumnGraphPlot", metadata)
 
     iSEE::iSEE(se, initial = initial, extra = initial, colormap = colormap,
         landingPage = landingPage, tour = tour, appTitle = appTitle,

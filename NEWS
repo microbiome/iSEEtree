@@ -13,8 +13,6 @@ Changes in version 0.99.X
 Changes in version 1.1.X
 * Updated .multiSelectionResponsive
 * Conformed to iSEE v2.19.2
-
-Changes in version 1.2.X
 * Created TreePlot family
 * Added typical tree operations
 * Created GraphPlot family

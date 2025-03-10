@@ -1,5 +1,5 @@
 Package: iSEEtree
-Version: 1.2.0
+Version: 1.1.3
 Authors@R: 
     c(person(given = "Giulio", family = "Benedetti", role = c("aut", "cre"),
            email = "giulio.benedetti@utu.fi",
@@ -44,7 +44,6 @@ Suggests:
     biomformat,
     BiocStyle,
     knitr,
-    MGnifyR,
     RefManageR,
     remotes,
     rmarkdown,
