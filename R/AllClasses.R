@@ -23,7 +23,9 @@ graph_slots <- c(name="character", assay.type="character", layout="character",
     edge.type="character", show.label="logical", add.legend="logical",
     edge.colour.by="character", edge.size.by="character",
     node.colour.by="character", node.shape.by="character",
-    node.size.by="character")
+    node.size.by="character", visual_parameters="character",
+    size_parameters="character", shape_parameters="character",
+    colour_parameters="character")
 
 #' @rdname GraphPlot
 #' @export

@@ -37,6 +37,7 @@ Imports:
     shinyWidgets,
     SingleCellExperiment,
     SummarizedExperiment,
+    tidygraph,
     TreeSummarizedExperiment,
     utils
 Suggests:

@@ -6,12 +6,12 @@
 \alias{GraphPlot}
 \title{Graph plot}
 \description{
-The Graph plot is a virtual class that creates the network structure of
+The Graph plot is a virtual class that showcases the network organisation of
 either the features or samples of a
-\code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}
+\code{\link[SummarizedExperiment:SummarizedExperiment-class]{SummarizedExperiment}}
 object. The \linkS4class{RowGraphPlot} and \linkS4class{ColumnGraphPlot}
 classes belong to this family and are specialised to visualise the feature
-or sample graphs stored in metadata, respectively.
+or sample igraphs stored in metadata, respectively.
 }
 \section{Slot overview}{
 
@@ -45,6 +45,10 @@ In addition, this class inherits all slots from its parent class
 \linkS4class{Panel}.
 }
 
+\seealso{
+\linkS4class{RowGraphPlot}
+\linkS4class{ColumnGraphPlot}
+}
 \author{
 Giulio Benedetti
 }

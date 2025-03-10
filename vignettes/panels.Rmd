@@ -155,6 +155,10 @@ Supported operations:
 - selecting edge type
 - customising aesthetics
 
+```{r tree_plot, echo=FALSE, out.width="100%"}
+SCREENSHOT("screenshots/RowGraphPlot.png", delay=20)
+```
+
 # Other panels {#sec-other}
 
 | Panel name         | Panel class    | Purpose                                     |

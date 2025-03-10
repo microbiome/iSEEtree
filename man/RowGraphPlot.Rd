@@ -11,11 +11,11 @@ RowGraphPlot class, where any slot and its value can be passed to \code{...}
 as a named argument.
 }
 \description{
-Hierarchical tree for the rows of a
-\code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}
-object. The tree can be produced with \code{\link[mia:taxonomy-methods]{addTaxonomyTree}}
-and gets stored in the \code{\link[TreeSummarizedExperiment:rowLinks]{rowTree}}
-slot of the experiment object. The panel implements \code{\link[miaViz:plotTree]{plotRowTree}}
+Network organisation for the features of a
+\code{\link[SummarizedExperiment:SummarizedExperiment-class]{SummarizedExperiment}}
+object. The igraph should be stored in the \code{metadata} slot by a name
+containing \code{"graph"}. This panel uses
+\code{\link[miaViz:plotColGraph]{plotRowGraph}}
 to generate the plot.
 }
 \section{Slot overview}{
@@ -25,10 +25,17 @@ This class inherits all slots from its parent class \linkS4class{GraphPlot}.
 }
 
 \examples{
-# Import TreeSE
 library(mia)
-data("Tengeler2020", package = "mia")
-tse <- Tengeler2020
+library(miaViz)
+data("GlobalPatterns", library = "mia")
+data("row_graph", library = "miaViz")
+
+tse <- GlobalPatterns
+tse <- agglomerateByRank(tse,
+                         rank = "Genus",
+                         na.rm = TRUE)
+                         
+metadata(tse)$graph <- row_graph
 
 # Store panel into object
 panel <- RowGraphPlot()
@@ -40,6 +47,10 @@ if (interactive()) {
   iSEE(tse, initial = c(panel))
 }
 
+}
+\seealso{
+\linkS4class{GraphPlot}
+\linkS4class{ColumnGraphPlot}
 }
 \author{
 Giulio Benedetti

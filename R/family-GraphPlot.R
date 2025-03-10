@@ -1,11 +1,11 @@
 #' Graph plot
 #'
-#' The Graph plot is a virtual class that creates the network structure of
+#' The Graph plot is a virtual class that showcases the network organisation of
 #' either the features or samples of a
-#' \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}
+#' \code{\link[SummarizedExperiment:SummarizedExperiment-class]{SummarizedExperiment}}
 #' object. The \linkS4class{RowGraphPlot} and \linkS4class{ColumnGraphPlot}
 #' classes belong to this family and are specialised to visualise the feature
-#' or sample graphs stored in metadata, respectively.
+#' or sample igraphs stored in metadata, respectively.
 #'
 #' @section Slot overview:
 #' The following slots control the thresholds used in the visualisation:
@@ -36,7 +36,11 @@
 #'
 #' In addition, this class inherits all slots from its parent class
 #' \linkS4class{Panel}.
-#'
+#' 
+#' @seealso
+#' \linkS4class{RowGraphPlot}
+#' \linkS4class{ColumnGraphPlot}
+#' 
 #' @author Giulio Benedetti
 #' 
 #' @docType methods
@@ -48,8 +52,8 @@ setValidity2("GraphPlot", function(x) {
     msg <- character(0)
     
     msg <- .singleStringError(msg, x, fields=c("name", "assay.type", "layout",
-        "edge.type", "edge.colour.by", "edge.size.by", "colour.by", "shape.by",
-        "size.by"))
+        "edge.type", "edge.colour.by", "edge.size.by", "node.colour.by",
+        "node.shape.by", "node.size.by"))
     msg <- .validLogicalError(msg, x, fields=c("add.legend", "show.label"))
 
     if (length(msg)) {
@@ -70,9 +74,13 @@ setMethod("initialize", "GraphPlot", function(.Object, ...) {
     args <- .emptyDefault(args, "add.legend", TRUE)
     args <- .emptyDefault(args, "edge.colour.by", NA_character_)
     args <- .emptyDefault(args, "edge.size.by", NA_character_)
-    args <- .emptyDefault(args, "colour.by", NA_character_)
-    args <- .emptyDefault(args, "size.by", NA_character_)
-    args <- .emptyDefault(args, "shape.by", NA_character_)
+    args <- .emptyDefault(args, "node.colour.by", NA_character_)
+    args <- .emptyDefault(args, "node.size.by", NA_character_)
+    args <- .emptyDefault(args, "node.shape.by", NA_character_)
+    args <- .emptyDefault(args, "visual_parameters", NA_character_)
+    args <- .emptyDefault(args, "colour_parameters", NA_character_)
+    args <- .emptyDefault(args, "shape_parameters", NA_character_)
+    args <- .emptyDefault(args, "size_parameters", NA_character_)
 
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -102,12 +110,13 @@ setMethod(".createObservers", "GraphPlot",
     panel_name <- .getEncodedName(x)
 
     .createProtectedParameterObservers(panel_name, c("layout", "assay.type",
-        "name", "edge.type", "show.label", "add.legend", "RowSelectionSource"),
-        input=input, pObjects=pObjects, rObjects=rObjects)
+        "name", "edge.type", "show.label", "add.legend", "RowSelectionSource",
+        "visual_parameters", "colour_parameters", "size_parameters",
+        "shape_parameters"), input=input, pObjects=pObjects, rObjects=rObjects)
     
     .createUnprotectedParameterObservers(panel_name, c("edge.colour.by",
-        "edge.size.by", "size.by", "shape.by", "size.by"), input=input,
-        pObjects=pObjects, rObjects=rObjects)
+        "edge.size.by", "node.size.by", "node.colour.by", "node.shape.by",
+        "node.size.by"), input=input, pObjects=pObjects, rObjects=rObjects)
     
     invisible(NULL)
 })
@@ -172,9 +181,14 @@ setMethod(".definePanelTour", "GraphPlot", function(x) {
     callNextMethod())
 })
 
+#' @importFrom methods slot
+#' @importFrom S4Vectors metadata
+#' @importFrom tidygraph activate
 #' @importFrom SummarizedExperiment rowData colData
 .create_visual_box_for_graph <- function(x, se) {
     panel_name <- .getEncodedName(x)
+    
+    edge_data <- as.data.frame(activate(metadata(se)[[slot(x, "name")]], "edges"))
     gr_data <- switch(substr(panel_name, 1, 3),
         Row = rowData(se), Col = colData(se))
 
@@ -198,49 +212,109 @@ setMethod(".definePanelTour", "GraphPlot", function(x) {
             and one of them can be selected.")))})
     .addSpecificTour(class(x)[1], "edge.size.by", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_edge\\.width\\.by + .selectize-control"), intro = "Here, we can
+            "_edge\\.size\\.by + .selectize-control"), intro = "Here, we can
             choose whether or not to colour the tips by a variable from the
             <code>metadata</code>. When active, the available options are listed
             and one of them can be selected.")))})
-    .addSpecificTour(class(x)[1], "colour.by", function(panel_name) {
+    .addSpecificTour(class(x)[1], "node.colour.by", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_colour\\.by + .selectize-control"), intro = "Here, we can choose
-            whether or not to colour the nodes by a variable from the
+            "_node\\.colour\\.by + .selectize-control"), intro = "Here, we can
+            choose whether or not to colour the nodes by a variable from the
             <code>metadata</code>. When active, the available options are listed
             and one of them can be selected.")))})
-    .addSpecificTour(class(x)[1], "shape.by", function(panel_name) {
+    .addSpecificTour(class(x)[1], "node.shape.by", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_shape\\.by + .selectize-control"), intro = "Here, we can order
-            the tree alphabetically.")))})
-    .addSpecificTour(class(x)[1], "size.by", function(panel_name) {
+            "_node\\.shape\\.by + .selectize-control"), intro = "Here, we can
+            order the tree alphabetically.")))})
+    .addSpecificTour(class(x)[1], "node.size.by", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_size\\.by + .selectize-control"), intro = "Here, we can
+            "_node\\.size\\.by + .selectize-control"), intro = "Here, we can
             choose how to colour the  tips by.")))})
+    .addSpecificTour(class(x)[1], "visual_parameters", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_visual_parameters"), intro = "Here, we can 
+            choose to show the different visual parameters.")))})
+    .addSpecificTour(class(x)[1], "colour_parameters", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_colour_parameters"), intro = "Here, we can make 
+            the colour depend on the value of a
+            categorical column data field for each plot components
+            (line, tip, node).")))})
+    .addSpecificTour(class(x)[1], "shape_parameters", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_shape_parameters"), intro = "Here, we can make 
+            the shape depend on the value of a
+            categorical column data field for each plot components
+            (line, tip, node).")))})
+    .addSpecificTour(class(x)[1], "size_parameters", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_size_parameters"), intro = "Here, we can make 
+            the size depend on the value of a
+            categorical column data field for each plot components
+            (line, tip, node).")))})
     
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_VisualBoxOpen"),
         title="Visual parameters", open=FALSE,
         # Graph layout
         .selectInput.iSEE(x, field="layout", label="Layout:",
-            choices=c("auto", "fan", "igraph", "dendrogram", "linear", "matrix",
+            choices=c("kk", "fan", "link", "arc", "parallel", "linear", "matrix",
                 "treemap", "circlepack", "partition", "hive", "cactustree",
                 "backbone", "centrality", "eigen", "fabric", "focus", "pmds",
                 "stress", "unrooted", "htree"), selected=slot(x, "layout")),
         .selectInput.iSEE(x, field="edge.type", label="Edge type:",
-            choices=c("link", "arc", "parallel", "fan", "loop", "diagonal",
-                "elbow", "bend", "hive", "span", "point", "tile", "density",
-                "force", "path", "minimal", "sf"), selected=slot(x, "edge.type")),
+            choices=c("fan", "link", "arc", "parallel"),
+            selected=slot(x, "edge.type")),
         .checkboxInput.iSEE(x, field="add.legend", label="View legend",
             value=slot(x, "add.legend")),
-        .selectInput.iSEE(x, field="edge.colour.by", label="Color edges by",
-            choices=names(gr_data), selected=slot(x, "edge.colour.by")),
-        .selectInput.iSEE(x, field="edge.size.by", label="Widen edges by",
-            choices=names(gr_data), selected=slot(x, "edge.size.by")),
-        .selectInput.iSEE(x, field="colour.by", label="Color nodes by",
-            choices=names(gr_data), selected=slot(x, "colour.by")),
-        .selectInput.iSEE(x, field="shape.by", label="Shape nodes by",
-            choices=names(gr_data), selected=slot(x, "shape.by")),
-        .selectInput.iSEE(x, field="size.by", label="Size edges by",
-            choices=names(gr_data), selected=slot(x, "size.by")))
+        .checkboxGroupInput.iSEE(x, field="visual_parameters", label=NULL,
+            inline=TRUE, selected=slot(x, "visual_parameters"),
+            choices=c("Colour", "Size", "Shape")),
+        
+        .conditionalOnCheckGroup(
+            paste0(panel_name, "_visual_parameters"), "Colour",
+            list(
+                .checkboxGroupInput.iSEE(x, field="colour_parameters",
+                    inline=TRUE, selected=slot(x, "colour_parameters"),
+                    choices=c("Edge", "Node"), label="Colour by:"),
+                .conditionalOnCheckGroup(
+                    paste0(panel_name, "_colour_parameters"), "Edge",
+                        .selectInput.iSEE(x, field="edge.colour.by",
+                            label="Colour lines by", choices=names(edge_data),
+                            selected=slot(x, "edge.colour.by"))),
+                .conditionalOnCheckGroup(
+                    paste0(panel_name, "_colour_parameters"), "Node",
+                        .selectInput.iSEE(x, field="node.colour.by",
+                            label="Colour nodes by", choices=names(gr_data),
+                            selected=slot(x, "node.colour.by"))))),
+        
+        .conditionalOnCheckGroup(
+            paste0(panel_name, "_visual_parameters"), "Size",
+            list(
+                .checkboxGroupInput.iSEE(x, field="size_parameters",
+                    inline=TRUE, selected=slot(x, "size_parameters"),
+                    choices=c("Edge", "Node"), label="Size by:"),
+                .conditionalOnCheckGroup(
+                    paste0(panel_name, "_size_parameters"), "Edge",
+                        .selectInput.iSEE(x, field="edge.size.by",
+                            label="Size lines by", choices=names(edge_data),
+                            selected=slot(x, "edge.size.by"))),
+                .conditionalOnCheckGroup(
+                    paste0(panel_name, "_size_parameters"), "Node",
+                        .selectInput.iSEE(x, field="node.size.by",
+                            label="Size nodes by", choices=names(gr_data),
+                            selected=slot(x, "node.size.by"))))),
+        
+        .conditionalOnCheckGroup(
+            paste0(panel_name, "_visual_parameters"), "Shape",
+            list(
+                .checkboxGroupInput.iSEE(x, field="shape_parameters",
+                    inline=TRUE, selected=slot(x, "shape_parameters"),
+                    choices=c("Node"), label="Shape by:"),
+                .conditionalOnCheckGroup(
+                    paste0(panel_name, "_shape_parameters"), "Node",
+                        .selectInput.iSEE(x, field="node.shape.by",
+                            label="Shape nodes by", choices=names(gr_data),
+                            selected=slot(x, "node.shape.by"))))))
 
 }

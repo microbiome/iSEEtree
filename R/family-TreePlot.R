@@ -216,24 +216,26 @@ setMethod(".definePanelTour", "TreePlot", function(x) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_add\\.legend"), intro = "Here, we can choose
             whether or not to show a legend.")))})
-    .addSpecificTour(class(x)[1], "edge_colour", function(panel_name) {
+    .addSpecificTour(class(x)[1], "add.tip.lab", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_edge_colour"), intro = "Here, we can choose
-            whether or not to colour the lines by a variable from the
-            <code>metadata</code>. When active, the available options are listed
-            and one of them can be selected.")))})
-    .addSpecificTour(class(x)[1], "tip_colour", function(panel_name) {
+            "_add\\.tip\\.lab"), intro = "Here, we can choose
+            whether or not to show the tip labels.")))})
+    .addSpecificTour(class(x)[1], "add.node.lab", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_tip_colour"), intro = "Here, we can choose
-            whether or not to colour the tips by a variable from the
-            <code>metadata</code>. When active, the available options are listed
-            and one of them can be selected.")))})
-    .addSpecificTour(class(x)[1], "node_colour", function(panel_name) {
+            "_add\\.node\\.lab"), intro = "Here, we can choose
+            whether or not to show the node numbers.")))})
+    .addSpecificTour(class(x)[1], "rotate.angle", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
-            "_node_colour"), intro = "Here, we can choose
-            whether or not to colour the nodes by a variable from the
-            <code>metadata</code>. When active, the available options are listed
-            and one of them can be selected.")))})
+            "_rotate\\.angle"), intro = "Here, we can specify the angle by which
+            to rotate the tree.")))})
+    .addSpecificTour(class(x)[1], "open.angle", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_open\\.angle"), intro = "Here, we can specify the angle by which
+            to open the tree.")))})
+    .addSpecificTour(class(x)[1], "branch.length", function(panel_name) {
+        data.frame(rbind(c(element = paste0("#", panel_name,
+            "_branch\\.length"), intro = "Here, we can choose whether branch
+            length should be equalised.")))})
     .addSpecificTour(class(x)[1], "order.tree", function(panel_name) {
         data.frame(rbind(c(element = paste0("#", panel_name,
             "_order\\.tree"), intro = "Here, we can order
@@ -371,13 +373,16 @@ setMethod(".definePanelTour", "TreePlot", function(x) {
 }
 
 #' @importFrom methods slot
-.assign_viz_param <- function(args, x, element, aesthetic) {
-  
-    param_name <- paste(tolower(element), aesthetic, "by", sep = ".")
-    
-    if( element %in% slot(x, paste(aesthetic, "parameters", sep = "_")) ){
-        args[[param_name]] <- deparse(slot(x, param_name))
+.assign_viz_param <- function(args, x, element, aesthetic, arg.name = NULL) {
+    # Build panel slot name
+    slot_name <- paste(tolower(element), aesthetic, "by", sep = ".")
+    # Use slot name if arg name is not given
+    if( is.null(arg.name) ){
+        arg.name <- slot_name
     }
-  
+    # Add slot value to args
+    if( element %in% slot(x, paste(aesthetic, "parameters", sep = "_")) ){
+        args[[arg.name]] <- deparse(slot(x, slot_name))
+    }
     return(args)
 }
