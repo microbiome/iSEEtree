@@ -223,7 +223,6 @@ We hope that iSEEtree will be useful for your research. Please use the following
 information to cite the package and the overall approach. Thank you!
 
 ```{r citation}
-## Citation info
 citation("iSEEtree")
 ```
 

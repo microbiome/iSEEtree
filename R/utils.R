@@ -22,9 +22,9 @@
 #' # Create list of panels
 #' initial <- c(RowTreePlot(), ColumnTreePlot())
 #' # If RowTreePlot is in initial, check whether rowLinks is defined
-#' initial <- .check_panel(se, initial, "RowTreePlot", rowLinks)
+#' initial <- .check_panel(tse, initial, "RowTreePlot", rowLinks)
 #' # If ColumnTreePlot is in initial, check whether colLinks is defined
-#' initial <- .check_panel(se, initial, "ColumnTreePlot", colLinks)
+#' initial <- .check_panel(tse, initial, "ColumnTreePlot", colLinks)
 #' 
 #' # View filtered list of panels
 #' initial
