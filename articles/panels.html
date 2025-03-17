@@ -86,9 +86,9 @@ Benedetti</h4>
 Turku<br><a class="author_email" href="mailto:#"></a><a href="mailto:giulio.benedetti@utu.fi" class="email">giulio.benedetti@utu.fi</a>
       </address>
                   
-            <h4 data-toc-skip class="date">10 March 2025</h4>
+            <h4 data-toc-skip class="date">17 March 2025</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/microbiome/iSEEtree/blob/devel/vignettes/panels.Rmd" class="external-link"><code>vignettes/panels.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/microbiome/iSEEtree/blob/examples/vignettes/panels.Rmd" class="external-link"><code>vignettes/panels.Rmd</code></a></small>
       <div class="hidden name"><code>panels.Rmd</code></div>
 
     </div>
@@ -136,7 +136,7 @@ plot and row/column data plots</li>
 <tr class="odd">
 <td>Abundance plot</td>
 <td>AbundancePlot</td>
-<td>Feature composition by sample</td>
+<td>Feature abundance by sample</td>
 </tr>
 <tr class="even">
 <td>Abundance density plot</td>
@@ -149,9 +149,14 @@ plot and row/column data plots</li>
 <td>Feature prevalence across samples</td>
 </tr>
 <tr class="even">
+<td>Feature assay plot</td>
+<td>FeatureAssayPlot</td>
+<td>Feature counts by column variable</td>
+</tr>
+<tr class="odd">
 <td>Complex heatmap plot</td>
 <td>ComplexHeatmapPlot</td>
-<td>Whole assay composition</td>
+<td>Counts by features and samples</td>
 </tr>
 </tbody>
 </table>
@@ -191,8 +196,22 @@ plotAbundanceDensity.</p>
 <p>Coming soon!</p>
 </div>
 <div class="section level3">
+<h3 id="feature-assay-plot">Feature assay plot<a class="anchor" aria-label="anchor" href="#feature-assay-plot"></a>
+</h3>
+<p>The Feature assay plot is inherited from iSEE. It is based on the
+scater function plotRowData and can be used to visualise the counts of a
+specific feature across samples grouped by a column variable.</p>
+<p>See its image in the iSEE panel catalogue: <a href="https://isee.github.io/panels.html#featureassayplot" class="external-link">FeatureAssayPlot</a></p>
+</div>
+<div class="section level3">
 <h3 id="complex-heatmap-plot">Complex heatmap plot<a class="anchor" aria-label="anchor" href="#complex-heatmap-plot"></a>
 </h3>
+<p>The Reduced dimension plot is inherited from iSEE. It is based on the
+ComplexHeatmap function Heatmap, which shows an entire assay as a
+heatmap where rows and columns represent features and samples,
+respectively. Hierarchical clustering as well as grouping by a variable
+can be performed across both dimensions.</p>
+<p>See its image in the iSEE panel catalogue: <a href="https://isee.github.io/panels.html#complexheatmapplot" class="external-link">ComplexHeatmapPlot</a></p>
 </div>
 </div>
 <div class="section level2">
@@ -279,9 +298,10 @@ function plotLoadings.</p>
 <h3 id="reduced-dimension-plot">Reduced dimension plot<a class="anchor" aria-label="anchor" href="#reduced-dimension-plot"></a>
 </h3>
 <p>The Reduced dimension plot is inherited from iSEE. It is based on the
-scater function plotReducedDim and and can be used to visualise the
-results of an ordination analysis with both supervised and unsupervised
-methods as dot plot with reduced dimensions as coordinate axes.</p>
+scater function plotReducedDim and can be used to visualise the results
+of an ordination analysis with both supervised and unsupervised methods
+as dot plot with reduced dimensions as coordinate axes.</p>
+<p>See its image in the iSEE panel catalogue: <a href="https://isee.github.io/panels.html#reduceddimensionplot" class="external-link">ReducedDimensionPlot</a></p>
 </div>
 </div>
 <div class="section level2">
@@ -363,23 +383,23 @@ and plotColGraph.</p>
 <table class="table">
 <colgroup>
 <col width="24%">
-<col width="19%">
-<col width="55%">
+<col width="20%">
+<col width="54%">
 </colgroup>
 <thead><tr class="header">
 <th>Panel name</th>
 <th>Panel class</th>
-<th>Purpose</th>
+<th>Information</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td>Row tile plot</td>
-<td>RowTreePlot</td>
+<td>RowTilePlot</td>
 <td>Variable distribution across feature groups</td>
 </tr>
 <tr class="even">
 <td>Column tile plot</td>
-<td>ColumnTreePlot</td>
+<td>ColumnTilePlot</td>
 <td>Variable distribution across sample groups</td>
 </tr>
 <tr class="odd">
@@ -388,14 +408,24 @@ and plotColGraph.</p>
 <td>Results of mediation analysis</td>
 </tr>
 <tr class="even">
+<td>Row data table</td>
+<td>RowDataTable</td>
+<td>Table of feature metadata</td>
+</tr>
+<tr class="odd">
+<td>Column data table</td>
+<td>ColumnDataTable</td>
+<td>Table of sample metadata</td>
+</tr>
+<tr class="even">
 <td>Row data plot</td>
 <td>RowDataPlot</td>
-<td>Variables from feature metadata</td>
+<td>Feature variable distribution</td>
 </tr>
 <tr class="odd">
 <td>Column data plot</td>
 <td>ColumnDataPlot</td>
-<td>Variables from sample metadata</td>
+<td>Sample variable distribution</td>
 </tr>
 </tbody>
 </table>
@@ -410,19 +440,31 @@ and plotColGraph.</p>
 <p>Coming soon!</p>
 </div>
 <div class="section level3">
+<h3 id="rowcolumn-data-tables">Row/Column data tables<a class="anchor" aria-label="anchor" href="#rowcolumn-data-tables"></a>
+</h3>
+<p>The Row and column data tables are inherited from iSEE. They are
+rendered as a tidy table of feeature or sample variables, respectively.
+From those, it is possible to select a subset of the observations and
+transmit it to one or many other panels.</p>
+<p>See their images in the iSEE panel catalogue: <a href="https://isee.github.io/panels.html#rowdataplot" class="external-link">RowDataPlot</a>
+and <a href="https://isee.github.io/panels.html#columndataplot" class="external-link">ColumnDataPlot</a></p>
+</div>
+<div class="section level3">
 <h3 id="rowcolumn-data-plots">Row/Column data plots<a class="anchor" aria-label="anchor" href="#rowcolumn-data-plots"></a>
 </h3>
 <p>The Row and column data plots are inherited from iSEE. They are based
 on the scater functions plotRowData and plotColData and can be used to
 visualise feature or sample metadata as scatter plots when the x
 variable is continuous or boxplots when the x variable is discrete.</p>
+<p>See their images in the iSEE panel catalogue: <a href="https://isee.github.io/panels.html#rowdatatable" class="external-link">RowDataTable</a>
+and <a href="https://isee.github.io/panels.html#columndatatable" class="external-link">ColumnDataTable</a></p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="reproducibility">Reproducibility<a class="anchor" aria-label="anchor" href="#reproducibility"></a>
 </h2>
 <p>R session information:</p>
-<pre><code><span><span class="co">#&gt; R Under development (unstable) (2025-03-04 r87880)</span></span>
+<pre><code><span><span class="co">#&gt; R Under development (unstable) (2025-03-08 r87910)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>
 <span><span class="co">#&gt; Running under: Ubuntu 24.04.1 LTS</span></span>
 <span><span class="co">#&gt; </span></span>
