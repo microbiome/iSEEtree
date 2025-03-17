@@ -1,5 +1,5 @@
 ---
-title: "iSEEtree: interactive exploration of microbiome data"
+title: "iSEEtree: interactive explorer for hierarchical data"
 author: 
   - name: Giulio Benedetti
     affiliation: University of Turku
@@ -14,6 +14,7 @@ output:
         number_sections: true
         self_contained: true
         code_folding: show
+bibliography: ../inst/REFERENCES.bib
 date: "`r doc_date()`"
 package: "`r pkg_ver('iSEEtree')`"
 vignette: >
@@ -29,29 +30,14 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r vignetteSetup, echo=FALSE, message=FALSE, warning=FALSE}
-## Bib setup
-library(RefManageR)
-
-## Write bibliography information
-bib <- c(
-    R = citation(),
-    BiocStyle = citation("BiocStyle")[1],
-    knitr = citation("knitr")[1],
-    RefManageR = citation("RefManageR")[1],
-    rmarkdown = citation("rmarkdown")[1],
-    testthat = citation("testthat")[1]
-)
-```
-
 # Introduction
 
 ## Motivation
 
 iSEEtree is a Bioconductor package for the interactive visualisation of
-microbiome data stored in a TreeSummarizedExperiment (TreeSE) container. On the
-one side, it leverages and extends the graphics of the iSEE package, which is
-designed for the generic SummarizedExperiment class. On the other side, it
+hierarchical data stored in a TreeSummarizedExperiment (TreeSE) container. On
+the one side, it leverages and extends the graphics of the iSEE package, which
+is designed for the generic SummarizedExperiment class. On the other side, it
 employs the statistical and visual tools for microbiome data science provided by
 the mia family of packages. Thus, iSEE and mia represent the two building blocks
 of iSEEtree. Detailed introductory material on these two frameworks is available
@@ -60,45 +46,79 @@ in the [iSEE-verse website](https://isee.github.io/) and the
 respectively.
 
 iSEEtree is meant for new and experienced users alike, who desire to create and
-interact with several graphics for microbiome data, without the need for an
-in-depth knowledge of the underlying mia functionality. Current microbiome-specific
-panels include phylogenetic trees, ordination plots and compositional plots,
-which can be further explored below in this article. Other more generic panels
-are also reused from the iSEE package and can be experimented in
-[this article](https://isee.github.io/iSEE/articles/basic.html).
+interact with several graphics for hierarchical data, without the need for an
+in-depth knowledge of the underlying mia functionality. Current panels include
+compositional plots, ordination graphs and structural tree or networks, which
+are further discussed in the current article and in the
+[online package documentation](https://microbiome.github.io/iSEEtree/).
+Other more generic panels are also inherited from the parent package iSEE and
+its many extensions.
 
 ## Panels
 
 iSEEtree derives its microbiome-related visualisation methods from the
 [miaViz](https://microbiome.github.io/miaViz/) package, which is code-based and
 requires basic knowledge of R programming and microbiome data structures. The
-following panels represent an easy-to-use interactive version of the miaViz
-plotting functions:
+panels provided represent an easy-to-use interactive version of most miaViz
+plotting functions. They allow to visualise several aspects of hierarchical data
+by three general approaches: compositional, ordination and structural analysis.
 
-- [AbundanceDensityPlot](https://microbiome.github.io/iSEEtree/reference/AbundanceDensityPlot.html):
-  a density plot of the top features, where every line is a feature and the x
-  axis shows its abundance for different samples. Its interpretation is
-  explained in the OMA chapter on
-  [Exploration](https://microbiome.github.io/OMA/docs/devel/pages/12_quality_control.html).
+### Compositional Analysis
+
+These panels can be used to explore sample composition and feature prevalence
+or abundance across samples. This topic is further discussed in the OMA chapter
+on [Community Composition](https://microbiome.github.io/OMA/docs/devel/pages/composition.html).
+
 - [AbundancePlot](https://microbiome.github.io/iSEEtree/reference/AbundancePlot.html):
   a compositional barplot of the samples, where every bar is a sample composed
-  by different features in different colours. Its interpretation is explained
-  in the OMA chapter on
-  [Community Composition](https://microbiome.github.io/OMA/docs/devel/pages/21_microbiome_community.html).
-- [ColumnTreePlot](https://microbiome.github.io/iSEEtree/reference/ColumnTreePlot.html):
-  the hierarchical organisation of the samples, where every tip is a sample and
-  the closer the more related they are.
-- [LoadingPlot](https://microbiome.github.io/iSEEtree/reference/LoadingPlot.html):
-  a heatmap or barplot of the loadings or contributions of each feature to the
-  reduced dimensions of PCA, PCoA or another ordination method.
+  by different features in different colours.
+- [AbundanceDensityPlot](https://microbiome.github.io/iSEEtree/reference/AbundanceDensityPlot.html):
+  a density plot of the top features, where every line is a feature and the x
+  axis shows its abundance for different samples.
+- PrevalencePlot: coming soon!
+
+### Ordination Analysis
+
+These panels show the results of ordination analyses or dimensionality reduction
+methods applied to the assay data, both in terms of reduced components as well
+as explained variance and feature importance. This topic is further discussed in
+the OMA chapter on
+[Community Similarity](https://microbiome.github.io/OMA/docs/devel/pages/20_beta_diversity.html).
+
 - [RDAPlot](https://microbiome.github.io/iSEEtree/reference/RDAPlot.html): an
   supervised ordination plot of the samples, where every dot is a sample on a
   reduced dimensional space and every arrow reflects the contribution of a
-  sample variable. Its interpretation is explained in the OMA chapter on
-  [Community Similarity](https://microbiome.github.io/OMA/docs/devel/pages/20_beta_diversity.html).
+  sample variable.
+- [LoadingPlot](https://microbiome.github.io/iSEEtree/reference/LoadingPlot.html):
+  a heatmap or barplot of the loadings or contributions of each feature to the
+  reduced dimensions of PCA, PCoA or another ordination method.
+- [ScreePlot](https://microbiome.github.io/iSEEtree/reference/LoadingPlot.html):
+  a barplot of the contributions of each reduced dimension component to the
+  explained variance.
+
+### Structural Analysis
+
+The structure or organisation of hierarchical data can be explored with the
+tree and network visualisations that provide a holistic picture of the
+structured relationships across features or samples. This topic is further
+discussed in the OMA chapters on
+[Exploration](https://microbiome.github.io/OMA/docs/devel/pages/quality_control.html) and
+[Networks](https://microbiome.github.io/OMA/docs/devel/pages/network_learning.html).
+
 - [RowTreePlot](https://microbiome.github.io/iSEEtree/reference/RowTreePlot.html):
   a phylogenetic tree of the features, where every tip is a feature and two
   neighbouring tips are more closely related than two far apart from each other.
+- [ColumnTreePlot](https://microbiome.github.io/iSEEtree/reference/ColumnTreePlot.html):
+  the hierarchical organisation of the samples, where every tip is a sample and
+  the closer the more related they are.
+- [RowGraphPlot](https://microbiome.github.io/iSEEtree/reference/RowGraphPlot.html):
+  the network organisation of the features, where every node is a feature and
+  edges reflect the degree of connection between features.
+- [ColumnGraphPlot](https://microbiome.github.io/iSEEtree/reference/ColumnGraphPlot.html):
+  the network organisation of the samples, where every node is a sample and
+  edges reflect the degree of connection between samples.
+
+### Other Panels
 
 By default, the iSEEtree layout also includes the following panels inherited by
 iSEE:
@@ -113,9 +133,14 @@ could also prove useful for the visualisation of column variables such as
 alpha diversity indices. Its interpretation is explained in the OMA chapter on
 [Community Diversity](https://microbiome.github.io/OMA/docs/devel/pages/14_alpha_diversity.html).
 
+For more information on the available panels, users are directed to the
+[iSEEtree panel catalogue](https://microbiome.github.io/iSEEtree/articles/panels.html)
+in the main package documentation.
+
 # Tutorial
 
 ## Installation
+
 R is an open-source statistical environment which can be easily modified to
 enhance its functionality via packages. iSEEtree is an R package available on
 [Bioconductor](https://bioconductor.org/). R can be installed on any operating
@@ -165,6 +190,33 @@ SCREENSHOT("screenshots/get_started.png", delay=20)
 
 # Resources
 
+## Open datasets
+
+TreeSE objects can be constructed from raw data and standardised file formats.
+However, several packages provide access to demonstration datasets used to
+familiarise with the use of TreeSE objects. A complete list of resources is
+available in the OMA chapter on
+[Data Import](https://microbiome.github.io/OMA/docs/devel/pages/import.html#sec-example-data).
+
+In addition, we provide the Microbiome Analysis Dashboard (miaDash), a web app
+based on iSEEtree that offers a complete interface to import, analyse and
+visualise microbiome data, or to easily access mia datasets for experimentation
+purposes. The app is hosted online at
+[this address](https://miadash-microbiome.2.rahtiapp.fi/) by the Finnish IT
+Center for Science (CSC).
+
+## Other tutorials
+
+Users interested in general topics about the iSEE interface are redirected to
+the [documentation](https://isee.github.io/iSEE) of the iSEE parent package,
+which provides ideas and solutions on how to:
+
+- use iSEE with big data
+- configure iSEE apps
+- deploy custom panels
+- share information across panels
+- control the interface with speech
+
 ## Citation
 
 We hope that iSEEtree will be useful for your research. Please use the following
@@ -175,16 +227,16 @@ information to cite the package and the overall approach. Thank you!
 citation("iSEEtree")
 ```
 
-## Background Knowledge
+## Acknowledgements
 
-iSEEtree is based on many other packages and in particular on those that have
-implemented the infrastructure needed for dealing with omics data, microbiome
-data and interactive visualisation. That is, packages like
-[_SummarizedExperiment_](https://bioconductor.org/packages/3.18/bioc/html/SummarizedExperiment.html),
-[_TreeSummarizedExperiment_](https://bioconductor.org/packages/3.18/bioc/html/TreeSummarizedExperiment.html),
-[_mia_](https://bioconductor.org/packages/3.18/bioc/html/mia.html),
-[_iSEE_](https://bioconductor.org/packages/3.18/bioc/html/iSEE.html) and
-[_shiny_](https://cran.r-project.org/web/packages/shiny/).
+iSEEtree originates from the joint effort of the R/Bioconductor community. It is
+mainly based on the following software:
+
+- [R](https://www.r-project.org/), statistical programming language [@core2024r]
+- [mia](https://bioconductor.org/packages/release/bioc/html/mia.html), framework for microbiome data analysis [@borman2024mia]
+- [iSEE](https://bioconductor.org/packages/release/bioc/html/iSEE.html), SummarizedExperiment interactive explorer [@rue2018isee]
+- [TreeSummarizedExperiment](https://bioconductor.org/packages/release/bioc/html/TreeSummarizedExperiment.htmlm), S4 container for hierarchical data [@huang2021treesummarizedexperiment]
+- [shiny](https://cran.r-project.org/web/packages/shiny/index.html), web app development in R [@chang2024shiny]
 
 If you are asking yourself the question “Where do I start using Bioconductor?”
 you might be interested in
@@ -208,18 +260,6 @@ error.
 
 # Reproducibility
 
-iSEEtree was made possible thanks to:
-
-- R `r Citep(bib[["R"]])`
-- `r Biocpkg("BiocStyle")` `r Citep(bib[["BiocStyle"]])`
-- `r CRANpkg("knitr")` `r Citep(bib[["knitr"]])`
-- `r CRANpkg("RefManageR")` `r Citep(bib[["RefManageR"]])`
-- `r CRANpkg("rmarkdown")` `r Citep(bib[["rmarkdown"]])`
-- `r CRANpkg("testthat")` `r Citep(bib[["testthat"]])`
-
-This package was developed using
-[_usethis_](https://cran.r-project.org/web/packages/usethis/).
-
 R session information:
 
 ```{r reproduce, echo=FALSE}
@@ -229,11 +269,3 @@ sessionInfo()
 ```
 
 # References
-
-This vignette was generated using `r Biocpkg("BiocStyle")` `r Citep(bib[["BiocStyle"]])`
-with `r CRANpkg("knitr")` `r Citep(bib[["knitr"]])` and `r CRANpkg("rmarkdown")` `r Citep(bib[["rmarkdown"]])` running behind the scenes. Citations were generated with `r CRANpkg("RefManageR")` `r Citep(bib[["RefManageR"]])`.
-
-```{r vignetteBiblio, results="asis", echo=FALSE, warning=FALSE, message=FALSE}
-## Print bibliography
-PrintBibliography(bib, .opts = list(hyperlink = "to.doc", style = "html"))
-```
