@@ -8,11 +8,27 @@
 \usage{
 .check_all_panels(se, initial)
 
-.check_panel(se, panel_list, panel_class, panel_fun, wtext)
+.check_panel(se, initial, panel.class, panel.fun, wtext)
+}
+\arguments{
+\item{se}{a
+\code{\link[SummarizedExperiment:SummarizedExperiment-class]{SummarizedExperiment}}
+object.}
+
+\item{initial}{\code{Panel vector}. A list of panel objects to check.}
+
+\item{panel.class}{\code{Character vector}. A list of panel names
+corresponding to panel objects in \code{initial}.}
+
+\item{panel.fun}{\code{Function scalar}. The element of \code{se} whose
+existance should be checked.}
+
+\item{wtext}{\code{Character scalar}. Text of the warning message returned
+if \code{panel.fun} does not exist or is empty.}
 }
 \value{
 \code{.check_panel} returns the input \code{initial} list of panels excluding
-the checked panel if \code{panel_fun} is \code{NULL} or empty.
+the checked panel if \code{panel.fun} is \code{NULL} or empty.
 \code{.check_all_panels} applies \code{.check_panel} to multiple panels and
 returns the a filtered version of \code{initial}.
 }

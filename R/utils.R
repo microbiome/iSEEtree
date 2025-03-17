@@ -4,9 +4,24 @@
 #' \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}
 #' that are compulsory when using certain panels.
 #' 
+#' @param se a
+#' \code{\link[SummarizedExperiment:SummarizedExperiment-class]{SummarizedExperiment}}
+#' object.
+#' 
+#' @param initial \code{Panel vector}. A list of panel objects to check.
+#' 
+#' @param panel.class \code{Character vector}. A list of panel names
+#'   corresponding to panel objects in \code{initial}.
+#' 
+#' @param panel.fun \code{Function scalar}. The element of \code{se} whose
+#'   existance should be checked.
+#' 
+#' @param wtext \code{Character scalar}. Text of the warning message returned
+#'   if \code{panel.fun} does not exist or is empty.
+#' 
 #' @return
 #' \code{.check_panel} returns the input \code{initial} list of panels excluding
-#' the checked panel if \code{panel_fun} is \code{NULL} or empty.
+#' the checked panel if \code{panel.fun} is \code{NULL} or empty.
 #' \code{.check_all_panels} applies \code{.check_panel} to multiple panels and
 #' returns the a filtered version of \code{initial}.
 #'
@@ -60,15 +75,15 @@ NULL
 #' @export
 #' @importFrom S4Vectors isEmpty
 #' @importFrom methods is
-.check_panel <- function(se, panel_list, panel_class, panel_fun, wtext) {
+.check_panel <- function(se, initial, panel.class, panel.fun, wtext) {
     
-    no_keep <- unlist(lapply(panel_list, function(x) is(x, panel_class)))
+    no_keep <- unlist(lapply(initial, function(x) is(x, panel.class)))
 
-    if( any(no_keep) && (is.null(panel_fun(se)) || isEmpty(panel_fun(se))) ){
-        panel_list <- panel_list[!no_keep]
-        warning("no valid ", as.character(substitute(panel_fun)),
-            " fields for ", panel_class, call. = FALSE)
+    if( any(no_keep) && (is.null(panel.fun(se)) || isEmpty(panel.fun(se))) ){
+        initial <- initial[!no_keep]
+        warning("no valid ", as.character(substitute(panel.fun)),
+            " fields for ", panel.class, call. = FALSE)
     }
     
-    return(panel_list)
+    return(initial)
 }
