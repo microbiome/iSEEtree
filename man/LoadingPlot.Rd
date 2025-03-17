@@ -26,7 +26,8 @@ The following slots control the thresholds used in the visualisation:
 \item \code{add.tree}, a logical indicating whether the tree should be shown.
 }
 
-In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
+In addition, this class inherits all slots from its parent class
+\code{\link[iSEE:Panel-class]{Panel}}.
 }
 
 \examples{

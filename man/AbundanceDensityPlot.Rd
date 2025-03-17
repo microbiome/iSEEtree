@@ -27,7 +27,8 @@ The following slots control the thresholds used in the visualisation:
 \item \code{order_descending}, a string specifying the descending order.
 }
 
-In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
+In addition, this class inherits all slots from its parent class
+\code{\link[iSEE:Panel-class]{Panel}}.
 }
 
 \examples{

@@ -45,8 +45,8 @@
 #'   (Default: \code{c("eig", "varExplained")})
 #' }
 #' 
-#' In addition, this class inherits all slots from its parent
-#' \linkS4class{Panel} class.
+#' In addition, this class inherits all slots from its parent class
+#' \code{\link[iSEE:Panel-class]{Panel}}.
 #'
 #' @return
 #' The \code{ScreePlot(...)} constructor creates an instance of an ScreePlot

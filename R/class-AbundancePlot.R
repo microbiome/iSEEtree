@@ -13,7 +13,8 @@
 #' \item \code{add_legend}, a logical indicating if the color legend should appear.
 #' }
 #'
-#' In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
+#' In addition, this class inherits all slots from its parent class
+#' \code{\link[iSEE:Panel-class]{Panel}}.
 #'
 #' @return
 #' The \code{AbundancePlot(...)} constructor creates an instance of an

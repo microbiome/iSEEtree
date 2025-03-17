@@ -52,10 +52,11 @@ the app. This catalogue is divided into four sections:
 
 | Panel name             | Panel class          | Purpose                             |
 |------------------------|----------------------|-------------------------------------|
-| Abundance plot         | AbundancePlot        | Feature composition by sample       |
+| Abundance plot         | AbundancePlot        | Feature abundance by sample         |
 | Abundance density plot | AbundanceDensityPlot | Feature distribution across samples |
 | Prevalence plot        | PrevalencePlot       | Feature prevalence across samples   |
-| Complex heatmap plot   | ComplexHeatmapPlot   | Whole assay composition             |
+| Feature assay plot     | FeatureAssayPlot     | Feature counts by column variable   |
+| Complex heatmap plot   | ComplexHeatmapPlot   | Counts by features and samples      |
 
 ## Abundance plot
 
@@ -94,7 +95,25 @@ SCREENSHOT("screenshots/AbundanceDensityPlot.png", delay=20)
 
 Coming soon!
 
+## Feature assay plot
+
+The Feature assay plot is inherited from iSEE. It is based on the
+scater function plotRowData and can be used to visualise the counts of a
+specific feature across samples grouped by a column variable.
+
+See its image in the iSEE panel catalogue:
+[FeatureAssayPlot](https://isee.github.io/panels.html#featureassayplot)
+
 ## Complex heatmap plot
+
+The Reduced dimension plot is inherited from iSEE. It is based on the
+ComplexHeatmap function Heatmap, which shows an entire assay as a heatmap where
+rows and columns represent features and samples, respectively. Hierarchical
+clustering as well as grouping by a variable can be performed across both
+dimensions.
+
+See its image in the iSEE panel catalogue:
+[ComplexHeatmapPlot](https://isee.github.io/panels.html#complexheatmapplot)
 
 # Ordination Analysis {#sec-ordination}
 
@@ -157,9 +176,12 @@ SCREENSHOT("screenshots/LoadingPlot.png", delay=20)
 ## Reduced dimension plot
 
 The Reduced dimension plot is inherited from iSEE. It is based on the
-scater function plotReducedDim and and can be used to visualise the results
+scater function plotReducedDim and can be used to visualise the results
 of an ordination analysis with both supervised and unsupervised methods as dot
 plot with reduced dimensions as coordinate axes.
+
+See its image in the iSEE panel catalogue:
+[ReducedDimensionPlot](https://isee.github.io/panels.html#reduceddimensionplot)
 
 # Structural Analysis {#sec-structure}
 
@@ -209,13 +231,15 @@ SCREENSHOT("screenshots/RowGraphPlot.png", delay=20)
 
 # Other panels {#sec-other}
 
-| Panel name         | Panel class    | Purpose                                     |
-|--------------------|----------------|---------------------------------------------|
-| Row tile plot      | RowTreePlot    | Variable distribution across feature groups |
-| Column tile plot   | ColumnTreePlot | Variable distribution across sample groups  |
-| Mediation plot     | MediationPlot  | Results of mediation analysis               |
-| Row data plot      | RowDataPlot    | Variables from feature metadata             |
-| Column data plot   | ColumnDataPlot | Variables from sample metadata              |
+| Panel name         | Panel class     | Information                                 |
+|--------------------|-----------------|---------------------------------------------|
+| Row tile plot      | RowTilePlot     | Variable distribution across feature groups |
+| Column tile plot   | ColumnTilePlot  | Variable distribution across sample groups  |
+| Mediation plot     | MediationPlot   | Results of mediation analysis               |
+| Row data table     | RowDataTable    | Table of feature metadata                   |
+| Column data table  | ColumnDataTable | Table of sample metadata                    |
+| Row data plot      | RowDataPlot     | Feature variable distribution               |
+| Column data plot   | ColumnDataPlot  | Sample variable distribution                |
 
 ## Row/Column tile plots
 
@@ -225,12 +249,27 @@ Coming soon!
 
 Coming soon!
 
+## Row/Column data tables
+
+The Row and column data tables are inherited from iSEE. They are rendered as
+a tidy table of feeature or sample variables, respectively. From those, it is
+possible to select a subset of the observations and transmit it to one or many
+other panels.
+
+See their images in the iSEE panel catalogue:
+[RowDataPlot](https://isee.github.io/panels.html#rowdataplot) and
+[ColumnDataPlot](https://isee.github.io/panels.html#columndataplot)
+
 ## Row/Column data plots
 
 The Row and column data plots are inherited from iSEE. They are based on the
 scater functions plotRowData and plotColData and can be used to visualise
 feature or sample metadata as scatter plots when the x variable is continuous or
 boxplots when the x variable is discrete.
+
+See their images in the iSEE panel catalogue:
+[RowDataTable](https://isee.github.io/panels.html#rowdatatable) and
+[ColumnDataTable](https://isee.github.io/panels.html#columndatatable)
 
 # Reproducibility
 

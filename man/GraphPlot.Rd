@@ -42,7 +42,7 @@ by when \code{shape_parameters = "Node"}. (Default: \code{NULL})
 }
 
 In addition, this class inherits all slots from its parent class
-\linkS4class{Panel}.
+\code{\link[iSEE:Panel-class]{Panel}}.
 }
 
 \seealso{

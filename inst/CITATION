@@ -1,0 +1,20 @@
+citHeader("To cite iSEEtree in publications use:")
+
+citEntry(
+  entry    = "Article",
+  title    = "iSEEtree: interactive explorer for hierarchical data",
+  author   = personList(
+      as.person("Giulio Benedetti"),
+      as.person("Ely Seraidarian"),
+      as.person("Theotime Pralas"),
+      as.person("Akewak Jeba"),
+      as.person("Tuomas Borman"),
+      as.person("Leo Lahti")
+  ),
+  journal  = "arXiv",
+  year     = "2024",
+  url      = "https://arxiv.org/abs/2412.02882",
+  textVersion = paste("Benedetti, G., Seraidarian, E., Pralas, T., Jeba, A.",
+  "Borman, T., & Lahti, L. (2024). iSEEtree: interactive explorer for",
+  "hierarchical data. arXiv. doi: https://doi.org/10.48550/arXiv.2412.02882")
+)

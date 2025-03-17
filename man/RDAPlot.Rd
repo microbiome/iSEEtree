@@ -41,7 +41,8 @@ should appear in the labels.
 on the coordinate axes.
 }
 
-In addition, this class inherits all slots from its parent \linkS4class{Panel} class.
+In addition, this class inherits all slots from its parent class
+\code{\link[iSEE:Panel-class]{Panel}}.
 }
 
 \examples{

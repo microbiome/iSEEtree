@@ -28,6 +28,7 @@ reference:
 - subtitle: Default layout
 - contents:
   - iSEE
+  - utils
 - subtitle: Package
 - contents:
-  - iSEEtree
+  - iSEEtree-package

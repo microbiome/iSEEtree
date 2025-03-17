@@ -35,7 +35,7 @@
 #' }
 #'
 #' In addition, this class inherits all slots from its parent class
-#' \linkS4class{Panel}.
+#' \code{\link[iSEE:Panel-class]{Panel}}.
 #' 
 #' @seealso
 #' \linkS4class{RowGraphPlot}
