@@ -48,7 +48,7 @@ equalised. (Default: \code{FALSE})
 }
 
 In addition, this class inherits all slots from its parent
-\linkS4class{Panel} class.
+\code{\link[iSEE:Panel-class]{Panel}}.
 }
 
 \seealso{

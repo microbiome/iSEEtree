@@ -29,6 +29,7 @@
 #' # View filtered list of panels
 #' initial
 #' 
+#' @keywords internal
 #' @name utils
 NULL
 

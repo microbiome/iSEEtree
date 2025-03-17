@@ -57,8 +57,8 @@ components on the x-axis. If \code{FALSE}, indices are shown instead.
 (Default: \code{c("eig", "varExplained")})
 }
 
-In addition, this class inherits all slots from its parent
-\linkS4class{Panel} class.
+In addition, this class inherits all slots from its parent class
+\code{\link[iSEE:Panel-class]{Panel}}.
 }
 
 \examples{

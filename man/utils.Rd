@@ -41,3 +41,4 @@ initial <- .check_panel(tse, initial, "ColumnTreePlot", colLinks)
 initial
 
 }
+\keyword{internal}
