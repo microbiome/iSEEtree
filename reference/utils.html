@@ -69,13 +69,42 @@ that are compulsory when using certain panels.</p>
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.check_all_panels</span><span class="op">(</span><span class="va">se</span>, <span class="va">initial</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">.check_panel</span><span class="op">(</span><span class="va">se</span>, <span class="va">panel_list</span>, <span class="va">panel_class</span>, <span class="va">panel_fun</span>, <span class="va">wtext</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">.check_panel</span><span class="op">(</span><span class="va">se</span>, <span class="va">initial</span>, <span class="va">panel.class</span>, <span class="va">panel.fun</span>, <span class="va">wtext</span><span class="op">)</span></span></code></pre></div>
     </div>
 
+    <div id="arguments">
+    <h2>Arguments</h2>
+
+
+<dl><dt id="arg-se">se<a class="anchor" aria-label="anchor" href="#arg-se"></a></dt>
+<dd><p>a
+<code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">SummarizedExperiment</a></code>
+object.</p></dd>
+
+
+<dt id="arg-initial">initial<a class="anchor" aria-label="anchor" href="#arg-initial"></a></dt>
+<dd><p><code>Panel vector</code>. A list of panel objects to check.</p></dd>
+
+
+<dt id="arg-panel-class">panel.class<a class="anchor" aria-label="anchor" href="#arg-panel-class"></a></dt>
+<dd><p><code>Character vector</code>. A list of panel names
+corresponding to panel objects in <code>initial</code>.</p></dd>
+
+
+<dt id="arg-panel-fun">panel.fun<a class="anchor" aria-label="anchor" href="#arg-panel-fun"></a></dt>
+<dd><p><code>Function scalar</code>. The element of <code>se</code> whose
+existance should be checked.</p></dd>
+
+
+<dt id="arg-wtext">wtext<a class="anchor" aria-label="anchor" href="#arg-wtext"></a></dt>
+<dd><p><code>Character scalar</code>. Text of the warning message returned
+if <code>panel.fun</code> does not exist or is empty.</p></dd>
+
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p><code>.check_panel</code> returns the input <code>initial</code> list of panels excluding
-the checked panel if <code>panel_fun</code> is <code>NULL</code> or empty.
+the checked panel if <code>panel.fun</code> is <code>NULL</code> or empty.
 <code>.check_all_panels</code> applies <code>.check_panel</code> to multiple panels and
 returns the a filtered version of <code>initial</code>.</p>
     </div>
