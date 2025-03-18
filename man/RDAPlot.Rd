@@ -52,7 +52,7 @@ data("enterotype", package = "mia")
 tse <- enterotype
 
 # Run RDA and store results into TreeSE
-tse <- runRDA(tse,
+tse <- addRDA(tse, assay.type = "counts",
               formula = assay ~ ClinicalStatus + Gender + Age,
               FUN = vegan::vegdist,
               distance = "bray",

@@ -78,3 +78,9 @@ setClass("AbundanceDensityPlot", contains="Panel", slots=c(layout="character",
     order_descending="logical", dots_shape="character",
     dots_shape_by="character"))
 
+#' @rdname PrevalencePlot
+#' @export
+setClass("PrevalencePlot", contains="Panel", slots=c(detection="numeric",
+    prevalence="numeric", assay.type="character", rank="character",
+    include.lowest="logical"))
+

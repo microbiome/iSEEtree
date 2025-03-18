@@ -1,25 +1,38 @@
-#' Abundance plot
+#' Prevalence plot
 #'
-#' Composite abundance profile of all features in a
-#' \code{\link[TreeSummarizedExperiment:TreeSummarizedExperiment-constructor]{TreeSummarizedExperiment}}
-#' object. The panel implements \code{\link[miaViz:plotAbundance]{plotAbundance}}
+#' Prevalence plot of all or agglomerated features in a
+#' \code{\link[SummarizedExperiment:SummarizedExperiment-constructor]{SummarizedExperiment}}
+#' object. The panel implements \code{\link[miaViz:plotAbundance]{plotPrevalence}}
 #' to generate the plot.
 #'
 #' @section Slot overview:
 #' The following slots control the thresholds used in the visualization:
 #' \itemize{
-#' \item \code{rank}, a string specifying the taxonomic rank to visualize.
-#' \item \code{use_relative}, a logical indicating if the relative values should be calculated. 
-#' \item \code{add_legend}, a logical indicating if the color legend should appear.
+#' \item \code{detection} \code{Numeric scalar}. Detection threshold between 0
+#'   and 1 for absence/presence. (Defualt: \code{0})
+#' 
+#' \item \code{prevalence} \code{Numeric scalar}. Prevalence threshold between 0
+#'   and 1. The required prevalence is strictly greater by default. To
+#'   include the limit, set \code{include.lowest} to \code{TRUE}. (Default:
+#'   \code{0})
+#' 
+#' \item \code{assay.type} \code{Character scalar}. The name of the assay to
+#'   show. (Default: \code{"relabundance"})
+#' 
+#' \item \code{rank} \code{Character scalar}. The taxonomic rank to visualise.
+#'   (Default: \code{NULL})
+#'   
+#' \item \code{include.lowest} \code{Logical scalar}. Should features with
+#'   prevalence equal to \code{prevalence} be included. (Default: \code{FALSE})
 #' }
 #'
 #' In addition, this class inherits all slots from its parent class
 #' \code{\link[iSEE:Panel-class]{Panel}}.
 #'
 #' @return
-#' The \code{AbundancePlot(...)} constructor creates an instance of an
-#' AbundancePlot class, where any slot and its value can be passed to \code{...}
-#' as a named argument.
+#' The \code{PrevalencePlot(...)} constructor creates an instance of an
+#' PrevalencePlot class, where any slot and its value can be passed to
+#' \code{...} as a named argument.
 #'
 #' @author Giulio Benedetti
 #' @examples
@@ -28,8 +41,12 @@
 #' data("Tengeler2020", package = "mia")
 #' tse <- Tengeler2020
 #' 
+#' tse <- transformAssay(tse,
+#'                       assay.type = "counts",
+#'                       method = "relabundance")
+#' 
 #' # Store panel into object
-#' panel <- AbundancePlot()
+#' panel <- PrevalencePlot()
 #' # View some adjustable parameters
 #' head(slotNames(panel))
 #' 
@@ -39,15 +56,17 @@
 #' }
 #' 
 #' @docType methods
-#' @name AbundancePlot
+#' @name PrevalencePlot
 NULL
 
 #' @importFrom S4Vectors setValidity2
-setValidity2("AbundancePlot", function(x) {
+setValidity2("PrevalencePlot", function(x) {
     
     msg <- character(0)
-    msg <- .singleStringError(msg, x, fields="rank")
-    msg <- .validLogicalError(msg, x, fields=c("add_legend", "use_relative"))
+    msg <- .singleStringError(msg, x, fields=c("assay.type", "rank"))
+    msg <- .validLogicalError(msg, x, fields="include.lowest")
+    msg <- .validNumberError(msg, x, "detection", lower=0, upper=1)
+    msg <- .validNumberError(msg, x, "prevalence", lower=0, upper=1)
     
     if( length(msg) ){
         return(msg)
@@ -56,86 +75,77 @@ setValidity2("AbundancePlot", function(x) {
 })
 
 #' @importFrom methods callNextMethod
-setMethod("initialize", "AbundancePlot", function(.Object, ...) {
+setMethod("initialize", "PrevalencePlot", function(.Object, ...) {
     args <- list(...)
+    args <- .emptyDefault(args, "detection", 0)
+    args <- .emptyDefault(args, "prevalence", 0)
+    args <- .emptyDefault(args, "include.lowest", FALSE)
+    args <- .emptyDefault(args, "assay.type", "relabundance")
     args <- .emptyDefault(args, "rank", NA_character_)
-    args <- .emptyDefault(args, "order_sample_by_row", NA_character_)
-    args <- .emptyDefault(args, "order_sample_by_column", NA_character_)
-    args <- .emptyDefault(args, "add_legend", TRUE)
-    args <- .emptyDefault(args, "use_relative", TRUE)
-    args <- .emptyDefault(args, "decreasing", FALSE)
-    args <- .emptyDefault(args, "order_sample", "None")
-    
+
     do.call(callNextMethod, c(list(.Object), args))
 })
 
 #' @export
 #' @importFrom methods new
-AbundancePlot <- function(...) {
-    new("AbundancePlot", ...)
+PrevalencePlot <- function(...) {
+    new("PrevalencePlot", ...)
 }
 
 #' @importFrom methods slot
-#' @importFrom SummarizedExperiment colData
-setMethod(".defineDataInterface", "AbundancePlot", function(x, se, select_info) {
+#' @importFrom SummarizedExperiment assayNames
+#' @importFrom mia taxonomyRanks
+setMethod(".defineDataInterface", "PrevalencePlot", function(x, se, select_info) {
     panel_name <- .getEncodedName(x)
           
-    list(.checkboxInput.iSEE(x, field="use_relative",
-        label="Use relative values", value=slot(x, "use_relative")),
-        .radioButtons.iSEE(x, field="order_sample", label="Sample order:",
-            inline=TRUE, choices=c("None", "Column data", "Row data"),
-            selected=slot(x, "order_sample")),
-            .conditionalOnRadio(paste0(panel_name, "_order_sample"), "Column data",
-                list(.selectInput.iSEE(x, field="order_sample_by_column",
-                label="Order sample by", choices=names(colData(se)),
-                selected=slot(x, "order_sample_by_column")),
-                .checkboxInput.iSEE(x, field="decreasing",
-                label="Order decreasing", value=slot(x, "decreasing")))),
-            .conditionalOnRadio(paste0(panel_name, "_order_sample"), "Row data",
-                list(.selectInput.iSEE(x, field="order_sample_by_row",
-                label="Order sample by", selected=slot(x, "order_sample_by_row"),
-                choices=.list_taxa(se)),
-                .checkboxInput.iSEE(x, field="decreasing",
-                label="Order decreasing", value=slot(x, "decreasing")))))
+    list(.selectInput.iSEE(x, field="assay.type", label="Assay type:",
+            choices=assayNames(se), selected=slot(x, "assay.type")),
+        .numericInput.iSEE(x, field="prevalence", label="Prevalence threshold:",
+            value=slot(x, "prevalence"), min=0, max=1, step=0.01),
+        .checkboxInput.iSEE(x, field="include.lowest", label="Include lowest",
+            value=slot(x, "include.lowest")),
+        .numericInput.iSEE(x, field="detection", label="Detection threshold:",
+            value=slot(x, "detection"), min=0, max=1, step=0.01),
+        .selectInput.iSEE(x, field="rank", label="Rank",
+            choices=taxonomyRanks(se), selected=slot(x, "rank")))
 })
 
 #' @importFrom methods callNextMethod
-setMethod(".defineInterface", "AbundancePlot", function(x, se, select_info) {
-     
+setMethod(".defineInterface", "PrevalencePlot", function(x, se, select_info) {
     out <- callNextMethod()
-    list(out[1], .create_visual_box_for_abund_plot(x, se), out[-1])
+    #list(out[1], .create_visual_box_for_prev_plot(x, se), out[-1])
 })
 
-setMethod(".createObservers", "AbundancePlot",
+setMethod(".createObservers", "PrevalencePlot",
     function(x, se, input, session, pObjects, rObjects) {
     
     callNextMethod()
     panel_name <- .getEncodedName(x)
     
-    .createProtectedParameterObservers(panel_name, c("rank", "use_relative",
-        "add_legend"), input=input, pObjects=pObjects, rObjects=rObjects)
+    .createProtectedParameterObservers(panel_name, c("assay.type", "prevalence",
+        "detection", "include.lowest"), input=input, pObjects=pObjects,
+        rObjects=rObjects)
     
-    .createUnprotectedParameterObservers(panel_name, c("decreasing",
-        "order_sample", "order_sample_by_row", "order_sample_by_column"),
-        input=input, pObjects=pObjects, rObjects=rObjects)
+    # .createUnprotectedParameterObservers(panel_name, c(),
+    #     input=input, pObjects=pObjects, rObjects=rObjects)
     
     invisible(NULL)
 })
 
-setMethod(".fullName", "AbundancePlot", function(x) "Abundance plot")
-setMethod(".panelColor", "AbundancePlot", function(x) "#00E5EE")
+setMethod(".fullName", "PrevalencePlot", function(x) "Prevalence plot")
+setMethod(".panelColor", "PrevalencePlot", function(x) "grey")
 
 #' @importFrom shiny plotOutput
 #' @importFrom shinyWidgets addSpinner
-setMethod(".defineOutput", "AbundancePlot", function(x) {
+setMethod(".defineOutput", "PrevalencePlot", function(x) {
     panel_name <- .getEncodedName(x)
     
     addSpinner(plotOutput(panel_name,
         height = paste0(slot(x, "PanelHeight"), "px")), color=.panelColor(x))
 })
 
-#' @importFrom miaViz plotAbundance
-setMethod(".generateOutput", "AbundancePlot",
+#' @importFrom miaViz plotPrevalence
+setMethod(".generateOutput", "PrevalencePlot",
     function(x, se, all_memory, all_contents) {
     
     panel_env <- new.env()
@@ -152,24 +162,15 @@ setMethod(".generateOutput", "AbundancePlot",
         panel_env[["se"]] <- se
     }
     
+    args[["assay.type"]] <- deparse(slot(x, "assay.type"))
     args[["rank"]] <- deparse(slot(x, "rank"))
-    args[["add_legend"]] <- deparse(slot(x, "add_legend"))
-    args[["use_relative"]] <- deparse(slot(x, "use_relative"))
-    
-    if( slot(x, "order_sample") == "Column data" ){
-        args[["order_sample_by"]] <- deparse(slot(x, "order_sample_by_column"))
-        args[["decreasing"]] <- deparse(slot(x, "decreasing"))
-    }
-
-    if( slot(x, "order_sample") == "Row data" &&
-        slot(x, "order_sample_by_row") %in% .list_taxa(se)[[slot(x, "rank")]] ){
-        args[["order_sample_by"]] <- deparse(slot(x, "order_sample_by_row"))
-        args[["decreasing"]] <- deparse(slot(x, "decreasing"))
-    }
+    args[["prevalence"]] <- deparse(slot(x, "prevalence"))
+    args[["detection"]] <- deparse(slot(x, "detection"))
+    args[["include.lowest"]] <- deparse(slot(x, "include.lowest"))
     
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse=", ")
-    fun_call <- sprintf("p <- miaViz::plotAbundance(se, %s)", args)
+    fun_call <- sprintf("p <- miaViz::plotPrevalence(se, %s)", args)
     
     fun_cmd <- paste(strwrap(fun_call, width = 80, exdent = 4), collapse = "\n")
     plot_out <- .textEval(fun_cmd, panel_env)
@@ -180,7 +181,7 @@ setMethod(".generateOutput", "AbundancePlot",
 
 #' @importFrom shiny renderPlot
 #' @importFrom methods callNextMethod
-setMethod(".renderOutput", "AbundancePlot",
+setMethod(".renderOutput", "PrevalencePlot",
     function(x, se, output, pObjects, rObjects) {
     
     panel_name <- .getEncodedName(x)
@@ -194,7 +195,7 @@ setMethod(".renderOutput", "AbundancePlot",
 })
 
 #' @importFrom grDevices pdf dev.off
-setMethod(".exportOutput", "AbundancePlot",
+setMethod(".exportOutput", "PrevalencePlot",
     function(x, se, all_memory, all_contents) {
             
     contents <- .generateOutput(x, se, all_memory=all_memory,
@@ -212,7 +213,7 @@ setMethod(".exportOutput", "AbundancePlot",
 })
 
 #' @importFrom methods callNextMethod
-setMethod(".hideInterface", "AbundancePlot", function(x, field) {
+setMethod(".hideInterface", "PrevalencePlot", function(x, field) {
     if( field %in% c("SelectionHistory", "RowSelectionRestrict",
         "RowSelectionDynamicSource", "RowSelectionSource") ){
         TRUE
@@ -221,7 +222,7 @@ setMethod(".hideInterface", "AbundancePlot", function(x, field) {
     }
 })
 
-setMethod(".multiSelectionResponsive", "AbundancePlot",
+setMethod(".multiSelectionResponsive", "PrevalencePlot",
     function(x, dim = character(0)) {
     
     if( "column" %in% dim ){
@@ -231,9 +232,9 @@ setMethod(".multiSelectionResponsive", "AbundancePlot",
 })
 
 #' @importFrom methods callNextMethod
-setMethod(".definePanelTour", "AbundancePlot", function(x) {
+setMethod(".definePanelTour", "PrevalencePlot", function(x) {
     rbind(c(paste0("#", .getEncodedName(x)), sprintf(
-        "The <font color=\"%s\">Abundance Plot</font> panel
+        "The <font color=\"%s\">Prevalence Plot</font> panel
         contains a representation of the relative abundance
         for each taxonomic rank. Each column corresponds to
         a sample of the <code>SummarizedExperiment</code>
@@ -252,7 +253,7 @@ setMethod(".definePanelTour", "AbundancePlot", function(x) {
 #' @importFrom methods slot
 #' @importFrom mia taxonomyRanks
 #' @importFrom SummarizedExperiment rowData
-.create_visual_box_for_abund_plot <- function(x, se) {
+.create_visual_box_for_prev_plot <- function(x, se) {
     
     panel_name <- .getEncodedName(x)
     
@@ -290,7 +291,7 @@ setMethod(".definePanelTour", "AbundancePlot", function(x) {
     collapseBox(paste0(panel_name, "_Visual"),
         title="Visual parameters", open=FALSE,
         # Rank
-        .selectInput.iSEE(x, field="rank", label="Rank:",
+        .selectInput.iSEE(x, field="rank", label="Rank",
             choices=taxonomyRanks(se), selected=slot(x, "rank")),
         # Colour legend
         .checkboxInput.iSEE(x, field="add_legend", label="View legend",
