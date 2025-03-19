@@ -82,5 +82,5 @@ setClass("AbundanceDensityPlot", contains="Panel", slots=c(layout="character",
 #' @export
 setClass("PrevalencePlot", contains="Panel", slots=c(detection="numeric",
     prevalence="numeric", assay.type="character", rank="character",
-    include.lowest="logical"))
+    include.lowest="logical", show.rank="logical"))
 

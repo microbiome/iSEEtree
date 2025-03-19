@@ -34,6 +34,9 @@ show. (Default: \code{"relabundance"})
 \item \code{rank} \code{Character scalar}. The taxonomic rank to visualise.
 (Default: \code{NULL})
 
+\item \code{show.rank} \code{Logical scalar}. Should options for the
+taxonomic rank appear. (Default: \code{FALSE})
+
 \item \code{include.lowest} \code{Logical scalar}. Should features with
 prevalence equal to \code{prevalence} be included. (Default: \code{FALSE})
 }

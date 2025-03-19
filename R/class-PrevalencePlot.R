@@ -21,6 +21,9 @@
 #' 
 #' \item \code{rank} \code{Character scalar}. The taxonomic rank to visualise.
 #'   (Default: \code{NULL})
+#'  
+#' \item \code{show.rank} \code{Logical scalar}. Should options for the
+#'   taxonomic rank appear. (Default: \code{FALSE})
 #'   
 #' \item \code{include.lowest} \code{Logical scalar}. Should features with
 #'   prevalence equal to \code{prevalence} be included. (Default: \code{FALSE})
@@ -64,7 +67,7 @@ setValidity2("PrevalencePlot", function(x) {
     
     msg <- character(0)
     msg <- .singleStringError(msg, x, fields=c("assay.type", "rank"))
-    msg <- .validLogicalError(msg, x, fields="include.lowest")
+    msg <- .validLogicalError(msg, x, fields=c("include.lowest", "show.rank"))
     msg <- .validNumberError(msg, x, "detection", lower=0, upper=1)
     msg <- .validNumberError(msg, x, "prevalence", lower=0, upper=1)
     
@@ -82,6 +85,7 @@ setMethod("initialize", "PrevalencePlot", function(.Object, ...) {
     args <- .emptyDefault(args, "include.lowest", FALSE)
     args <- .emptyDefault(args, "assay.type", "relabundance")
     args <- .emptyDefault(args, "rank", NA_character_)
+    args <- .emptyDefault(args, "show.rank", FALSE)
 
     do.call(callNextMethod, c(list(.Object), args))
 })
@@ -100,20 +104,23 @@ setMethod(".defineDataInterface", "PrevalencePlot", function(x, se, select_info)
           
     list(.selectInput.iSEE(x, field="assay.type", label="Assay type:",
             choices=assayNames(se), selected=slot(x, "assay.type")),
-        .numericInput.iSEE(x, field="prevalence", label="Prevalence threshold:",
-            value=slot(x, "prevalence"), min=0, max=1, step=0.01),
+        .sliderInput.iSEE(x, field="prevalence", label="Prevalence threshold:",
+            min=0, max=1, step=0.01, value=slot(x, "prevalence")),
         .checkboxInput.iSEE(x, field="include.lowest", label="Include lowest",
             value=slot(x, "include.lowest")),
-        .numericInput.iSEE(x, field="detection", label="Detection threshold:",
-            value=slot(x, "detection"), min=0, max=1, step=0.01),
-        .selectInput.iSEE(x, field="rank", label="Rank",
-            choices=taxonomyRanks(se), selected=slot(x, "rank")))
+        .sliderInput.iSEE(x, field="detection", label="Detection threshold:",
+            min=0, max=1, step=0.01, value=slot(x, "detection")),
+        .checkboxInput.iSEE(x, field="show.rank", label="Show rank:",
+            value=slot(x, "show.rank")),
+        .conditionalOnCheckSolo(paste0(panel_name, "_show.rank"), TRUE,
+            .selectInput.iSEE(x, field="rank", label="Rank",
+            choices=taxonomyRanks(se), selected=slot(x, "rank"))))
 })
 
 #' @importFrom methods callNextMethod
 setMethod(".defineInterface", "PrevalencePlot", function(x, se, select_info) {
     out <- callNextMethod()
-    #list(out[1], .create_visual_box_for_prev_plot(x, se), out[-1])
+    list(out[1], .create_visual_box_for_prev_plot(x, se), out[-1])
 })
 
 setMethod(".createObservers", "PrevalencePlot",
@@ -123,11 +130,11 @@ setMethod(".createObservers", "PrevalencePlot",
     panel_name <- .getEncodedName(x)
     
     .createProtectedParameterObservers(panel_name, c("assay.type", "prevalence",
-        "detection", "include.lowest"), input=input, pObjects=pObjects,
+        "detection", "include.lowest", "rank"), input=input, pObjects=pObjects,
         rObjects=rObjects)
     
-    # .createUnprotectedParameterObservers(panel_name, c(),
-    #     input=input, pObjects=pObjects, rObjects=rObjects)
+    .createUnprotectedParameterObservers(panel_name, c("show.rank"),
+        input=input, pObjects=pObjects, rObjects=rObjects)
     
     invisible(NULL)
 })
@@ -156,17 +163,20 @@ setMethod(".generateOutput", "PrevalencePlot",
         x, all_memory, all_contents, panel_env
     )
     
-    if( exists("col_selected", envir=panel_env, inherits=FALSE) ){
-        panel_env[["se"]] <- se[ , unlist(panel_env[["col_selected"]])]
+    if( exists("row_selected", envir=panel_env, inherits=FALSE) ){
+        panel_env[["se"]] <- se[ , unlist(panel_env[["row_selected"]])]
     } else {
         panel_env[["se"]] <- se
     }
     
     args[["assay.type"]] <- deparse(slot(x, "assay.type"))
-    args[["rank"]] <- deparse(slot(x, "rank"))
-    args[["prevalence"]] <- deparse(slot(x, "prevalence"))
-    args[["detection"]] <- deparse(slot(x, "detection"))
+    args[["prevalence"]] <- deparse(seq(slot(x, "prevalence"), 1, by = 0.1))
+    args[["detection"]] <- deparse(seq(slot(x, "detection"), 1, by = 0.1))
     args[["include.lowest"]] <- deparse(slot(x, "include.lowest"))
+    
+    if( slot(x, "show.rank") ){
+        args[["rank"]] <- deparse(slot(x, "rank"))
+    }
     
     args <- sprintf("%s=%s", names(args), args)
     args <- paste(args, collapse=", ")
@@ -214,8 +224,8 @@ setMethod(".exportOutput", "PrevalencePlot",
 
 #' @importFrom methods callNextMethod
 setMethod(".hideInterface", "PrevalencePlot", function(x, field) {
-    if( field %in% c("SelectionHistory", "RowSelectionRestrict",
-        "RowSelectionDynamicSource", "RowSelectionSource") ){
+    if( field %in% c("SelectionHistory", "ColumnSelectionRestrict",
+        "ColumnSelectionDynamicSource", "ColumnSelectionSource") ){
         TRUE
     } else {
         callNextMethod()
@@ -225,7 +235,7 @@ setMethod(".hideInterface", "PrevalencePlot", function(x, field) {
 setMethod(".multiSelectionResponsive", "PrevalencePlot",
     function(x, dim = character(0)) {
     
-    if( "column" %in% dim ){
+    if( "row" %in% dim ){
         return(TRUE)
     }
     return(FALSE)
@@ -254,62 +264,9 @@ setMethod(".definePanelTour", "PrevalencePlot", function(x) {
 #' @importFrom mia taxonomyRanks
 #' @importFrom SummarizedExperiment rowData
 .create_visual_box_for_prev_plot <- function(x, se) {
-    
     panel_name <- .getEncodedName(x)
-    
-    .addSpecificTour(class(x)[1], "rank", function(panel_name) {
-        data.frame(rbind(c(element = paste0("#", panel_name,
-            "_rank + .selectize-control"), intro = "Here, we can select the
-            taxonomic rank.")))})
-    .addSpecificTour(class(x)[1], "add_legend", function(panel_name) {
-        data.frame(rbind(c(element = paste0("#", panel_name,
-            "_add_legend"), intro = "Here, we can choose
-            whether or not to show a legend.")))})
-    .addSpecificTour(class(x)[1], "use_relative", function(panel_name) {
-        data.frame(rbind(c(element = paste0("#", panel_name,
-            "_use_relative"), intro = "Here, we can choose
-            whether to use relative or absolute values.")))})
-    .addSpecificTour(class(x)[1], "order_sample", function(panel_name) {
-        data.frame(rbind(c(element = paste0("#", panel_name,
-            "_order_sample"), intro = "Here, we can choose
-            how to order the abundance plot by.")))})
-    .addSpecificTour(class(x)[1], "decreasing", function(panel_name) {
-        data.frame(rbind(c(element = paste0("#", panel_name,
-            "_decreasing"), intro = "Here, we can choose
-            whether or not to plot by decreasing order.")))})
-    .addSpecificTour(class(x)[1], "order_sample_by_row", function(panel_name) {
-        data.frame(rbind(c(element = paste0("#", panel_name,
-            "_order_sample_by_row + .selectize-control"), intro = "Here, we can
-            choose a variable from the <code>rowData</code> to order the plot by.
-            It has to be part of the rank selected in the Visual Parameters.")))})
-    .addSpecificTour(class(x)[1], "order_sample_by_column", function(panel_name) {
-      data.frame(rbind(c(element = paste0("#", panel_name,
-            "_order_sample_by_column + .selectize-control"), intro = "Here, we can
-            choose a variable from the <code>colData</code> to order the plot by.")))})
-    
+
     # Define what parameters the user can adjust
     collapseBox(paste0(panel_name, "_Visual"),
-        title="Visual parameters", open=FALSE,
-        # Rank
-        .selectInput.iSEE(x, field="rank", label="Rank",
-            choices=taxonomyRanks(se), selected=slot(x, "rank")),
-        # Colour legend
-        .checkboxInput.iSEE(x, field="add_legend", label="View legend",
-            value=slot(x, "add_legend")))
-    
-}
-
-#' @importFrom SummarizedExperiment rowData
-#' @importFrom mia taxonomyRanks
-#' @importFrom utils stack
-.list_taxa <- function(se){
-  
-    row_data <- as.data.frame(rowData(se)[ , taxonomyRanks(se)])
-    names(row_data) <- taxonomyRanks(se)
-
-    tax_opts <- unique(stack(row_data))
-    tax_opts <- tax_opts[tax_opts$values != "" & !is.na(tax_opts$ind), ]
-    tax_list <- lapply(split(tax_opts$values, tax_opts$ind), sort)
-
-    return(tax_list)
+        title="Visual parameters", open=FALSE)
 }
