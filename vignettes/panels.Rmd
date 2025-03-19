@@ -129,7 +129,7 @@ See its image in the iSEE panel catalogue:
 
 # Ordination Analysis {#sec-ordination}
 
-| Panel name             | Panel class          | Purpose                         |
+| Panel name             | Panel class          | Information                     |
 |------------------------|----------------------|---------------------------------|
 | RDA plot               | RDAPlot              | Supervised ordination           |
 | Scree plot             | ScreePlot            | Explained variance by component |
@@ -197,7 +197,7 @@ See its image in the iSEE panel catalogue:
 
 # Structural Analysis {#sec-structure}
 
-| Panel name         | Panel class      | Purpose                            |
+| Panel name         | Panel class      | Information                        |
 |--------------------|------------------|------------------------------------|
 | Row tree plot      | RowTreePlot      | Hierarchical structure of features |
 | Column tree plot   | ColumnTreePlot   | Hierarchical structure of samples  |
