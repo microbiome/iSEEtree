@@ -1,7 +1,7 @@
 #' Prevalence plot
 #'
 #' Prevalence plot of all or agglomerated features in a
-#' \code{\link[SummarizedExperiment:SummarizedExperiment-constructor]{SummarizedExperiment}}
+#' \code{\link[SummarizedExperiment:SummarizedExperiment-class]{SummarizedExperiment}}
 #' object. The panel implements \code{\link[miaViz:plotAbundance]{plotPrevalence}}
 #' to generate the plot.
 #'
