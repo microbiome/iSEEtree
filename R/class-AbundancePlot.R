@@ -134,7 +134,7 @@ setMethod(".defineOutput", "AbundancePlot", function(x) {
         height = paste0(slot(x, "PanelHeight"), "px")), color=.panelColor(x))
 })
 
-#' @importFrom miaViz plotRowTree
+#' @importFrom miaViz plotAbundance
 setMethod(".generateOutput", "AbundancePlot",
     function(x, se, all_memory, all_contents) {
     
@@ -290,7 +290,7 @@ setMethod(".definePanelTour", "AbundancePlot", function(x) {
     collapseBox(paste0(panel_name, "_Visual"),
         title="Visual parameters", open=FALSE,
         # Rank
-        .selectInput.iSEE(x, field="rank", label="Rank",
+        .selectInput.iSEE(x, field="rank", label="Rank:",
             choices=taxonomyRanks(se), selected=slot(x, "rank")),
         # Colour legend
         .checkboxInput.iSEE(x, field="add_legend", label="View legend",

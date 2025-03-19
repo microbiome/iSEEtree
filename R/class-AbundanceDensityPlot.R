@@ -92,10 +92,10 @@ setMethod(".defineDataInterface", "AbundanceDensityPlot",
     
     panel_name <- .getEncodedName(x)
     
-    list(.selectInput.iSEE(x, field="assay.type", label="Assay type",
+    list(.selectInput.iSEE(x, field="assay.type", label="Assay type:",
             choices=assayNames(se), selected=slot(x, "assay.type")),
         # Number of taxa
-        .numericInput.iSEE(x, field="n", label="Number of taxa",
+        .numericInput.iSEE(x, field="n", label="Number of taxa:",
             value=slot(x, "n"), min=1, max=nrow(se), step=1),
         
         .checkboxInput.iSEE(x, field="flipped", label="Switch axes",
@@ -130,9 +130,9 @@ setMethod(".createObservers", "AbundanceDensityPlot",
     callNextMethod()
     panel_name <- .getEncodedName(x)
     
-    .createProtectedParameterObservers(panel_name,
-        c("layout", "assay.type", "n", "add_legend", "flipped", "order_descending"),
-        input=input, pObjects=pObjects, rObjects=rObjects)
+    .createProtectedParameterObservers(panel_name, c("layout", "assay.type",
+       "n", "add_legend", "flipped", "order_descending"), input=input,
+       pObjects=pObjects, rObjects=rObjects)
     
     .createUnprotectedParameterObservers(panel_name,
         c("dots_colour", "dots_colour_by", "dots_shape", "dots_shape_by"),
@@ -154,7 +154,7 @@ setMethod(".defineOutput", "AbundanceDensityPlot", function(x) {
         color=.panelColor(x))
 })
 
-#' @importFrom miaViz plotRowTree
+#' @importFrom miaViz plotAbundanceDensity
 setMethod(".generateOutput", "AbundanceDensityPlot",
     function(x, se, all_memory, all_contents) {
     

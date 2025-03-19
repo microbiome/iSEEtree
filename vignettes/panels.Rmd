@@ -50,7 +50,7 @@ the app. This catalogue is divided into four sections:
 
 # Compositional Analysis {#sec-composition}
 
-| Panel name             | Panel class          | Purpose                             |
+| Panel name             | Panel class          | Information                         |
 |------------------------|----------------------|-------------------------------------|
 | Abundance plot         | AbundancePlot        | Feature abundance by sample         |
 | Abundance density plot | AbundanceDensityPlot | Feature distribution across samples |
@@ -93,7 +93,19 @@ SCREENSHOT("screenshots/AbundanceDensityPlot.png", delay=20)
 
 ## Prevalence plot
 
-Coming soon!
+The Prevalence plot provides an way to visualise feature prevalence across
+samples. In this panel, each line represents the feature abundance across the
+samples and prevalence is encoded by the colour. It is based on the miaViz
+function plotPrevalence.
+
+Supported operations:
+
+- adjusting prevalence and detection thresholds
+- selecting the taxonomic rank to show
+
+```{r prevalence_plot, echo=FALSE, out.width="60%"}
+SCREENSHOT("screenshots/PrevalencePlot.png", delay=20)
+```
 
 ## Feature assay plot
 
@@ -117,7 +129,7 @@ See its image in the iSEE panel catalogue:
 
 # Ordination Analysis {#sec-ordination}
 
-| Panel name             | Panel class          | Purpose                         |
+| Panel name             | Panel class          | Information                     |
 |------------------------|----------------------|---------------------------------|
 | RDA plot               | RDAPlot              | Supervised ordination           |
 | Scree plot             | ScreePlot            | Explained variance by component |
@@ -185,7 +197,7 @@ See its image in the iSEE panel catalogue:
 
 # Structural Analysis {#sec-structure}
 
-| Panel name         | Panel class      | Purpose                            |
+| Panel name         | Panel class      | Information                        |
 |--------------------|------------------|------------------------------------|
 | Row tree plot      | RowTreePlot      | Hierarchical structure of features |
 | Column tree plot   | ColumnTreePlot   | Hierarchical structure of samples  |

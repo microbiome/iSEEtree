@@ -45,7 +45,7 @@
 #' tse <- enterotype
 #'
 #' # Run RDA and store results into TreeSE
-#' tse <- runRDA(tse,
+#' tse <- addRDA(tse, assay.type = "counts",
 #'               formula = assay ~ ClinicalStatus + Gender + Age,
 #'               FUN = vegan::vegdist,
 #'               distance = "bray",
@@ -69,10 +69,10 @@ NULL
 setValidity2("RDAPlot", function(x) {
     msg <- character(0)
     
-    msg <- .singleStringError(msg, x, fields=c("dimred", "colour_by", "vec.colour",
-                                    "label.colour"))
+    msg <- .singleStringError(msg, x, fields=c("dimred", "colour_by",
+        "vec.colour", "label.colour"))
     msg <- .validLogicalError(msg, x, fields=c("vec.text", "add.vectors",
-                                    "add.significance", "add.expl.var"))
+        "add.significance", "add.expl.var"))
     msg <- .validNumberError(msg, x, "ellipse.alpha", lower=0, upper=1)
     msg <- .validNumberError(msg, x, "confidence.level", lower=0, upper=1)
     msg <- .validNumberError(msg, x, "ellipse.linewidth", lower=0, upper=1)
@@ -82,11 +82,9 @@ setValidity2("RDAPlot", function(x) {
     msg <- .validNumberError(msg, x, "arrow.size", lower=0, upper=1)
     msg <- .validNumberError(msg, x, "label.size", lower=0, upper=10)
     
-    
     if( length(msg) ){
         return(msg)
     }
-    
     TRUE
 })
 

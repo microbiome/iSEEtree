@@ -10,7 +10,7 @@ test_that("RDAPlot", {
   tse <- enterotype
   panel <- RDAPlot()
   
-  tse <- mia::runRDA(tse,
+  tse <- mia::runRDA(tse, assay.type = "counts",
       formula = assay ~ ClinicalStatus + Gender + Age,
       na.action = na.exclude)
   
