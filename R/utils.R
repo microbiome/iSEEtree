@@ -14,7 +14,7 @@
 #'   corresponding to panel objects in \code{initial}.
 #' 
 #' @param panel.fun \code{Function scalar}. The element of \code{se} whose
-#'   existance should be checked.
+#'   existence should be checked.
 #' 
 #' @param wtext \code{Character scalar}. Text of the warning message returned
 #'   if \code{panel.fun} does not exist or is empty.
