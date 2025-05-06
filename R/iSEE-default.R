@@ -56,7 +56,8 @@ setMethod("iSEE", "TreeSummarizedExperiment",
         AbundancePlot(), AbundanceDensityPlot(), ReducedDimensionPlot(),
         ComplexHeatmapPlot()), extra = NULL, colormap = ExperimentColorMap(),
         landingPage = createLandingPage(), tour = NULL, appTitle = NULL,
-        runLocal = TRUE, voice = FALSE, bugs = FALSE, saveState = NULL, ...) {
+        tabTitle = NULL, runLocal = TRUE, voice = FALSE, bugs = FALSE,
+        saveState = NULL, ...) {
     
     initial <- .check_all_panels(se, initial)
 
