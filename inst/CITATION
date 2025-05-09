@@ -11,10 +11,11 @@ citEntry(
       as.person("Tuomas Borman"),
       as.person("Leo Lahti")
   ),
-  journal  = "arXiv",
-  year     = "2024",
-  url      = "https://arxiv.org/abs/2412.02882",
+  journal  = "Bioinformatics Advances",
+  year     = "2025",
+  doi      = "https://doi.org/10.1093/bioadv/vbaf107",
   textVersion = paste("Benedetti, G., Seraidarian, E., Pralas, T., Jeba, A.",
-  "Borman, T., & Lahti, L. (2024). iSEEtree: interactive explorer for",
-  "hierarchical data. arXiv. doi: https://doi.org/10.48550/arXiv.2412.02882")
+  "Borman, T., & Lahti, L. (2025). iSEEtree: interactive explorer for",
+  "hierarchical data. Bioinformatics Advances. ",
+  "doi: https://doi.org/10.1093/bioadv/vbaf107")
 )
