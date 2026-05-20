@@ -17,7 +17,7 @@ output:
 date: "`r doc_date()`"
 package: "`r pkg_ver('iSEEtree')`"
 vignette: >
-    %\VignetteIndexEntry{iSEEtree}
+    %\VignetteIndexEntry{Panel Catalogue}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---
