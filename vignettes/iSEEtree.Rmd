@@ -18,7 +18,7 @@ bibliography: ../inst/REFERENCES.bib
 date: "`r doc_date()`"
 package: "`r pkg_ver('iSEEtree')`"
 vignette: >
-    %\VignetteIndexEntry{iSEEtree}
+    %\VignetteIndexEntry{iSEEtree: interactive explorer for hierarchical data}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
 ---
