@@ -26,52 +26,74 @@ exportClasses(RowTreePlot)
 exportClasses(ScreePlot)
 exportClasses(TreePlot)
 exportMethods(iSEE)
-importFrom(S4Vectors,isEmpty)
-importFrom(S4Vectors,metadata)
-importFrom(S4Vectors,setValidity2)
-importFrom(SingleCellExperiment,reducedDim)
-importFrom(SingleCellExperiment,reducedDimNames)
-importFrom(SingleCellExperiment,reducedDims)
-importFrom(SummarizedExperiment,assayNames)
-importFrom(SummarizedExperiment,colData)
-importFrom(SummarizedExperiment,rowData)
-importFrom(TreeSummarizedExperiment,TreeSummarizedExperiment)
-importFrom(TreeSummarizedExperiment,colLinks)
-importFrom(TreeSummarizedExperiment,colTree)
-importFrom(TreeSummarizedExperiment,rowLinks)
-importFrom(TreeSummarizedExperiment,rowTree)
+importFrom(S4Vectors,
+  isEmpty,
+  metadata,
+  setValidity2
+)
+importFrom(SingleCellExperiment,
+  reducedDim,
+  reducedDimNames,
+  reducedDims
+)
+importFrom(SummarizedExperiment,
+  assayNames,
+  colData,
+  rowData
+)
+importFrom(TreeSummarizedExperiment,
+  TreeSummarizedExperiment,
+  colLinks,
+  colTree,
+  rowLinks,
+  rowTree
+)
 importFrom(ape,Ntip)
-importFrom(ggplot2,aes)
-importFrom(ggplot2,geom_text)
-importFrom(ggtree,collapse)
-importFrom(ggtree,geom_tiplab)
-importFrom(ggtree,rotate_tree)
-importFrom(grDevices,dev.off)
-importFrom(grDevices,pdf)
-importFrom(grDevices,rainbow)
-importFrom(iSEE,ColumnDataTable)
-importFrom(iSEE,ComplexHeatmapPlot)
-importFrom(iSEE,ExperimentColorMap)
-importFrom(iSEE,ReducedDimensionPlot)
-importFrom(iSEE,RowDataTable)
-importFrom(iSEE,createLandingPage)
-importFrom(methods,callNextMethod)
-importFrom(methods,is)
-importFrom(methods,new)
-importFrom(methods,slot)
+importFrom(ggplot2,
+  aes,
+  geom_text
+)
+importFrom(ggtree,
+  collapse,
+  geom_tiplab,
+  rotate_tree
+)
+importFrom(grDevices,
+  dev.off,
+  pdf,
+  rainbow
+)
+importFrom(iSEE,
+  ColumnDataTable,
+  ComplexHeatmapPlot,
+  ExperimentColorMap,
+  ReducedDimensionPlot,
+  RowDataTable,
+  createLandingPage
+)
+importFrom(methods,
+  callNextMethod,
+  is,
+  new,
+  slot
+)
 importFrom(mia,taxonomyRanks)
-importFrom(miaViz,plotAbundance)
-importFrom(miaViz,plotAbundanceDensity)
-importFrom(miaViz,plotColGraph)
-importFrom(miaViz,plotColTree)
-importFrom(miaViz,plotLoadings)
-importFrom(miaViz,plotPrevalence)
-importFrom(miaViz,plotRowGraph)
-importFrom(miaViz,plotRowTree)
-importFrom(miaViz,plotScree)
+importFrom(miaViz,
+  plotAbundance,
+  plotAbundanceDensity,
+  plotColGraph,
+  plotColTree,
+  plotLoadings,
+  plotPrevalence,
+  plotRowGraph,
+  plotRowTree,
+  plotScree
+)
 importFrom(purrr,reduce)
-importFrom(shiny,plotOutput)
-importFrom(shiny,renderPlot)
+importFrom(shiny,
+  plotOutput,
+  renderPlot
+)
 importFrom(shinyWidgets,addSpinner)
 importFrom(tidygraph,activate)
 importFrom(utils,stack)

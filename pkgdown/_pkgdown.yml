@@ -1,34 +1,63 @@
+url: https://microbiome.github.io/iSEEtree
 destination: docs
+
+template:
+  bootstrap: 5
+  light-switch: true
+  bslib:
+    navbar-bg: "#0087af"
+
+articles:
+  - title: iSEEintro
+    navbar: ~
+    contents: iSEEintro
+  - title: "iSEEtree Panel Catalogue"
+    navbar: ~
+    contents: panels
+  - title: iSEEcat
+    navbar: ~
+    contents: iSEEcat
+
+external-articles:
+  - name: iSEEintro
+    title: "An introduction to the iSEE interface"
+    description: an introduction to the iSEE interface
+    href: https://isee.github.io/iSEE/articles/basic.html
+  - name: iSEEcat
+    title: "iSEE panel catalogue"
+    description: catalogue of base iSEE panels
+    href: https://isee.github.io/panels.html
+
 reference:
-- title: Panels
-- subtitle: Compositional analysis
-- contents:
-  - AbundancePlot
-  - AbundanceDensityPlot
-  - PrevalencePlot
-- subtitle: Ordination analysis
-- contents:
-  - RDAPlot
-  - ScreePlot
-  - LoadingPlot
-- subtitle: Structural analysis
-- contents:
-  - TreePlot
-  - RowTreePlot
-  - ColumnTreePlot
-  - GraphPlot
-  - RowGraphPlot
-  - ColumnGraphPlot
-# - subtitle: Others
-# - contents:
-  # - RowTilePlot
-  # - ColumnTilePlot
-  # - MediationPlot
-- title: Interface
-- subtitle: Default layout
-- contents:
-  - iSEE
-  - utils
-- subtitle: Package
-- contents:
-  - iSEEtree-package
+  - title: Panels
+  - subtitle: Compositional analysis
+  - contents:
+    - AbundancePlot
+    - AbundanceDensityPlot
+    - PrevalencePlot
+  - subtitle: Ordination analysis
+  - contents:
+    - RDAPlot
+    - ScreePlot
+    - LoadingPlot
+  - subtitle: Structural analysis
+  - contents:
+    - TreePlot
+    - RowTreePlot
+    - ColumnTreePlot
+    - GraphPlot
+    - RowGraphPlot
+    - ColumnGraphPlot
+  # - subtitle: Others
+  # - contents:
+    # - RowTilePlot
+    # - ColumnTilePlot
+    # - MediationPlot
+  - title: Interface
+  - subtitle: Default layout
+  - contents:
+    - iSEE
+    - utils
+  - subtitle: Package
+  - contents:
+    - iSEEtree-package

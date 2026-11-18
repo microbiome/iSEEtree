@@ -1,5 +1,5 @@
 ---
-title: "Panel Catalogue"
+title: "iSEEtree Panel Catalogue"
 author: 
   - name: Giulio Benedetti
     affiliation: University of Turku
